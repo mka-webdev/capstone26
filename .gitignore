@@ -1,0 +1,81 @@
+# =====================================
+# Java / Spring Boot
+# =====================================
+*.class
+*.log
+
+# Package files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# =====================================
+# Maven
+# =====================================
+target/
+dependency-reduced-pom.xml
+release.properties
+
+# Keep Maven wrapper (important)
+!.mvn/wrapper/maven-wrapper.jar
+
+# =====================================
+# NetBeans
+# =====================================
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# NetBeans project-specific files (ignore)
+nbactions.xml
+nb-configuration.xml
+
+# =====================================
+# IntelliJ IDEA
+# =====================================
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# =====================================
+# Eclipse / STS
+# =====================================
+.classpath
+.project
+.settings/
+.factorypath
+.springBeans
+.sts4-cache
+
+# =====================================
+# VS Code
+# =====================================
+.vscode/
+*.code-workspace
+
+# =====================================
+# Build / temp
+# =====================================
+build/
+out/
+tmp/
+temp/
+
+# =====================================
+# Database (SQLite)
+# =====================================
+*.db
+
+# =====================================
+# OS files
+# =====================================
+.DS_Store
+Thumbs.db
