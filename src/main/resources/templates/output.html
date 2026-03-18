@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Latest Scan Output</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: auto;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .wrap {
+            white-space: normal;
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>Latest Scan Output</h1>
+
+    <div th:if="${scan != null}">
+        <p><strong>Scan ID:</strong> <span th:text="${scan.id}"></span></p>
+        <p><strong>URL:</strong> <span th:text="${scan.url}"></span></p>
+        <p><strong>Test Engine:</strong>
+            <span th:text="${scan.testEngineName}"></span>
+            <span th:text="${scan.testEngineVersion}"></span>
+        </p>
+        <p><strong>Test Runner:</strong>
+            <span th:text="${scan.testRunnerName}"></span>
+            <span th:text="${scan.testRunnerVersion}"></span>
+        </p>
+        <p><strong>Source Timestamp:</strong> <span th:text="${scan.sourceTimestamp}"></span></p>
+        <p><strong>Imported At:</strong> <span th:text="${scan.importedAt}"></span></p>
+
+        <h2>Violations</h2>
+
+        <p><strong>Total Violations:</strong> <span th:text="${#lists.size(scan.violations)}"></span></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Rule ID</th>
+                    <th>Impact</th>
+                    <th>Description</th>
+                    <th>Help</th>
+                    <th>Targets</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="v, stat : ${scan.violations}">
+                    <td th:text="${stat.count}"></td>
+                    <td class="wrap" th:text="${v.ruleId}"></td>
+                    <td class="wrap" th:text="${v.impact}"></td>
+                    <td class="wrap" th:text="${v.description}"></td>
+                    <td class="wrap" th:text="${v.help}"></td>
+                    <td class="wrap" th:text="${v.targetElements}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${scan == null}">
+        <p>No scan data found.</p>
+    </div>
+</body>
+</html>
