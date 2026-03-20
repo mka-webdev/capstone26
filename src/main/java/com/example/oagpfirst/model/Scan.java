@@ -31,7 +31,6 @@ public class Scan {
     private String testEngineName;
     private String testEngineVersion;
     private String testRunnerName;
-    private String testRunnerVersion;
     private String sourceTimestamp;
     private LocalDateTime importedAt;
     
@@ -84,13 +83,6 @@ public class Scan {
         this.testRunnerName = testRunnerName;
     }
 
-    public String getTestRunnerVersion() {
-        return testRunnerVersion;
-    }
-
-    public void setTestRunnerVersion(String testRunnerVersion) {
-        this.testRunnerVersion = testRunnerVersion;
-    }
 
     public String getSourceTimestamp() {
         return sourceTimestamp;

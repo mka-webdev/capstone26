@@ -66,9 +66,9 @@ public class ScanService {
 
         if (axeResult.getTestRunner() != null) {
             scan.setTestRunnerName(axeResult.getTestRunner().getName());
-            scan.setTestRunnerVersion(axeResult.getTestRunner().getVersion());
+           
         }
-
+        scan.setSourceTimestamp(axeResult.getTimestamp());  
         scan.setImportedAt(LocalDateTime.now());
 
         if (axeResult.getViolations() != null) {

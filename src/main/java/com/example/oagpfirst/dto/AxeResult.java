@@ -44,7 +44,7 @@ public class AxeResult {
     //Nested static class representing the "testRunner" object in JSON
     public static class TestRunner {
         private String name;
-        private String version;
+       
 
         public String getName() {
             return name;
@@ -54,13 +54,7 @@ public class AxeResult {
             this.name = name;
         }
 
-        public String getVersion() {
-            return version;
-        }
-
-        public void setVersion(String version) {
-            this.version = version;
-        }
+        
     }
 
     public String getUrl() {

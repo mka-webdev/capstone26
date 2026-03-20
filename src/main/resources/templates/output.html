@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Latest Scan Output</title>
+    <title>OAGP Accessibility Scan Results</title>
     <meta charset="UTF-8">
+
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
 
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+
         table {
             border-collapse: collapse;
             width: 100%;
-            table-layout: auto;
+            margin-bottom: 30px;
         }
 
         th, td {
@@ -26,59 +31,95 @@
             background-color: #f2f2f2;
         }
 
-        .wrap {
-            white-space: normal;
-            word-break: break-word;
+        .scan-block {
+            margin-bottom: 40px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            background-color: #fafafa;
         }
     </style>
 </head>
+
 <body>
-    <h1>Latest Scan Output</h1>
 
-    <div th:if="${scan != null}">
-        <p><strong>Scan ID:</strong> <span th:text="${scan.id}"></span></p>
-        <p><strong>URL:</strong> <span th:text="${scan.url}"></span></p>
-        <p><strong>Test Engine:</strong>
-            <span th:text="${scan.testEngineName}"></span>
-            <span th:text="${scan.testEngineVersion}"></span>
-        </p>
-        <p><strong>Test Runner:</strong>
-            <span th:text="${scan.testRunnerName}"></span>
-            <span th:text="${scan.testRunnerVersion}"></span>
-        </p>
-        <p><strong>Source Timestamp:</strong> <span th:text="${scan.sourceTimestamp}"></span></p>
-        <p><strong>Imported At:</strong> <span th:text="${scan.importedAt}"></span></p>
+<h1>OAGP Accessibility Scan Results</h1>
 
-        <h2>Violations</h2>
+<!-- Handle NULL case -->
+<div th:if="${scan == null}">
+    <p>No scan results found.</p>
+</div>
 
-        <p><strong>Total Violations:</strong> <span th:text="${#lists.size(scan.violations)}"></span></p>
+<!-- Display scan -->
+<div th:if="${scan != null}" class="scan-block">
 
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Rule ID</th>
-                    <th>Impact</th>
-                    <th>Description</th>
-                    <th>Help</th>
-                    <th>Targets</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="v, stat : ${scan.violations}">
-                    <td th:text="${stat.count}"></td>
-                    <td class="wrap" th:text="${v.ruleId}"></td>
-                    <td class="wrap" th:text="${v.impact}"></td>
-                    <td class="wrap" th:text="${v.description}"></td>
-                    <td class="wrap" th:text="${v.help}"></td>
-                    <td class="wrap" th:text="${v.targetElements}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <h2>Scan Details</h2>
 
-    <div th:if="${scan == null}">
-        <p>No scan data found.</p>
-    </div>
+    <table>
+        <tr>
+            <th>ID</th>
+            <td th:text="${scan.id}"></td>
+        </tr>
+        <tr>
+            <th>URL</th>
+            <td th:text="${scan.url}"></td>
+        </tr>
+        <tr>
+            <th>Test Engine Name</th>
+            <td th:text="${scan.testEngineName}"></td>
+        </tr>
+        <tr>
+            <th>Test Engine Version</th>
+            <td th:text="${scan.testEngineVersion}"></td>
+        </tr>
+        <tr>
+            <th>Test Runner Name</th>
+            <td th:text="${scan.testRunnerName}"></td>
+        </tr>
+        <tr>
+            <th>Source Timestamp</th>
+            <td th:text="${scan.sourceTimestamp}"></td>
+        </tr>
+        <tr>
+            <th>Imported At</th>
+            <td th:text="${scan.importedAt}"></td>
+        </tr>
+    </table>
+
+    <h3>Violations</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Rule ID</th>
+                <th>Impact</th>
+                <th>Description</th>
+                <th>Help</th>
+                <th>Target Elements</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <!-- If no violations -->
+            <tr th:if="${scan.violations == null or #lists.isEmpty(scan.violations)}">
+                <td colspan="6">No violations found.</td>
+            </tr>
+
+            <!-- Loop violations -->
+            <tr th:each="violation : ${scan.violations}">
+                <td th:text="${violation.id}"></td>
+                <td th:text="${violation.ruleId}"></td>
+                <td th:text="${violation.impact}"></td>
+                <td th:text="${violation.description}"></td>
+                <td th:text="${violation.help}"></td>
+                <td th:text="${violation.targetElements}"></td>
+            </tr>
+
+        </tbody>
+    </table>
+
+</div>
+
 </body>
 </html>
