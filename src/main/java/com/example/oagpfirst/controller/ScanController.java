@@ -50,7 +50,7 @@ public class ScanController {
 
         } catch (IOException | InterruptedException e) {
             model.addAttribute("scan", scanService.getLatestScan());
-            model.addAttribute("errorMessage", "Scanner failed: " + e.getMessage());
+            model.addAttribute("errorMessage", "Unable to scan the page. Check that the address is correct and reachable.");
             return "output";
         }
     }
@@ -68,6 +68,12 @@ public class ScanController {
 
             if (host == null || host.isBlank()) {
                 throw new IllegalArgumentException("Invalid URL.");
+            }
+
+            if (!isValidHost(host)) {
+                throw new IllegalArgumentException(
+                        "Enter a valid website address, for example example.com, www.example.com, or localhost:8080."
+                );
             }
 
         } catch (URISyntaxException e) {
@@ -96,4 +102,17 @@ public class ScanController {
 
         return "https://" + trimmedUrl;
     }
+
+    private boolean isValidHost(String host) {
+        if (host.equalsIgnoreCase("localhost")) {
+            return true;
+        }
+
+        if (host.matches("^\\d{1,3}(\\.\\d{1,3}){3}$")) {
+            return true;
+        }
+
+        return host.contains(".");
+    }
+
 }
