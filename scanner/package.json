@@ -1,0 +1,13 @@
+{
+  "name": "oagp-scanner",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "main": "scan-page.js",
+  "scripts": {
+    "scan": "node scan-page.js"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "playwright": "^1.52.0"
+  }
+}

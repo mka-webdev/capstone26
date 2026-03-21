@@ -23,6 +23,16 @@ release.properties
 # Keep Maven wrapper (important)
 !.mvn/wrapper/maven-wrapper.jar
 
+
+# =====================================
+# Node / Playwright scanner module
+# =====================================
+scanner/node_modules/
+npm-debug.log*
+results.json
+playwright-report/
+test-results/
+
 # =====================================
 # NetBeans
 # =====================================
