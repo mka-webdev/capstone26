@@ -22,15 +22,32 @@ NetBeans-ready Spring Boot project with an integrated Node-based accessibility s
 
 ## Accepted input examples
 
-The scanner currently supports inputs such as:
+The scanner currently accepts inputs such as:
 
 - `example.com`
 - `www.example.com`
 - `https://example.com`
+- `http://example.com`
 - `localhost:8080`
 - `127.0.0.1:8080`
 
-This allows scanning of both hosted pages and local development pages.
+The application normalises supported inputs before scanning. For example:
+
+- `example.com` becomes `https://example.com`
+- `www.example.com` becomes `https://www.example.com`
+- `localhost:8080` becomes `http://localhost:8080`
+
+## Basic input validation
+
+Before the scanner runs, the application performs basic validation on the submitted address.
+
+It rejects clearly incomplete or invalid inputs such as:
+
+- `cnn`
+- `test`
+- blank input
+
+This helps prevent unnecessary scanner execution and avoids exposing raw processing errors for simple input mistakes.
 
 ## Scanner module setup
 
