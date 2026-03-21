@@ -39,7 +39,7 @@ The application normalises supported inputs before scanning. For example:
 
 ## Basic input validation
 
-Before the scanner runs, the application performs basic validation on the submitted address.
+Before the scanner runs, the application performs basic validation on the submitted address **and** checks if it is reachable.
 
 It rejects clearly incomplete or invalid inputs such as:
 
