@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 /*
  * service class
  * Read JSON file axe-core output
@@ -24,20 +25,22 @@ import java.util.List;
  */
 @Service
 public class ScanService {
+
     //Repository used to save and retrieve Scan data from the database
     private final ScanRepository scanRepository;
-    
+
     /*
      * Jackson ObjectMapper used to:
      * Parse JSON files
      * -Convert JSON → Java objects
      */
     private final ObjectMapper objectMapper;
-    
+
     public ScanService(ScanRepository scanRepository, ObjectMapper objectMapper) {
         this.scanRepository = scanRepository;
         this.objectMapper = objectMapper;
     }
+
     //Reads the JSON file and processes its contents.
     public void processJsonFile(Path jsonPath) throws IOException {
         JsonNode root = objectMapper.readTree(jsonPath.toFile());
@@ -54,6 +57,18 @@ public class ScanService {
             throw new IOException("Unsupported JSON format in results.json");
         }
     }
+
+    public Scan processScannedJson(Path jsonPath) throws IOException {
+        JsonNode root = objectMapper.readTree(jsonPath.toFile());
+
+        if (!root.isObject()) {
+            throw new IOException("Expected a single scan object in results.json");
+        }
+
+        AxeResult axeResult = objectMapper.treeToValue(root, AxeResult.class);
+        return saveAxeResult(axeResult);
+    }
+
     //Converts DTO → Entity and saves it.
     private Scan saveAxeResult(AxeResult axeResult) {
         Scan scan = new Scan();
@@ -66,9 +81,9 @@ public class ScanService {
 
         if (axeResult.getTestRunner() != null) {
             scan.setTestRunnerName(axeResult.getTestRunner().getName());
-           
+
         }
-        scan.setSourceTimestamp(axeResult.getTimestamp());  
+        scan.setSourceTimestamp(axeResult.getTimestamp());
         scan.setImportedAt(LocalDateTime.now());
 
         if (axeResult.getViolations() != null) {
@@ -95,16 +110,14 @@ public class ScanService {
 
         return scanRepository.save(scan);
     }
+
     //Returns all scan records from the database
     public List<Scan> getAllScans() {
         return scanRepository.findAll();
     }
+
     //Returns the most recently added scan
     public Scan getLatestScan() {
-        List<Scan> scans = scanRepository.findAll();
-        if (scans.isEmpty()) {
-            return null;
-        }
-        return scans.get(scans.size() - 1);
-    }
+    return scanRepository.findTopByOrderByIdDesc().orElse(null);
+}
 }
