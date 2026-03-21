@@ -43,6 +43,22 @@
 <body>
 
 <h1>OAGP Accessibility Scan Results</h1>
+<h2>Run New Scan</h2>
+
+<form method="post" action="/scan">
+    <label for="url">Page URL:</label>
+    <input type="text" id="url" name="url" placeholder="Enter page URL" required style="width: 400px;">
+    <p style="margin-top: 6px; font-size: 0.95em; color: #555;">
+        Accepted formats: example.com, www.example.com, https://example.com, localhost:8080
+    </p>
+    <button type="submit">Scan</button>
+</form>
+
+<div th:if="${errorMessage != null}" style="color: red; margin-top: 15px;">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<hr>
 
 <!-- Handle NULL case -->
 <div th:if="${scan == null}">
