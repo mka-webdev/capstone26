@@ -6,14 +6,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.5</version>
-        <relativePath/>
+        <version>3.3.13</version>
+        <relativePath/> 
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>OAGP_FIRST</artifactId>
+    <artifactId>OAGP</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>OAGP_FIRST</name>
+    <name>OAGP</name>
     <description>Spring Boot axe-core scan importer with SQLite history</description>
 
     <properties>

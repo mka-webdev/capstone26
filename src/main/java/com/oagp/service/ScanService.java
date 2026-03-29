@@ -1,10 +1,10 @@
-package com.example.oagpfirst.service;
+package com.oagp.service;
 
-import com.example.oagpfirst.dto.AxeResult;
-import com.example.oagpfirst.dto.AxeViolation;
-import com.example.oagpfirst.model.Scan;
-import com.example.oagpfirst.model.Violation;
-import com.example.oagpfirst.repository.ScanRepository;
+import com.oagp.dto.AxeResult;
+import com.oagp.dto.AxeViolation;
+import com.oagp.model.Scan;
+import com.oagp.model.Violation;
+import com.oagp.repository.ScanRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;

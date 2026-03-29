@@ -1,4 +1,4 @@
-package com.example.oagpfirst.model;
+package com.oagp.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

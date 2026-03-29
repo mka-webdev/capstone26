@@ -1,8 +1,8 @@
-package com.example.oagpfirst.controller;
+package com.oagp.controller;
 
-import com.example.oagpfirst.model.Scan;
-import com.example.oagpfirst.service.ScanService;
-import com.example.oagpfirst.service.ScannerProcessService;
+import com.oagp.model.Scan;
+import com.oagp.service.ScanService;
+import com.oagp.service.ScannerProcessService;
 import java.io.IOException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
