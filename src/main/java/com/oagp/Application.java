@@ -1,12 +1,12 @@
-package com.example.oagpfirst;
+package com.oagp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OagpFirstApplication {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(OagpFirstApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 }

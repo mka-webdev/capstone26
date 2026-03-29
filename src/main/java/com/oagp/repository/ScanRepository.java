@@ -1,6 +1,6 @@
-package com.example.oagpfirst.repository;
+package com.oagp.repository;
 
-import com.example.oagpfirst.model.Scan;
+import com.oagp.model.Scan;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

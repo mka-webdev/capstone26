@@ -1,10 +1,10 @@
-package com.example.oagpfirst;
+package com.oagp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class OagpFirstApplicationTests {
+class ApplicationTests {
 
     @Test
     void contextLoads() {

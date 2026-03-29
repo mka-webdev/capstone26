@@ -1,4 +1,4 @@
-package com.example.oagpfirst.dto;
+package com.oagp.dto;
 
 import java.util.List;
 

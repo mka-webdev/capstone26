@@ -1,4 +1,4 @@
-package com.example.oagpfirst.service;
+package com.oagp.service;
 
 import org.springframework.stereotype.Service;
 import java.io.BufferedReader;

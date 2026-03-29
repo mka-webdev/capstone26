@@ -1,4 +1,4 @@
-package com.example.oagpfirst.model;
+package com.oagp.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
