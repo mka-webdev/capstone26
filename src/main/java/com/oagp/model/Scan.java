@@ -27,13 +27,10 @@ public class Scan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String url;
-    private String testEngineName;
-    private String testEngineVersion;
-    private String testRunnerName;
-    private String sourceTimestamp;
-    private LocalDateTime importedAt;
-    
+    private String auditName;
+    private String pageUrl;
+    private LocalDateTime scanTimestamp;
+    private String timeZone;
 
     @OneToMany(mappedBy = "scan", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id ASC")
@@ -51,53 +48,36 @@ public class Scan {
         return id;
     }
 
-    public String getUrl() {
-        return url;
+    public String getAuditName() {
+        return auditName;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setAuditName(String auditName) {
+        this.auditName = auditName;
     }
 
-    public String getTestEngineName() {
-        return testEngineName;
+    public String getPageUrl() {
+        return pageUrl;
     }
 
-    public void setTestEngineName(String testEngineName) {
-        this.testEngineName = testEngineName;
+    public void setPageUrl(String pageUrl) {
+        this.pageUrl = pageUrl;
     }
 
-    public String getTestEngineVersion() {
-        return testEngineVersion;
+    public LocalDateTime getScanTimestamp() {
+        return scanTimestamp;
     }
 
-    public void setTestEngineVersion(String testEngineVersion) {
-        this.testEngineVersion = testEngineVersion;
+    public void setScanTimestamp(LocalDateTime scanTimestamp) {
+        this.scanTimestamp = scanTimestamp;
     }
 
-    public String getTestRunnerName() {
-        return testRunnerName;
+    public String getTimeZone() {
+        return timeZone;
     }
 
-    public void setTestRunnerName(String testRunnerName) {
-        this.testRunnerName = testRunnerName;
-    }
-
-
-    public String getSourceTimestamp() {
-        return sourceTimestamp;
-    }
-
-    public void setSourceTimestamp(String sourceTimestamp) {
-        this.sourceTimestamp = sourceTimestamp;
-    }
-
-    public LocalDateTime getImportedAt() {
-        return importedAt;
-    }
-
-    public void setImportedAt(LocalDateTime importedAt) {
-        this.importedAt = importedAt;
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
     }
 
     public List<Violation> getViolations() {

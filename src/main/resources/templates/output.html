@@ -37,6 +37,27 @@
             border: 1px solid #ccc;
             background-color: #fafafa;
         }
+
+        .node-block {
+            margin-top: 15px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+
+        .node-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
     </style>
 </head>
 
@@ -60,12 +81,10 @@
 
 <hr>
 
-<!-- Handle NULL case -->
 <div th:if="${scan == null}">
     <p>No scan results found.</p>
 </div>
 
-<!-- Display scan -->
 <div th:if="${scan != null}" class="scan-block">
 
     <h2>Scan Details</h2>
@@ -76,28 +95,20 @@
             <td th:text="${scan.id}"></td>
         </tr>
         <tr>
-            <th>URL</th>
-            <td th:text="${scan.url}"></td>
+            <th>Audit Name</th>
+            <td th:text="${scan.auditName}"></td>
         </tr>
         <tr>
-            <th>Test Engine Name</th>
-            <td th:text="${scan.testEngineName}"></td>
+            <th>Page URL</th>
+            <td th:text="${scan.pageUrl}"></td>
         </tr>
         <tr>
-            <th>Test Engine Version</th>
-            <td th:text="${scan.testEngineVersion}"></td>
+            <th>Scan Timestamp</th>
+            <td th:text="${scan.scanTimestamp}"></td>
         </tr>
         <tr>
-            <th>Test Runner Name</th>
-            <td th:text="${scan.testRunnerName}"></td>
-        </tr>
-        <tr>
-            <th>Source Timestamp</th>
-            <td th:text="${scan.sourceTimestamp}"></td>
-        </tr>
-        <tr>
-            <th>Imported At</th>
-            <td th:text="${scan.importedAt}"></td>
+            <th>Time Zone</th>
+            <td th:text="${scan.timeZone}"></td>
         </tr>
     </table>
 
@@ -111,29 +122,102 @@
                 <th>Impact</th>
                 <th>Description</th>
                 <th>Help</th>
-                <th>Target Elements</th>
+                <th>Tags</th>
+                <th>Help URL</th>
+                <th>Instance Count</th>
             </tr>
         </thead>
 
         <tbody>
-
-            <!-- If no violations -->
             <tr th:if="${scan.violations == null or #lists.isEmpty(scan.violations)}">
-                <td colspan="6">No violations found.</td>
+                <td colspan="8">No violations found.</td>
             </tr>
 
-            <!-- Loop violations -->
             <tr th:each="violation : ${scan.violations}">
                 <td th:text="${violation.id}"></td>
                 <td th:text="${violation.ruleId}"></td>
                 <td th:text="${violation.impact}"></td>
                 <td th:text="${violation.description}"></td>
                 <td th:text="${violation.help}"></td>
-                <td th:text="${violation.targetElements}"></td>
+                <td th:text="${violation.tags}"></td>
+                <td>
+                    <a th:if="${violation.helpUrl != null}" th:href="${violation.helpUrl}" th:text="${violation.helpUrl}" target="_blank"></a>
+                    <span th:if="${violation.helpUrl == null}">N/A</span>
+                </td>
+                <td th:text="${violation.instanceCount}"></td>
             </tr>
-
         </tbody>
     </table>
+
+    <div th:if="${scan.violations != null and !#lists.isEmpty(scan.violations)}">
+        <div th:each="violation : ${scan.violations}" class="scan-block">
+            <h3 th:text="'Violation: ' + ${violation.ruleId}"></h3>
+
+            <table>
+                <tr>
+                    <th>Rule ID</th>
+                    <td th:text="${violation.ruleId}"></td>
+                </tr>
+                <tr>
+                    <th>Impact</th>
+                    <td th:text="${violation.impact}"></td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td th:text="${violation.description}"></td>
+                </tr>
+                <tr>
+                    <th>Help</th>
+                    <td th:text="${violation.help}"></td>
+                </tr>
+                <tr>
+                    <th>Tags</th>
+                    <td th:text="${violation.tags}"></td>
+                </tr>
+                <tr>
+                    <th>Help URL</th>
+                    <td>
+                        <a th:if="${violation.helpUrl != null}" th:href="${violation.helpUrl}" th:text="${violation.helpUrl}" target="_blank"></a>
+                        <span th:if="${violation.helpUrl == null}">N/A</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Instance Count</th>
+                    <td th:text="${violation.instanceCount}"></td>
+                </tr>
+            </table>
+
+            <h3>Violation Nodes</h3>
+
+            <div th:if="${violation.nodes == null or #lists.isEmpty(violation.nodes)}">
+                <p>No node details found.</p>
+            </div>
+
+            <div th:if="${violation.nodes != null and !#lists.isEmpty(violation.nodes)}">
+                <div th:each="node : ${violation.nodes}" class="node-block">
+                    <div class="node-title" th:text="'Node ID: ' + ${node.id}"></div>
+
+                    <table>
+                        <tr>
+                            <th>Message</th>
+                            <td th:text="${node.message}"></td>
+                        </tr>
+                        <tr>
+                            <th>HTML</th>
+                            <td>
+                                <pre th:text="${node.html}"></pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Element Type</th>
+                            <td th:text="${node.elementType}"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 </div>
 
