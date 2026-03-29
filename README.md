@@ -2,8 +2,7 @@
 
 OAGP is a local-first accessibility platform for scanning, storing, and reviewing web accessibility results.
 It helps turn technical scan output into clear, usable information for analysis and reporting. Built with
-Spring Boot and a Node-based scanning module, OAGP uses the open-source axe-core engine developed by Deque Systems.
-[axe-core](https://www.npmjs.com/package/axe-core)
+Spring Boot and a Node-based scanning module, OAGP uses the open-source [axe-core](https://www.npmjs.com/package/axe-core) engine developed by Deque Systems.
 
 ## What this version does
 
