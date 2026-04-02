@@ -4,6 +4,7 @@ import com.oagp.dto.AxeResult;
 import com.oagp.dto.AxeViolation;
 import com.oagp.model.Scan;
 import com.oagp.model.Violation;
+import com.oagp.model.ViolationNode;
 import com.oagp.repository.ScanRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,9 +13,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.OffsetDateTime;
 import java.util.List;
-
 /*
  * service class
  * Read JSON file axe-core output
@@ -72,19 +72,17 @@ public class ScanService {
     //Converts DTO → Entity and saves it.
     private Scan saveAxeResult(AxeResult axeResult) {
         Scan scan = new Scan();
-        scan.setUrl(axeResult.getUrl());
+        scan.setAuditName("NEEDS TO BE CORRECTED");
+        scan.setPageUrl(axeResult.getUrl());
 
-        if (axeResult.getTestEngine() != null) {
-            scan.setTestEngineName(axeResult.getTestEngine().getName());
-            scan.setTestEngineVersion(axeResult.getTestEngine().getVersion());
+        if (axeResult.getTimestamp() != null && !axeResult.getTimestamp().isBlank()) {
+            OffsetDateTime offsetDateTime = OffsetDateTime.parse(axeResult.getTimestamp());
+            scan.setScanTimestamp(offsetDateTime.toLocalDateTime());
+            scan.setTimeZone(offsetDateTime.getOffset().toString());
+        } else {
+            scan.setScanTimestamp(LocalDateTime.now());
+            scan.setTimeZone("TEXT");
         }
-
-        if (axeResult.getTestRunner() != null) {
-            scan.setTestRunnerName(axeResult.getTestRunner().getName());
-
-        }
-        scan.setSourceTimestamp(axeResult.getTimestamp());
-        scan.setImportedAt(LocalDateTime.now());
 
         if (axeResult.getViolations() != null) {
             for (AxeViolation axeViolation : axeResult.getViolations()) {
@@ -93,17 +91,34 @@ public class ScanService {
                 violation.setImpact(axeViolation.getImpact());
                 violation.setDescription(axeViolation.getDescription());
                 violation.setHelp(axeViolation.getHelp());
+                violation.setHelpUrl(axeViolation.getHelpUrl());
 
-                StringBuilder targets = new StringBuilder();
-                if (axeViolation.getNodes() != null) {
-                    for (AxeViolation.NodeInfo node : axeViolation.getNodes()) {
-                        if (node.getTarget() != null) {
-                            targets.append(String.join(", ", node.getTarget())).append(" | ");
-                        }
-                    }
+                if (axeViolation.getTags() != null) {
+                    violation.setTags(String.join(", ", axeViolation.getTags()));
+                } else {
+                    violation.setTags(null);
                 }
 
-                violation.setTargetElements(targets.toString());
+                if (axeViolation.getNodes() != null) {
+                    violation.setInstanceCount(axeViolation.getNodes().size());
+
+                    for (AxeViolation.NodeInfo nodeInfo : axeViolation.getNodes()) {
+                        ViolationNode violationNode = new ViolationNode();
+                        violationNode.setMessage(nodeInfo.getFailureSummary());
+                        violationNode.setHtml(nodeInfo.getHtml());
+
+                        if (nodeInfo.getTarget() != null && !nodeInfo.getTarget().isEmpty()) {
+                            violationNode.setElementType(nodeInfo.getTarget().get(0));
+                        } else {
+                            violationNode.setElementType("unknown");
+                        }
+
+                        violation.addNode(violationNode);
+                    }
+                } else {
+                    violation.setInstanceCount(0);
+                }
+
                 scan.addViolation(violation);
             }
         }
@@ -118,6 +133,6 @@ public class ScanService {
 
     //Returns the most recently added scan
     public Scan getLatestScan() {
-    return scanRepository.findTopByOrderByIdDesc().orElse(null);
-}
+        return scanRepository.findTopByOrderByIdDesc().orElse(null);
+    }
 }

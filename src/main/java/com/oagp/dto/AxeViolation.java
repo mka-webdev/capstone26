@@ -16,11 +16,31 @@ public class AxeViolation {
     private String impact;
     private String description;
     private String help;
+    private List<String> tags;
+    private String helpUrl;
     private List<NodeInfo> nodes;
 
     //Nested static class representing each affected HTML element (node)
     public static class NodeInfo {
+        private String failureSummary;
+        private String html;
         private List<String> target;
+
+        public String getFailureSummary() {
+            return failureSummary;
+        }
+
+        public void setFailureSummary(String failureSummary) {
+            this.failureSummary = failureSummary;
+        }
+
+        public String getHtml() {
+            return html;
+        }
+
+        public void setHtml(String html) {
+            this.html = html;
+        }
 
         public List<String> getTarget() {
             return target;
@@ -61,6 +81,22 @@ public class AxeViolation {
 
     public void setHelp(String help) {
         this.help = help;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public String getHelpUrl() {
+        return helpUrl;
+    }
+
+    public void setHelpUrl(String helpUrl) {
+        this.helpUrl = helpUrl;
     }
 
     public List<NodeInfo> getNodes() {

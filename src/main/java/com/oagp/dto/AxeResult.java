@@ -15,47 +15,8 @@ import java.util.List;
 public class AxeResult {
 
     private String url;
-    private TestEngine testEngine;
-    private TestRunner testRunner;
     private String timestamp;
     private List<AxeViolation> violations;
-    
-    //Nested static class representing the "testEngine" object in JSON
-    public static class TestEngine {
-        private String name;
-        private String version;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getVersion() {
-            return version;
-        }
-
-        public void setVersion(String version) {
-            this.version = version;
-        }
-    }
-    //Nested static class representing the "testRunner" object in JSON
-    public static class TestRunner {
-        private String name;
-       
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        
-    }
 
     public String getUrl() {
         return url;
@@ -63,22 +24,6 @@ public class AxeResult {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public TestEngine getTestEngine() {
-        return testEngine;
-    }
-
-    public void setTestEngine(TestEngine testEngine) {
-        this.testEngine = testEngine;
-    }
-
-    public TestRunner getTestRunner() {
-        return testRunner;
-    }
-
-    public void setTestRunner(TestRunner testRunner) {
-        this.testRunner = testRunner;
     }
 
     public String getTimestamp() {
