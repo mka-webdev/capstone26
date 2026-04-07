@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 /*
  * service class
@@ -48,17 +49,17 @@ public class ScanService {
         if (root.isArray()) {
             for (JsonNode node : root) {
                 AxeResult axeResult = objectMapper.treeToValue(node, AxeResult.class);
-                saveAxeResult(axeResult);
+                saveAxeResult(axeResult, "Imported Scan");
             }
         } else if (root.isObject()) {
             AxeResult axeResult = objectMapper.treeToValue(root, AxeResult.class);
-            saveAxeResult(axeResult);
+            saveAxeResult(axeResult, "Imported Scan");
         } else {
             throw new IOException("Unsupported JSON format in results.json");
         }
     }
 
-    public Scan processScannedJson(Path jsonPath) throws IOException {
+    public Scan processScannedJson(Path jsonPath,String auditName) throws IOException {
         JsonNode root = objectMapper.readTree(jsonPath.toFile());
 
         if (!root.isObject()) {
@@ -66,22 +67,24 @@ public class ScanService {
         }
 
         AxeResult axeResult = objectMapper.treeToValue(root, AxeResult.class);
-        return saveAxeResult(axeResult);
+        return saveAxeResult(axeResult, auditName);
     }
 
     //Converts DTO → Entity and saves it.
-    private Scan saveAxeResult(AxeResult axeResult) {
+    private Scan saveAxeResult(AxeResult axeResult, String auditName) {
         Scan scan = new Scan();
-        scan.setAuditName("NEEDS TO BE CORRECTED");
+        scan.setAuditName(auditName);
         scan.setPageUrl(axeResult.getUrl());
 
         if (axeResult.getTimestamp() != null && !axeResult.getTimestamp().isBlank()) {
             OffsetDateTime offsetDateTime = OffsetDateTime.parse(axeResult.getTimestamp());
             scan.setScanTimestamp(offsetDateTime.toLocalDateTime());
-            scan.setTimeZone(offsetDateTime.getOffset().toString());
+            //scan.setTimeZone(offsetDateTime.getOffset().toString());
+            scan.setTimeZone(ZoneId.systemDefault().getId());
         } else {
             scan.setScanTimestamp(LocalDateTime.now());
-            scan.setTimeZone("TEXT");
+            //scan.setTimeZone("UTC");
+            scan.setTimeZone(ZoneId.systemDefault().getId());
         }
 
         if (axeResult.getViolations() != null) {

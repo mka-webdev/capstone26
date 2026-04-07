@@ -64,27 +64,49 @@
 <body>
 
 <h1>OAGP Accessibility Scan Results</h1>
+
 <h2>Run New Scan</h2>
 
 <form method="post" action="/scan">
-    <label for="url">Page URL:</label>
-    <input type="text" id="url" name="url" placeholder="Enter page URL" required style="width: 400px;">
+
+    <!-- ✅ NEW: Audit Name Field -->
+    <label for="auditName">Audit Name:</label><br>
+    <input type="text"
+           id="auditName"
+           name="auditName"
+           placeholder="Enter audit name"
+           required
+           style="width: 400px;">
+    <br><br>
+
+    <!-- Existing URL field -->
+    <label for="url">Page URL:</label><br>
+    <input type="text"
+           id="url"
+           name="url"
+           placeholder="Enter page URL"
+           required
+           style="width: 400px;">
     <p style="margin-top: 6px; font-size: 0.95em; color: #555;">
         Accepted formats: example.com, www.example.com, https://example.com, localhost:8080
     </p>
-    <button type="submit">Scan</button>
+
+    <button type="submit">Run Scan</button>
 </form>
 
+<!-- Error message -->
 <div th:if="${errorMessage != null}" style="color: red; margin-top: 15px;">
     <p th:text="${errorMessage}"></p>
 </div>
 
 <hr>
 
+<!-- No scan -->
 <div th:if="${scan == null}">
     <p>No scan results found.</p>
 </div>
 
+<!-- Scan results -->
 <div th:if="${scan != null}" class="scan-block">
 
     <h2>Scan Details</h2>
@@ -141,7 +163,10 @@
                 <td th:text="${violation.help}"></td>
                 <td th:text="${violation.tags}"></td>
                 <td>
-                    <a th:if="${violation.helpUrl != null}" th:href="${violation.helpUrl}" th:text="${violation.helpUrl}" target="_blank"></a>
+                    <a th:if="${violation.helpUrl != null}"
+                       th:href="${violation.helpUrl}"
+                       th:text="${violation.helpUrl}"
+                       target="_blank"></a>
                     <span th:if="${violation.helpUrl == null}">N/A</span>
                 </td>
                 <td th:text="${violation.instanceCount}"></td>
@@ -149,8 +174,10 @@
         </tbody>
     </table>
 
+    <!-- Detailed violations -->
     <div th:if="${scan.violations != null and !#lists.isEmpty(scan.violations)}">
         <div th:each="violation : ${scan.violations}" class="scan-block">
+
             <h3 th:text="'Violation: ' + ${violation.ruleId}"></h3>
 
             <table>
@@ -177,7 +204,10 @@
                 <tr>
                     <th>Help URL</th>
                     <td>
-                        <a th:if="${violation.helpUrl != null}" th:href="${violation.helpUrl}" th:text="${violation.helpUrl}" target="_blank"></a>
+                        <a th:if="${violation.helpUrl != null}"
+                           th:href="${violation.helpUrl}"
+                           th:text="${violation.helpUrl}"
+                           target="_blank"></a>
                         <span th:if="${violation.helpUrl == null}">N/A</span>
                     </td>
                 </tr>
@@ -195,7 +225,9 @@
 
             <div th:if="${violation.nodes != null and !#lists.isEmpty(violation.nodes)}">
                 <div th:each="node : ${violation.nodes}" class="node-block">
-                    <div class="node-title" th:text="'Node ID: ' + ${node.id}"></div>
+
+                    <div class="node-title"
+                         th:text="'Node ID: ' + ${node.id}"></div>
 
                     <table>
                         <tr>
@@ -213,6 +245,7 @@
                             <td th:text="${node.elementType}"></td>
                         </tr>
                     </table>
+
                 </div>
             </div>
 

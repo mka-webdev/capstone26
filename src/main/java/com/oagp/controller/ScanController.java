@@ -33,13 +33,16 @@ public class ScanController {
     }
 
     @PostMapping("/scan")
-    public String runScan(@RequestParam("url") String url, Model model) {
+    public String runScan(@RequestParam("url") String url,
+            @RequestParam("auditName") String auditName,
+            Model model) {
         try {
             String normalizedUrl = normalizeUrl(url);
             validateUrl(normalizedUrl);
 
             Path jsonPath = scannerProcessService.runScan(normalizedUrl);
-            scanService.processScannedJson(jsonPath);
+
+            scanService.processScannedJson(jsonPath, auditName);
 
             return "redirect:/";
 
@@ -50,7 +53,7 @@ public class ScanController {
 
         } catch (IOException | InterruptedException e) {
             model.addAttribute("scan", scanService.getLatestScan());
-            model.addAttribute("errorMessage", "Unable to scan the page. Check that the address is correct and reachable.");
+            model.addAttribute("errorMessage", "Unable to scan the page.");
             return "output";
         }
     }
