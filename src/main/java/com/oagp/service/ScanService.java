@@ -258,28 +258,10 @@ public class ScanService {
 
         scanReportRepository.save(scanReport);
 
-        writeLatestReportToTextFile(scanReport.getReportText());
+        
     }
 
-    private void writeLatestReportToTextFile(String reportText) {
-        try {
-            Path reportsFolder = Paths.get("reports");
-            Files.createDirectories(reportsFolder);
-
-            Path reportPath = reportsFolder.resolve("latest-scan-report.txt");
-
-            Files.writeString(
-                    reportPath,
-                    reportText,
-                    StandardCharsets.UTF_8,
-                    StandardOpenOption.CREATE,
-                    StandardOpenOption.TRUNCATE_EXISTING
-            );
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to write latest scan report text file", e);
-        }
-    }
+    
 
     //Returns all scan records from the database
     public List<Scan> getAllScans() {
