@@ -52,7 +52,7 @@ Users will be able to select an AI provider before running a scan.
 
 Planned behavior:
 - Default provider: Google Gemini (free-tier friendly)
-- Optional provider: OpenAI (user-supplied API key)
+- Optional provider: OpenAI (user-supplied API key stored locally on user's machine)
 - The system selects the provider dynamically at runtime
 
 AI generation is system-triggered after scan processing and does not require manual user input.
