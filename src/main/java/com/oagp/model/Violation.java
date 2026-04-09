@@ -18,8 +18,6 @@ import java.util.List;
  * 
  * This class represents a "Violation" table in the database.
  */
- 
-
 @Entity
 public class Violation {
 
@@ -43,6 +41,17 @@ public class Violation {
     private String helpUrl;
 
     private Integer instanceCount;
+
+    /*
+ * The remediation field stores the accessibility report text generated
+ * by the AI system after a scan is processed.
+ *
+ * When the user triggers report generation, the system builds a prompt
+ * using the full scan data, sends it to the AI service, and saves the
+ * returned report text in this field.
+     */
+    @Column(length = 10000)
+    private String remediation;
 
     @ManyToOne
     @JoinColumn(name = "scan_id")
@@ -118,6 +127,14 @@ public class Violation {
 
     public void setInstanceCount(Integer instanceCount) {
         this.instanceCount = instanceCount;
+    }
+
+    public String getRemediation() {
+        return remediation;
+    }
+
+    public void setRemediation(String remediation) {
+        this.remediation = remediation;
     }
 
     public Scan getScan() {

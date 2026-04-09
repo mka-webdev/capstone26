@@ -17,11 +17,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 /*
  * service class
@@ -34,26 +30,26 @@ import java.nio.file.StandardOpenOption;
 @Service
 public class ScanService {
 
-    //Repository used to save and retrieve Scan data from the database
+    // Repository used to save and retrieve Scan data from the database
     private final ScanRepository scanRepository;
     private final ScanReportRepository scanReportRepository;
 
     /*
      * Jackson ObjectMapper used to:
      * Parse JSON files
-     * -Convert JSON → Java objects
+     * Convert JSON → Java objects
      */
     private final ObjectMapper objectMapper;
 
     public ScanService(ScanRepository scanRepository,
-            ScanReportRepository scanReportRepository,
-            ObjectMapper objectMapper) {
+                       ScanReportRepository scanReportRepository,
+                       ObjectMapper objectMapper) {
         this.scanRepository = scanRepository;
         this.scanReportRepository = scanReportRepository;
         this.objectMapper = objectMapper;
     }
 
-    //Reads the JSON file and processes its contents.
+    // Reads the JSON file and processes its contents.
     public void processJsonFile(Path jsonPath) throws IOException {
         JsonNode root = objectMapper.readTree(jsonPath.toFile());
 
@@ -81,7 +77,7 @@ public class ScanService {
         return saveAxeResult(axeResult, auditName);
     }
 
-    //Converts DTO → Entity and saves it.
+    // Converts DTO → Entity and saves it.
     private Scan saveAxeResult(AxeResult axeResult, String auditName) {
         Scan scan = new Scan();
         scan.setAuditName(auditName);
@@ -90,11 +86,9 @@ public class ScanService {
         if (axeResult.getTimestamp() != null && !axeResult.getTimestamp().isBlank()) {
             OffsetDateTime offsetDateTime = OffsetDateTime.parse(axeResult.getTimestamp());
             scan.setScanTimestamp(offsetDateTime.toLocalDateTime());
-            //scan.setTimeZone(offsetDateTime.getOffset().toString());
             scan.setTimeZone(ZoneId.systemDefault().getId());
         } else {
             scan.setScanTimestamp(LocalDateTime.now());
-            //scan.setTimeZone("UTC");
             scan.setTimeZone(ZoneId.systemDefault().getId());
         }
 
@@ -139,6 +133,10 @@ public class ScanService {
 
         Scan savedScan = scanRepository.save(scan);
         buildAndSaveScanReport(savedScan);
+
+        // Remediation is now triggered manually from the front-end button,
+        // so it is NOT called automatically here.
+
         return savedScan;
     }
 
@@ -257,19 +255,20 @@ public class ScanService {
         scanReport.setReportText(reportTextBuilder.toString());
 
         scanReportRepository.save(scanReport);
-
-        
     }
 
-    
-
-    //Returns all scan records from the database
+    // Returns all scan records from the database
     public List<Scan> getAllScans() {
         return scanRepository.findAll();
     }
 
-    //Returns the most recently added scan
+    // Returns the most recently added scan
     public Scan getLatestScan() {
         return scanRepository.findTopByOrderByIdDesc().orElse(null);
+    }
+
+    // Returns a scan by its database ID
+    public Scan getScanById(Long id) {
+        return scanRepository.findById(id).orElse(null);
     }
 }

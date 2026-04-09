@@ -58,6 +58,16 @@
             padding: 10px;
             border: 1px solid #ccc;
         }
+
+        .button-row {
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .button-row button {
+            padding: 10px 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -69,7 +79,6 @@
 
 <form method="post" action="/scan">
 
-    <!-- ✅ NEW: Audit Name Field -->
     <label for="auditName">Audit Name:</label><br>
     <input type="text"
            id="auditName"
@@ -79,7 +88,6 @@
            style="width: 400px;">
     <br><br>
 
-    <!-- Existing URL field -->
     <label for="url">Page URL:</label><br>
     <input type="text"
            id="url"
@@ -94,19 +102,16 @@
     <button type="submit">Run Scan</button>
 </form>
 
-<!-- Error message -->
 <div th:if="${errorMessage != null}" style="color: red; margin-top: 15px;">
     <p th:text="${errorMessage}"></p>
 </div>
 
 <hr>
 
-<!-- No scan -->
 <div th:if="${scan == null}">
     <p>No scan results found.</p>
 </div>
 
-<!-- Scan results -->
 <div th:if="${scan != null}" class="scan-block">
 
     <h2>Scan Details</h2>
@@ -133,6 +138,13 @@
             <td th:text="${scan.timeZone}"></td>
         </tr>
     </table>
+
+    <!-- ✅ Button remains -->
+    <div class="button-row">
+        <form th:action="@{/generate-report}" method="post">
+            <button type="submit">Generate AI Report</button>
+        </form>
+    </div>
 
     <h3>Violations</h3>
 
@@ -174,7 +186,6 @@
         </tbody>
     </table>
 
-    <!-- Detailed violations -->
     <div th:if="${scan.violations != null and !#lists.isEmpty(scan.violations)}">
         <div th:each="violation : ${scan.violations}" class="scan-block">
 
