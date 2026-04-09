@@ -1,225 +1,210 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en-AU" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>OAGP Accessibility Scan Results</title>
-    <meta charset="UTF-8">
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1, h2, h3 {
-            color: #2c3e50;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-bottom: 30px;
-        }
-
-        th, td {
-            border: 1px solid #999;
-            padding: 8px;
-            text-align: left;
-            vertical-align: top;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .scan-block {
-            margin-bottom: 40px;
-            padding: 15px;
-            border: 1px solid #ccc;
-            background-color: #fafafa;
-        }
-
-        .node-block {
-            margin-top: 15px;
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            background-color: #fff;
-        }
-
-        .node-title {
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            background-color: #f4f4f4;
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
-    </style>
+    <meta charset="utf-8" />
+    <title>OAGP - Scan Management</title>
+    <link rel="stylesheet" th:href="@{/style.css}" />
 </head>
 
-<body>
+<!-- Main Screen Panel-->
+<div class="screen">
 
-<h1>OAGP Accessibility Scan Results</h1>
-<h2>Run New Scan</h2>
+    <!-- Sidebar And Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>OAGP</h2>
+        </div>
 
-<form method="post" action="/scan">
-    <label for="url">Page URL:</label>
-    <input type="text" id="url" name="url" placeholder="Enter page URL" required style="width: 400px;">
-    <p style="margin-top: 6px; font-size: 0.95em; color: #555;">
-        Accepted formats: example.com, www.example.com, https://example.com, localhost:8080
-    </p>
-    <button type="submit">Scan</button>
-</form>
-
-<div th:if="${errorMessage != null}" style="color: red; margin-top: 15px;">
-    <p th:text="${errorMessage}"></p>
-</div>
-
-<hr>
-
-<div th:if="${scan == null}">
-    <p>No scan results found.</p>
-</div>
-
-<div th:if="${scan != null}" class="scan-block">
-
-    <h2>Scan Details</h2>
-
-    <table>
-        <tr>
-            <th>ID</th>
-            <td th:text="${scan.id}"></td>
-        </tr>
-        <tr>
-            <th>Audit Name</th>
-            <td th:text="${scan.auditName}"></td>
-        </tr>
-        <tr>
-            <th>Page URL</th>
-            <td th:text="${scan.pageUrl}"></td>
-        </tr>
-        <tr>
-            <th>Scan Timestamp</th>
-            <td th:text="${scan.scanTimestamp}"></td>
-        </tr>
-        <tr>
-            <th>Time Zone</th>
-            <td th:text="${scan.timeZone}"></td>
-        </tr>
-    </table>
-
-    <h3>Violations</h3>
-
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Rule ID</th>
-                <th>Impact</th>
-                <th>Description</th>
-                <th>Help</th>
-                <th>Tags</th>
-                <th>Help URL</th>
-                <th>Instance Count</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr th:if="${scan.violations == null or #lists.isEmpty(scan.violations)}">
-                <td colspan="8">No violations found.</td>
-            </tr>
-
-            <tr th:each="violation : ${scan.violations}">
-                <td th:text="${violation.id}"></td>
-                <td th:text="${violation.ruleId}"></td>
-                <td th:text="${violation.impact}"></td>
-                <td th:text="${violation.description}"></td>
-                <td th:text="${violation.help}"></td>
-                <td th:text="${violation.tags}"></td>
-                <td>
-                    <a th:if="${violation.helpUrl != null}" th:href="${violation.helpUrl}" th:text="${violation.helpUrl}" target="_blank"></a>
-                    <span th:if="${violation.helpUrl == null}">N/A</span>
-                </td>
-                <td th:text="${violation.instanceCount}"></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div th:if="${scan.violations != null and !#lists.isEmpty(scan.violations)}">
-        <div th:each="violation : ${scan.violations}" class="scan-block">
-            <h3 th:text="'Violation: ' + ${violation.ruleId}"></h3>
-
-            <table>
-                <tr>
-                    <th>Rule ID</th>
-                    <td th:text="${violation.ruleId}"></td>
-                </tr>
-                <tr>
-                    <th>Impact</th>
-                    <td th:text="${violation.impact}"></td>
-                </tr>
-                <tr>
-                    <th>Description</th>
-                    <td th:text="${violation.description}"></td>
-                </tr>
-                <tr>
-                    <th>Help</th>
-                    <td th:text="${violation.help}"></td>
-                </tr>
-                <tr>
-                    <th>Tags</th>
-                    <td th:text="${violation.tags}"></td>
-                </tr>
-                <tr>
-                    <th>Help URL</th>
-                    <td>
-                        <a th:if="${violation.helpUrl != null}" th:href="${violation.helpUrl}" th:text="${violation.helpUrl}" target="_blank"></a>
-                        <span th:if="${violation.helpUrl == null}">N/A</span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Instance Count</th>
-                    <td th:text="${violation.instanceCount}"></td>
-                </tr>
-            </table>
-
-            <h3>Violation Nodes</h3>
-
-            <div th:if="${violation.nodes == null or #lists.isEmpty(violation.nodes)}">
-                <p>No node details found.</p>
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <h3>Actions</h3>
+                <a href="/" class="nav-item active">New Scan</a>
             </div>
+        </nav>
+    </aside>
 
-            <div th:if="${violation.nodes != null and !#lists.isEmpty(violation.nodes)}">
-                <div th:each="node : ${violation.nodes}" class="node-block">
-                    <div class="node-title" th:text="'Node ID: ' + ${node.id}"></div>
+    <!-- Main Content Panel -->
+    <main class="main-content">
 
-                    <table>
+        <!-- Application Header -->
+        <header class="header-banner">
+            <h1><strong>OAGP</strong> Open Accessibility Governance Platform</h1>
+        </header>
+
+        <!-- Error Panel -->
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <!-- Scan Input and Submission Panel -->
+        <div class="control-panel card">
+            <h2>Scan Management</h2>
+
+            <form th:action="@{/scan}" method="post" class="scan-form">
+                <div class="input-group">
+                    <input type="text" name="url" placeholder="Enter page URL" required
+                           th:value="${scan != null ? scan.pageUrl : ''}" />
+                    <button type="submit" class="btn btn-primary">Run New Scan</button>
+                </div>
+                <small class="hint">Accepted formats: https://example.com, example.com, localhost:8080</small>
+            </form>
+        </div>
+
+        <!-- Main Scan State -->
+        <section th:if="${scan != null}">
+
+            <!-- Exit case 1 : Violations Found (VIOLATIONS FOUND) -->
+            <div th:if="${!#lists.isEmpty(scan.violations)}">
+
+                <!-- Scan Header and Violation Count -->
+                <div class="results-header card">
+                    <div class="header-main">
+                        <h2 th:text="'Results for: ' + ${scan.pageUrl}"></h2>
+                        <p>
+                            Scanned on:
+                            <span th:text="${#temporals.format(scan.scanTimestamp, 'dd-MM-yyyy HH:mm')}"></span>
+                        </p>
+                    </div>
+
+                    <!-- Violation Count Panel-->
+                    <div class="metrics-grid">
+                        <div class="metric-card card">
+                            <div class="metric-label">Total Violations</div>
+                            <div class="metric-value" th:text="${#lists.size(scan.violations)}"></div>
+                        </div>
+
+                        <div class="metric-card card">
+                            <div class="metric-label">Critical</div>
+                            <div class="metric-value"
+                                 th:text="${scan.violations.?[impact.toLowerCase() == 'critical'].size()}"></div>
+                        </div>
+
+                        <div class="metric-card card">
+                            <div class="metric-label">Serious</div>
+                            <div class="metric-value"
+                                 th:text="${scan.violations.?[impact.toLowerCase() == 'serious'].size()}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Violation Table Panel -->
+                <h3 class="section-title">Found Violations</h3>
+
+                <table class="oagp-table">
+                    <thead>
                         <tr>
-                            <th>Message</th>
-                            <td th:text="${node.message}"></td>
+                            <th>#</th>
+                            <th>Rule ID</th>
+                            <th>Impact</th>
+                            <th>Description</th>
+                            <th>Help</th>
+                            <th>Resources</th>
                         </tr>
-                        <tr>
-                            <th>HTML</th>
+                    </thead>
+                    <tbody>
+                        <tr th:each="v, iter : ${scan.violations}">
+                            <td th:text="${iter.count}"></td>
+                            <td class="bold" th:text="${v.ruleId}"></td>
+
                             <td>
-                                <pre th:text="${node.html}"></pre>
+                                <span class="badge"
+                                      th:classappend="${v.impact}"
+                                      th:text="${v.impact}">
+                                </span>
+                            </td>
+
+                            <td th:text="${v.description}"></td>
+                            <td th:text="${v.help}"></td>
+
+                            <td>
+                                <a th:href="${v.helpUrl}" target="_blank" class="link">Learn More</a>
                             </td>
                         </tr>
-                        <tr>
-                            <th>Element Type</th>
-                            <td th:text="${node.elementType}"></td>
-                        </tr>
-                    </table>
+                    </tbody>
+                </table>
+
+                <!-- Violation Expandable Details Panel -->
+                <h3 class="section-title">Technical Details</h3>
+
+                <div class="violation-list">
+                    <details class="violation-card card"
+                             th:each="violation : ${scan.violations}">
+
+                        <summary class="violation-summary">
+                            <span class="badge"
+                                  th:classappend="${violation.impact.toLowerCase()}"
+                                  th:text="${violation.impact}">
+                            </span>
+
+                            <strong th:text="${violation.ruleId}"></strong>
+
+                            <span th:text="${#lists.size(violation.nodes)} + ' instances'"></span>
+                        </summary>
+
+                        <div class="violation-details">
+
+                            <div class="detail-row">
+                                <strong>Description:</strong>
+                                <p th:text="${violation.description}"></p>
+                            </div>
+
+                            <div class="detail-row">
+                                <strong>Tags:</strong>
+                                <div class="tag-cloud">
+                                    <span class="tag"
+                                          th:each="tag : ${#strings.arraySplit(violation.tags, ',')}"
+                                          th:text="${tag}">
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="detail-row">
+                                <strong>Help Resource:</strong>
+                                <a th:href="${violation.helpUrl}" target="_blank">
+                                    View Remediation Guide
+                                </a>
+                            </div>
+
+                            <div class="instances-section">
+                                <h4>Affected Elements</h4>
+
+                                <div class="node-item"
+                                     th:each="node : ${violation.nodes}">
+
+                                    <code>
+                                        Element:
+                                        <span th:text="${node.elementType}"></span>
+                                    </code>
+
+                                    <pre class="html-snippet"
+                                         th:text="${node.html}"></pre>
+
+                                    <p th:text="${node.message}"></p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </details>
                 </div>
+
             </div>
 
+            <!-- Exit case 2 : No violations found (SUCCESSFUL SCAN) -->
+            <div th:if="${#lists.isEmpty(scan.violations)}"
+                 class="success-state card">
+
+                <h2>No Violations Found!</h2>
+                <p>
+                    Excellent! The page at
+                    <strong th:text="${scan.pageUrl}"></strong>
+                    passed all accessibility checks.
+                </p>
+            </div>
+
+        </section>
+
+        <!-- Exit case 3 : No scan data has been found. (LACK OF SCAN DATA)-->
+        <div th:if="${scan == null}" class="empty-state">
+            <p>No scan data available. Enter a URL above to begin an audit.</p>
         </div>
-    </div>
 
+    </main>
 </div>
-
-</body>
-</html>

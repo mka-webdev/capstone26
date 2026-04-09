@@ -1,0 +1,368 @@
+/* Uniform Variable Declarations */
+:root {
+    --primary-color: #2c3e50;
+    --accent-color: #2471a3;
+
+    --bg-main: #ffffff;
+    --bg-soft: #f8f9fa;
+
+    --border: #dee2e6;
+
+    --danger: #e74c3c;
+    --success-bg: #e8f5e9;
+    --success-border: #2e7d32;
+
+    --text-main: #333;
+    --text-muted: #595959;
+
+    --radius: 8px;
+}
+
+/* Base Screen Style */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-main);
+    background: var(--bg-main);
+}
+
+.screen {
+    display: flex;
+    min-height: 100vh;
+}
+
+.bold {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Link Styling */
+.link {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+/* Sidebar and Navigation Style */
+.sidebar {
+    width: 260px;
+    padding: 20px;
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.sidebar-header h2 {
+    margin: 0 0 20px;
+}
+
+.nav-section h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+.nav-item {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 0;
+    font-size: 14px;
+}
+
+.nav-item.active {
+    font-weight: 600;
+}
+
+/* Main Content Panel Style */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    background: var(--bg-soft);
+}
+
+.header-banner h1 {
+    font-size: 24px;
+    font-weight: 300;
+    margin-bottom: 30px;
+}
+
+/* Item Card Style*/
+.card {
+    background: var(--bg-main);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05)
+}
+
+/* Control and Submission Panel */
+.control-panel {
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.control-panel h2 {
+    margin-top: 0;
+}
+
+/* Input Form Style */
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.hint {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Scan Results Header */
+.results-header {
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.header-main h2 {
+    margin: 0;
+}
+
+.header-main p {
+    margin: 5px 0 0;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* Violation Count Panel Styel */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.metric-card {
+    padding: 15px;
+    text-align: center;
+}
+
+.metric-label {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.metric-value {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* Violation Table Style */
+.section-title {
+    margin: 25px 0 10px;
+}
+
+.oagp-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-main);
+}
+
+.oagp-table th,
+.oagp-table td {
+    padding: 12px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+    text-align: left;
+}
+
+.oagp-table th {
+    background: #eee;
+    color: #444;
+}
+
+/* Severity Badge Styles */
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.badge.critical {
+    background: #000;
+    color: #fff;
+}
+
+.badge.serious {
+    background: #c0392b;
+    color: #fff;
+}
+
+.badge.moderate {
+    background: #ffe5cc;
+    color: #333;
+}
+
+.badge.minor {
+    background: #bdc3c7;
+    color: #333;
+}
+
+/* Violation Expandable Details Panel Style */
+.violation-list {
+    margin-top: 10px;
+}
+
+.violation-card {
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.violation-summary {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.violation-summary strong {
+    font-family: monospace;
+}
+
+.violation-details {
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Violation Details Panel Content*/
+.detail-row strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.tag {
+    background: #eee;
+    padding: 3px 6px;
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+/* Node Style */
+.instances-section h4 {
+    margin-bottom: 10px;
+}
+
+.node-item {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.node-item:last-child {
+    border-bottom: none;
+}
+
+.html-snippet {
+    background: #2d3436;
+    color: #fab1a0;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    font-family: 'Consolas', monospace;
+    margin: 10px 0;
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace;
+    background: #eee;
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #d63031;
+}
+
+/* Alert Styling */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: var(--radius);
+    font-size: 14px;
+}
+
+.alert-danger {
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border: 1px solid #facccc;
+    background: #fdeaea;
+    color: var(--danger);
+}
+
+/* Success Scan Style */
+.success-state {
+    padding: 40px;
+    text-align: center;
+    margin-top: 20px;
+    background: var(--success-bg);
+    border: 2px dashed var(--success-border);
+    border-radius: var(--radius);
+}
+
+.success-state h2 {
+    color: var(--success-border);
+}
+
+/* Empty / Null Scan Data Style */
+.empty-state {
+    text-align: center;
+    margin-top: 40px;
+    color: var(--text-muted);
+}
+
+code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    background: #dfe6e9;
+    color: #d63031;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
