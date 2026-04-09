@@ -4,8 +4,12 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class ScannerProcessService {
@@ -14,6 +18,8 @@ public class ScannerProcessService {
         Path projectRoot = Paths.get("").toAbsolutePath();
         Path scannerDir = projectRoot.resolve("scanner");
         Path outputPath = projectRoot.resolve("results.json");
+        
+        archiveExistingResults(outputPath, projectRoot);
 
         ProcessBuilder processBuilder = new ProcessBuilder(
                 "node",
@@ -45,4 +51,20 @@ public class ScannerProcessService {
 
         return outputPath;
     }
+    
+    private void archiveExistingResults(Path outputPath, Path projectRoot) throws IOException {
+    if (!Files.exists(outputPath)) {
+        return;
+    }
+
+    Path archiveDir = projectRoot.resolve("scan-archive");
+    Files.createDirectories(archiveDir);
+
+    String timestamp = LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+
+    Path archivedFile = archiveDir.resolve("results_" + timestamp + ".json");
+
+    Files.copy(outputPath, archivedFile, StandardCopyOption.REPLACE_EXISTING);
+}
 }
