@@ -26,9 +26,11 @@ public class ScanController {
     }
 
     @GetMapping("/")
-    public String showLatestScan(Model model) {
-        Scan latestScan = scanService.getLatestScan();
-        model.addAttribute("scan", latestScan);
+    public String showLatestScan(@RequestParam(value = "recentScan", required = false) boolean recentScan, Model model) {
+        if (recentScan)  {
+            Scan latestScan = scanService.getLatestScan();
+            model.addAttribute("scan", latestScan);
+        }
         return "output";
     }
 
@@ -41,7 +43,7 @@ public class ScanController {
             Path jsonPath = scannerProcessService.runScan(normalizedUrl);
             scanService.processScannedJson(jsonPath);
 
-            return "redirect:/";
+            return "redirect:/?recentScan=true";
 
         } catch (IllegalArgumentException e) {
             model.addAttribute("scan", scanService.getLatestScan());
@@ -54,7 +56,7 @@ public class ScanController {
             return "output";
         }
     }
-
+    
     private void validateUrl(String url) {
         try {
             URI uri = new URI(url);
