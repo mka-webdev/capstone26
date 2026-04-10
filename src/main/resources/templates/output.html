@@ -94,8 +94,10 @@
                         <tr>
                             <th>#</th>
                             <th>Rule ID</th>
+                            <th>Instances</th>
                             <th>Impact</th>
                             <th>Description</th>
+                            <th>Tags</th>
                             <th>Help</th>
                             <th>Resources</th>
                         </tr>
@@ -104,8 +106,8 @@
                         <tr th:each="v, iter : ${scan.violations}">
                             <td th:text="${iter.count}"></td>
                             <td class="bold" th:text="${v.ruleId}"></td>
-
-                            <td>
+                            <td th:text="${v.instanceCount}"></td>
+                            <td>    
                                 <span class="badge"
                                       th:classappend="${v.impact}"
                                       th:text="${v.impact}">
@@ -113,6 +115,14 @@
                             </td>
 
                             <td th:text="${v.description}"></td>
+                            <td>
+                                <div class="tag-cloud" th:if="${v.tags != null}">
+                                    <span class="tag" 
+                                          th:each="tag : ${#strings.arraySplit(v.tags, ',')}" 
+                                          th:text="${tag}">
+                                    </span>
+                                </div>
+                            </td>
                             <td th:text="${v.help}"></td>
 
                             <td>
@@ -137,7 +147,7 @@
 
                             <strong th:text="${violation.ruleId}"></strong>
 
-                            <span th:text="${#lists.size(violation.nodes)} + ' instances'"></span>
+                            <span th:text="${violation.instanceCount} + ' instances'"></span>
                         </summary>
 
                         <div class="violation-details">

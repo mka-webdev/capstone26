@@ -206,6 +206,18 @@ input[type="text"] {
     color: #444;
 }
 
+.oagp-table .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-width: 180px; 
+}
+
+.oagp-table .tag {
+    font-size: 10px;
+    padding: 2px 5px;
+}
+
 /* Severity Badge Styles */
 .badge {
     padding: 4px 8px;
