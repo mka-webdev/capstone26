@@ -142,6 +142,17 @@ input[type="text"] {
     color: var(--text-muted);
 }
 
+.input-field {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-field label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
 /* Scan Results Header */
 .results-header {
     padding: 20px;
