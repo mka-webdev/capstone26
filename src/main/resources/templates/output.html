@@ -24,7 +24,8 @@
         </nav>
     </aside>
 
-
+    <!-- Main Content Panel -->
+    <main class="main-content">
         <!-- Application Header -->
         <header class="header-banner">
             <h1><strong>OAGP</strong> Open Accessibility Governance Platform</h1>
@@ -92,8 +93,10 @@
                         <tr>
                             <th>#</th>
                             <th>Rule ID</th>
+                            <th>Instances</th>
                             <th>Impact</th>
                             <th>Description</th>
+                            <th>Tags</th>
                             <th>Help</th>
                             <th>Resources</th>
                         </tr>
@@ -102,8 +105,8 @@
                         <tr th:each="v, iter : ${scan.violations}">
                             <td th:text="${iter.count}"></td>
                             <td class="bold" th:text="${v.ruleId}"></td>
-
-                            <td>
+                            <td th:text="${v.instanceCount}"></td>
+                            <td>    
                                 <span class="badge"
                                       th:classappend="${v.impact}"
                                       th:text="${v.impact}">
@@ -111,14 +114,87 @@
                             </td>
 
                             <td th:text="${v.description}"></td>
+                            <td>
+                                <div class="tag-cloud" th:if="${v.tags != null}">
+                                    <span class="tag" 
+                                          th:each="tag : ${#strings.arraySplit(v.tags, ',')}" 
+                                          th:text="${tag}">
+                                    </span>
+                                </div>
+                            </td>
                             <td th:text="${v.help}"></td>
 
                             <td>
                                 <a th:href="${v.helpUrl}" target="_blank" class="link">Learn More</a>
                             </td>
                         </tr>
-    <!-- Main Content Panel -->
-    <main class="main-content">
+
+                    </tbody>
+                </table>
+
+                <!-- Violation Expandable Details Panel -->
+                <h3 class="section-title">Technical Details</h3>
+
+                <div class="violation-list">
+                    <details class="violation-card card"
+                             th:each="violation : ${scan.violations}">
+
+                        <summary class="violation-summary">
+                            <span class="badge"
+                                  th:classappend="${violation.impact.toLowerCase()}"
+                                  th:text="${violation.impact}">
+                            </span>
+
+                            <strong th:text="${violation.ruleId}"></strong>
+
+                            <span th:text="${violation.instanceCount} + ' instances'"></span>
+                        </summary>
+
+                        <div class="violation-details">
+
+                            <div class="detail-row">
+                                <strong>Description:</strong>
+                                <p th:text="${violation.description}"></p>
+                            </div>
+
+                            <div class="detail-row">
+                                <strong>Tags:</strong>
+                                <div class="tag-cloud">
+                                    <span class="tag"
+                                          th:each="tag : ${#strings.arraySplit(violation.tags, ',')}"
+                                          th:text="${tag}">
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="detail-row">
+                                <strong>Help Resource:</strong>
+                                <a th:href="${violation.helpUrl}" target="_blank">
+                                    View Remediation Guide
+                                </a>
+                            </div>
+
+                            <div class="instances-section">
+                                <h4>Affected Elements</h4>
+
+                                <div class="node-item"
+                                     th:each="node : ${violation.nodes}">
+
+                                    <code>
+                                        Element:
+                                        <span th:text="${node.elementType}"></span>
+                                    </code>
+
+                                    <pre class="html-snippet"
+                                         th:text="${node.html}"></pre>
+
+                                    <p th:text="${node.message}"></p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </details>
+
                 </div>
 
             </div>
