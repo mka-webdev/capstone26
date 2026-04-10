@@ -9,12 +9,16 @@ import com.oagp.repository.ScanRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+import com.oagp.model.ScanReport;
+import com.oagp.repository.ScanReportRepository;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
+import java.io.IOException;
+import java.nio.file.Path;
+
 /*
  * service class
  * Read JSON file axe-core output
@@ -26,39 +30,43 @@ import java.util.List;
 @Service
 public class ScanService {
 
-    //Repository used to save and retrieve Scan data from the database
+    // Repository used to save and retrieve Scan data from the database
     private final ScanRepository scanRepository;
+    private final ScanReportRepository scanReportRepository;
 
     /*
      * Jackson ObjectMapper used to:
      * Parse JSON files
-     * -Convert JSON → Java objects
+     * Convert JSON → Java objects
      */
     private final ObjectMapper objectMapper;
 
-    public ScanService(ScanRepository scanRepository, ObjectMapper objectMapper) {
+    public ScanService(ScanRepository scanRepository,
+                       ScanReportRepository scanReportRepository,
+                       ObjectMapper objectMapper) {
         this.scanRepository = scanRepository;
+        this.scanReportRepository = scanReportRepository;
         this.objectMapper = objectMapper;
     }
 
-    //Reads the JSON file and processes its contents.
+    // Reads the JSON file and processes its contents.
     public void processJsonFile(Path jsonPath) throws IOException {
         JsonNode root = objectMapper.readTree(jsonPath.toFile());
 
         if (root.isArray()) {
             for (JsonNode node : root) {
                 AxeResult axeResult = objectMapper.treeToValue(node, AxeResult.class);
-                saveAxeResult(axeResult);
+                saveAxeResult(axeResult, "Imported Scan");
             }
         } else if (root.isObject()) {
             AxeResult axeResult = objectMapper.treeToValue(root, AxeResult.class);
-            saveAxeResult(axeResult);
+            saveAxeResult(axeResult, "Imported Scan");
         } else {
             throw new IOException("Unsupported JSON format in results.json");
         }
     }
 
-    public Scan processScannedJson(Path jsonPath) throws IOException {
+    public Scan processScannedJson(Path jsonPath, String auditName) throws IOException {
         JsonNode root = objectMapper.readTree(jsonPath.toFile());
 
         if (!root.isObject()) {
@@ -66,22 +74,22 @@ public class ScanService {
         }
 
         AxeResult axeResult = objectMapper.treeToValue(root, AxeResult.class);
-        return saveAxeResult(axeResult);
+        return saveAxeResult(axeResult, auditName);
     }
 
-    //Converts DTO → Entity and saves it.
-    private Scan saveAxeResult(AxeResult axeResult) {
+    // Converts DTO → Entity and saves it.
+    private Scan saveAxeResult(AxeResult axeResult, String auditName) {
         Scan scan = new Scan();
-        scan.setAuditName("NEEDS TO BE CORRECTED");
+        scan.setAuditName(auditName);
         scan.setPageUrl(axeResult.getUrl());
 
         if (axeResult.getTimestamp() != null && !axeResult.getTimestamp().isBlank()) {
             OffsetDateTime offsetDateTime = OffsetDateTime.parse(axeResult.getTimestamp());
             scan.setScanTimestamp(offsetDateTime.toLocalDateTime());
-            scan.setTimeZone(offsetDateTime.getOffset().toString());
+            scan.setTimeZone(ZoneId.systemDefault().getId());
         } else {
             scan.setScanTimestamp(LocalDateTime.now());
-            scan.setTimeZone("TEXT");
+            scan.setTimeZone(ZoneId.systemDefault().getId());
         }
 
         if (axeResult.getViolations() != null) {
@@ -123,16 +131,144 @@ public class ScanService {
             }
         }
 
-        return scanRepository.save(scan);
+        Scan savedScan = scanRepository.save(scan);
+        buildAndSaveScanReport(savedScan);
+
+        // Remediation is now triggered manually from the front-end button,
+        // so it is NOT called automatically here.
+
+        return savedScan;
     }
 
-    //Returns all scan records from the database
+    private void buildAndSaveScanReport(Scan scan) {
+        if (scan == null) {
+            return;
+        }
+
+        ScanReport scanReport = new ScanReport();
+        scanReport.setScan(scan);
+        scanReport.setReportTitle("Accessibility Report for " + scan.getPageUrl());
+        scanReport.setGeneratedAt(LocalDateTime.now());
+
+        int criticalCount = 0;
+        int seriousCount = 0;
+        int moderateCount = 0;
+        int minorCount = 0;
+
+        StringBuilder reportTextBuilder = new StringBuilder();
+
+        reportTextBuilder.append("Accessibility Scan Report\n");
+        reportTextBuilder.append("=========================\n\n");
+
+        reportTextBuilder.append("Scan Details\n");
+        reportTextBuilder.append("------------\n");
+        reportTextBuilder.append("Audit Name: ").append(scan.getAuditName()).append("\n");
+        reportTextBuilder.append("Page URL: ").append(scan.getPageUrl()).append("\n");
+        reportTextBuilder.append("Scan Timestamp: ").append(scan.getScanTimestamp()).append("\n");
+        reportTextBuilder.append("Time Zone: ").append(scan.getTimeZone()).append("\n\n");
+
+        int totalViolations = 0;
+
+        if (scan.getViolations() != null) {
+            totalViolations = scan.getViolations().size();
+
+            for (Violation violation : scan.getViolations()) {
+                String impact = violation.getImpact();
+
+                if (impact != null) {
+                    switch (impact.toLowerCase()) {
+                        case "critical":
+                            criticalCount++;
+                            break;
+                        case "serious":
+                            seriousCount++;
+                            break;
+                        case "moderate":
+                            moderateCount++;
+                            break;
+                        case "minor":
+                            minorCount++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        String summary = "Total Violations: " + totalViolations
+                + ", Critical: " + criticalCount
+                + ", Serious: " + seriousCount
+                + ", Moderate: " + moderateCount
+                + ", Minor: " + minorCount;
+
+        scanReport.setSummary(summary);
+        scanReport.setTotalViolations(totalViolations);
+        scanReport.setCriticalCount(criticalCount);
+        scanReport.setSeriousCount(seriousCount);
+        scanReport.setModerateCount(moderateCount);
+        scanReport.setMinorCount(minorCount);
+
+        reportTextBuilder.append("Summary\n");
+        reportTextBuilder.append("-------\n");
+        reportTextBuilder.append(summary).append("\n\n");
+
+        reportTextBuilder.append("Detailed Violations\n");
+        reportTextBuilder.append("-------------------\n\n");
+
+        if (scan.getViolations() != null && !scan.getViolations().isEmpty()) {
+            int violationNumber = 1;
+
+            for (Violation violation : scan.getViolations()) {
+                reportTextBuilder.append("Violation ").append(violationNumber).append("\n");
+                reportTextBuilder.append("Rule ID: ").append(violation.getRuleId()).append("\n");
+                reportTextBuilder.append("Impact: ").append(violation.getImpact()).append("\n");
+                reportTextBuilder.append("Description: ").append(violation.getDescription()).append("\n");
+                reportTextBuilder.append("Help: ").append(violation.getHelp()).append("\n");
+                reportTextBuilder.append("Tags: ").append(violation.getTags()).append("\n");
+                reportTextBuilder.append("Help URL: ").append(violation.getHelpUrl()).append("\n");
+                reportTextBuilder.append("Instance Count: ").append(violation.getInstanceCount()).append("\n");
+
+                reportTextBuilder.append("Affected Elements:\n");
+
+                if (violation.getNodes() != null && !violation.getNodes().isEmpty()) {
+                    for (ViolationNode node : violation.getNodes()) {
+                        reportTextBuilder.append("- Message: ").append(node.getMessage()).append("\n");
+                        reportTextBuilder.append("  HTML: ").append(node.getHtml()).append("\n");
+                        reportTextBuilder.append("  Element Type: ").append(node.getElementType()).append("\n");
+                    }
+                } else {
+                    reportTextBuilder.append("- No affected elements recorded\n");
+                }
+
+                reportTextBuilder.append("\n");
+                violationNumber++;
+            }
+        } else {
+            reportTextBuilder.append("No violations found.\n");
+        }
+
+        reportTextBuilder.append("End of Report\n");
+        reportTextBuilder.append("=============\n");
+        reportTextBuilder.append("Generated by OAGP System\n");
+
+        scanReport.setReportText(reportTextBuilder.toString());
+
+        scanReportRepository.save(scanReport);
+    }
+
+    // Returns all scan records from the database
     public List<Scan> getAllScans() {
         return scanRepository.findAll();
     }
 
-    //Returns the most recently added scan
+    // Returns the most recently added scan
     public Scan getLatestScan() {
         return scanRepository.findTopByOrderByIdDesc().orElse(null);
+    }
+
+    // Returns a scan by its database ID
+    public Scan getScanById(Long id) {
+        return scanRepository.findById(id).orElse(null);
     }
 }

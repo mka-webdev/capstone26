@@ -24,8 +24,6 @@
         </nav>
     </aside>
 
-    <!-- Main Content Panel -->
-    <main class="main-content">
 
         <!-- Application Header -->
         <header class="header-banner">
@@ -119,71 +117,8 @@
                                 <a th:href="${v.helpUrl}" target="_blank" class="link">Learn More</a>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
-
-                <!-- Violation Expandable Details Panel -->
-                <h3 class="section-title">Technical Details</h3>
-
-                <div class="violation-list">
-                    <details class="violation-card card"
-                             th:each="violation : ${scan.violations}">
-
-                        <summary class="violation-summary">
-                            <span class="badge"
-                                  th:classappend="${violation.impact.toLowerCase()}"
-                                  th:text="${violation.impact}">
-                            </span>
-
-                            <strong th:text="${violation.ruleId}"></strong>
-
-                            <span th:text="${#lists.size(violation.nodes)} + ' instances'"></span>
-                        </summary>
-
-                        <div class="violation-details">
-
-                            <div class="detail-row">
-                                <strong>Description:</strong>
-                                <p th:text="${violation.description}"></p>
-                            </div>
-
-                            <div class="detail-row">
-                                <strong>Tags:</strong>
-                                <div class="tag-cloud">
-                                    <span class="tag"
-                                          th:each="tag : ${#strings.arraySplit(violation.tags, ',')}"
-                                          th:text="${tag}">
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="detail-row">
-                                <strong>Help Resource:</strong>
-                                <a th:href="${violation.helpUrl}" target="_blank">
-                                    View Remediation Guide
-                                </a>
-                            </div>
-
-                            <div class="instances-section">
-                                <h4>Affected Elements</h4>
-
-                                <div class="node-item"
-                                     th:each="node : ${violation.nodes}">
-
-                                    <code>
-                                        Element:
-                                        <span th:text="${node.elementType}"></span>
-                                    </code>
-
-                                    <pre class="html-snippet"
-                                         th:text="${node.html}"></pre>
-
-                                    <p th:text="${node.message}"></p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </details>
+    <!-- Main Content Panel -->
+    <main class="main-content">
                 </div>
 
             </div>
