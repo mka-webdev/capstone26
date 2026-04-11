@@ -1,17 +1,17 @@
-package com.oagp.service;
+package com.oagp.client;
 
 import com.google.genai.Client;
 import com.google.genai.types.GenerateContentResponse;
 import com.oagp.model.AITier;
-import com.oagp.model.GenerativeAIService;
+import com.oagp.model.GenerativeAIClient;
 import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Service("gemini")
-public class GeminiService implements GenerativeAIService {
+@Component
+public class GeminiClient implements GenerativeAIClient {
 
     private final Client freeClient;
     private final Client paidClient;
@@ -19,7 +19,7 @@ public class GeminiService implements GenerativeAIService {
     @Value("${gemini.model}")
     private String model;
 
-    public GeminiService() {
+    public GeminiClient() {
 
         var freeKey = System.getenv("GEMINI_API_KEY_FREE");
         var paidKey = System.getenv("GEMINI_API_KEY_PAID");

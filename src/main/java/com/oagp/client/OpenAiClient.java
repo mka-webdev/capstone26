@@ -1,20 +1,20 @@
-package com.oagp.service;
+package com.oagp.client;
 
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatModel;
 import com.oagp.model.AITier;
-import com.oagp.model.GenerativeAIService;
+import com.oagp.model.GenerativeAIClient;
 import com.openai.models.responses.Response;
 import com.openai.models.responses.ResponseCreateParams;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service("openai")
-public class OpenAiService implements GenerativeAIService {
+@Component
+public class OpenAiClient implements GenerativeAIClient {
 
     private final OpenAIClient  client;
 
-    public OpenAiService() {
+    public OpenAiClient() {
         client = OpenAIOkHttpClient.fromEnv();
     }
 
