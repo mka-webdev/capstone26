@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface ViolationNodeRepository extends JpaRepository<ViolationNode, Long> {
-    List<ViolationNode> findViolationNodesByViolationId(Long violationId);
 }
