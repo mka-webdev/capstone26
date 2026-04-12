@@ -13,32 +13,19 @@ import java.io.IOException;
 @Component
 public class GeminiClient implements GenerativeAIClient {
 
-    private final Client freeClient;
-    private final Client paidClient;
+    private final String freeKey;
+    private final String paidKey;
 
     @Value("${gemini.model}")
     private String model;
 
     public GeminiClient() {
-
-        var freeKey = System.getenv("GEMINI_API_KEY_FREE");
-        var paidKey = System.getenv("GEMINI_API_KEY_PAID");
-
-        if (freeKey == null || paidKey == null) {
-            throw new RuntimeException("Missing Gemini API keys");
-        }
-
-        this.freeClient = Client.builder()
-                .apiKey(freeKey)
-                .build();
-
-        this.paidClient = Client.builder()
-                .apiKey(paidKey)
-                .build();
+        this.freeKey = System.getenv("GEMINI_API_KEY_FREE");
+        this.paidKey = System.getenv("GEMINI_API_KEY_PAID");
     }
 
     @Override
-    public String ask(String prompt){
+    public String ask(String prompt) {
         return ask(prompt, AITier.FREE);
     }
 
@@ -46,11 +33,24 @@ public class GeminiClient implements GenerativeAIClient {
     public String ask(String prompt, AITier aiTier) {
         GenerateContentResponse response = null;
         try {
+            String selectedKey;
 
-            var client = freeClient;
             if (aiTier == AITier.PAID) {
-                client = paidClient;
+                selectedKey = paidKey;
+                if (selectedKey == null || selectedKey.isBlank()) {
+                    return "Gemini paid API key is missing.";
+                }
+            } else {
+                selectedKey = freeKey;
+                if (selectedKey == null || selectedKey.isBlank()) {
+                    return "Gemini free API key is missing.";
+                }
             }
+
+            Client client = Client.builder()
+                    .apiKey(selectedKey)
+                    .build();
+
             response = client.models.generateContent(
                     model,
                     prompt,
