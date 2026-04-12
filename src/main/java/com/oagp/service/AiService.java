@@ -1,5 +1,10 @@
 package com.oagp.service;
 
+import com.oagp.client.GeminiClient;
+import com.oagp.client.OpenAiClient;
+import com.oagp.model.AIProvider;
+import com.oagp.model.AITier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /*
@@ -19,38 +24,39 @@ import org.springframework.stereotype.Service;
 @Service
 public class AiService {
 
-    /*
-     * Generates a remediation response from the given prompt.
-     *
-     * In this version, the method:
-     * - receives the full prompt text
-     * - inserts that prompt into a sample response template
-     * - returns the combined string
-     *
-     * Parameter:
-     * - prompt: the structured text built from scan data
-     *
-     * Returns:
-     * - a simulated AI response containing the prompt
-     *
-     * Future improvement:
-     * - Replace this implementation with a real AI API call
-     *   (e.g., OpenAI, Gemini, etc.)
-     */
+    @Value("${ai.provider.default:GEMINI}")
+    private AIProvider defaultProvider;
+
+    @Value("${ai.tier.default:FREE}")
+    private AITier defaultTier;
+
+    private final GeminiClient geminiClient;
+    private final OpenAiClient openAiClient;
+
+    public AiService(GeminiClient geminiClient, OpenAiClient openAiClient) {
+        this.geminiClient = geminiClient;
+        this.openAiClient = openAiClient;
+    }
+
     public String generateRemediation(String prompt) {
+        return generateRemediation(prompt, defaultProvider, defaultTier);
+    }
 
-        /*
-         * Java text block is used here to define a multi-line string.
-         *
-         * %s is a placeholder that will be replaced with the prompt.
-         * .formatted(prompt) inserts the prompt into the string.
-         */
-        return """
-                SAMPLE AI RESPONSE
+    public String generateRemediation(String prompt, AIProvider provider) {
+        return generateRemediation(prompt, provider, defaultTier);
+    }
 
-                The following remediation was generated from this prompt:
+    public String generateRemediation(String prompt, AIProvider provider, AITier tier) {
 
-                %s
-                """.formatted(prompt);
+        switch (provider) {
+            case GEMINI:
+                return geminiClient.ask(prompt, tier);
+            case OPEN_AI:
+                return openAiClient.ask(prompt, tier);
+            default:
+                throw new IllegalArgumentException(
+                        "Invalid provider: " + provider + ". Use 'GEMINI' or 'OPEN_AI'."
+                );
+        }
     }
 }

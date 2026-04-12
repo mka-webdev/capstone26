@@ -101,3 +101,30 @@ After pulling the branch, run the following commands once to install the scanner
 cd scanner
 npm install
 npx playwright install
+```
+## Environment Variables
+
+This application requires several environment variables to be configured for AI provider integration. These variables are used to securely supply API keys and configuration without hardcoding sensitive data.
+
+### Required Variables
+
+| Variable Name | Description | Required |
+|--------------|------------|----------|
+| `GEMINI_API_KEY_FREE` | API key for the free-tier Gemini project | Yes (if using Gemini free tier) |
+| `GEMINI_API_KEY_PAID` | API key for the paid Gemini project | Yes (if using Gemini paid tier) |
+| `OPENAI_API_KEY` | API key for OpenAI | Yes (if using OpenAI) |
+
+### Example Setup
+
+#### macOS / Linux
+```bash
+export GEMINI_API_KEY_FREE=your_free_key
+export GEMINI_API_KEY_PAID=your_paid_key
+export OPENAI_API_KEY=your_openai_key
+```
+#### Windows (PowerShell)
+```powershell
+$env:GEMINI_API_KEY_FREE="your_free_key"
+$env:GEMINI_API_KEY_PAID="your_paid_key"
+$env:OPENAI_API_KEY="your_openai_key"
+```
