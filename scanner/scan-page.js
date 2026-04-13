@@ -17,7 +17,7 @@ async function run() {
   let context;
 
   try {
-    browser = await chromium.launch({ headless: true });
+    browser = await chromium.launch({ headless: false });
     context = await browser.newContext();
     const page = await context.newPage();
 
