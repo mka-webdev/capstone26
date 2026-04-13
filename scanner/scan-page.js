@@ -17,7 +17,9 @@ async function run() {
   let context;
 
   try {
-    browser = await chromium.launch({ headless: true });
+    // non-headless mode ensures accurate scans on sites with bot protection
+    // (e.g. Cloudflare), which may block or alter content in headless mode.
+    browser = await chromium.launch({ headless: false });
     context = await browser.newContext();
     const page = await context.newPage();
 

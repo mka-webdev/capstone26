@@ -1,5 +1,6 @@
 package com.oagp.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,14 +8,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * entity class
  * 
  * This class represents a "Violation" table in the database.
  */
- 
-
 @Entity
 public class Violation {
 
@@ -31,14 +34,39 @@ public class Violation {
     @Column(length = 1000)
     private String help;
 
-    @Column(length = 3000)
-    private String targetElements;
+    @Column(length = 2000)
+    private String tags;
+
+    @Column(length = 1000)
+    private String helpUrl;
+
+    private Integer instanceCount;
+
+    /*
+ * The remediation field stores the accessibility report text generated
+ * by the AI system after a scan is processed.
+ *
+ * When the user triggers report generation, the system builds a prompt
+ * using the full scan data, sends it to the AI service, and saves the
+ * returned report text in this field.
+     */
+    @Column(length = 10000)
+    private String remediation;
 
     @ManyToOne
     @JoinColumn(name = "scan_id")
     private Scan scan;
 
+    @OneToMany(mappedBy = "violation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
+    private List<ViolationNode> nodes = new ArrayList<>();
+
     public Violation() {
+    }
+
+    public void addNode(ViolationNode node) {
+        nodes.add(node);
+        node.setViolation(this);
     }
 
     public Long getId() {
@@ -77,12 +105,36 @@ public class Violation {
         this.help = help;
     }
 
-    public String getTargetElements() {
-        return targetElements;
+    public String getTags() {
+        return tags;
     }
 
-    public void setTargetElements(String targetElements) {
-        this.targetElements = targetElements;
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public String getHelpUrl() {
+        return helpUrl;
+    }
+
+    public void setHelpUrl(String helpUrl) {
+        this.helpUrl = helpUrl;
+    }
+
+    public Integer getInstanceCount() {
+        return instanceCount;
+    }
+
+    public void setInstanceCount(Integer instanceCount) {
+        this.instanceCount = instanceCount;
+    }
+
+    public String getRemediation() {
+        return remediation;
+    }
+
+    public void setRemediation(String remediation) {
+        this.remediation = remediation;
     }
 
     public Scan getScan() {
@@ -91,5 +143,13 @@ public class Violation {
 
     public void setScan(Scan scan) {
         this.scan = scan;
+    }
+
+    public List<ViolationNode> getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(List<ViolationNode> nodes) {
+        this.nodes = nodes;
     }
 }

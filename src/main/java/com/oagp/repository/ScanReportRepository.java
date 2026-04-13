@@ -1,12 +1,12 @@
 package com.oagp.repository;
 
-import com.oagp.model.Scan;
+import com.oagp.model.ScanReport;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ScanRepository extends JpaRepository<Scan, Long> {
+public interface ScanReportRepository extends JpaRepository<ScanReport, Long> {
 
-    Optional<Scan> findTopByOrderByIdDesc();
+    Optional<ScanReport> findByScanId(Long scanId);
 }
