@@ -1,6 +1,7 @@
 package com.oagp.controller;
 
 import com.oagp.model.Scan;
+import com.oagp.service.RemediationService;
 import com.oagp.service.ScanService;
 import com.oagp.service.ScannerProcessService;
 import java.io.IOException;
@@ -19,29 +20,38 @@ public class ScanController {
 
     private final ScanService scanService;
     private final ScannerProcessService scannerProcessService;
+    private final RemediationService remediationService;
 
-    public ScanController(ScanService scanService, ScannerProcessService scannerProcessService) {
+    public ScanController(ScanService scanService,
+            ScannerProcessService scannerProcessService,
+            RemediationService remediationService) {
         this.scanService = scanService;
         this.scannerProcessService = scannerProcessService;
+        this.remediationService = remediationService;
     }
 
     @GetMapping("/")
-    public String showLatestScan(Model model) {
-        Scan latestScan = scanService.getLatestScan();
-        model.addAttribute("scan", latestScan);
+    public String showLatestScan(@RequestParam(value = "recentScan", required = false) boolean recentScan, Model model) {
+        if (recentScan)  {
+            Scan latestScan = scanService.getLatestScan();
+            model.addAttribute("scan", latestScan);
+        }
         return "output";
     }
 
     @PostMapping("/scan")
-    public String runScan(@RequestParam("url") String url, Model model) {
+    public String runScan(@RequestParam("url") String url,
+            @RequestParam("auditName") String auditName,
+            Model model) {
         try {
             String normalizedUrl = normalizeUrl(url);
             validateUrl(normalizedUrl);
 
             Path jsonPath = scannerProcessService.runScan(normalizedUrl);
-            scanService.processScannedJson(jsonPath);
 
-            return "redirect:/";
+            scanService.processScannedJson(jsonPath, auditName);
+
+            return "redirect:/?recentScan=true";
 
         } catch (IllegalArgumentException e) {
             model.addAttribute("scan", scanService.getLatestScan());
@@ -50,11 +60,11 @@ public class ScanController {
 
         } catch (IOException | InterruptedException e) {
             model.addAttribute("scan", scanService.getLatestScan());
-            model.addAttribute("errorMessage", "Unable to scan the page. Check that the address is correct and reachable.");
+            model.addAttribute("errorMessage", "Unable to scan the page.");
             return "output";
         }
     }
-
+    
     private void validateUrl(String url) {
         try {
             URI uri = new URI(url);
@@ -115,4 +125,30 @@ public class ScanController {
         return host.contains(".");
     }
 
+    /*
+ * Handles the request to generate an AI report for the current scan.
+ *
+ * This method is called when the user presses the "Generate AI Report"
+ * button on the front end. It retrieves the most recently saved scan
+ * from the database. If a scan exists, it sends that scan to the
+ * remediation service, which builds the prompt data and runs the
+ * AI-report generation process.
+ *
+ * After the process completes, the method redirects the user back
+ * to the home page so the latest scan page is shown again.
+     */
+    @PostMapping("/generate-report")
+    public String generateReportForCurrentScan() {
+        // Retrieve the most recently saved scan from the database.
+        Scan scan = scanService.getLatestScan();
+        // Only continue if a scan was found.
+        if (scan != null) {
+            // Pass the current scan to the remediation service.
+            // That service is responsible for building the full prompt
+            // and running the AI-report generation logic.
+            remediationService.generateRemediationsForScan(scan);
+        }
+        // Redirect the browser back to the home page.
+        return "redirect:/";
+    }
 }
