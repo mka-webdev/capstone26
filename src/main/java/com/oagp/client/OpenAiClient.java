@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class OpenAiClient implements GenerativeAIClient {
 
-    private final OpenAIClient  client;
+    private final String apiKey;
 
     public OpenAiClient() {
-        client = OpenAIOkHttpClient.fromEnv();
+        this.apiKey = System.getenv("OPENAI_API_KEY");
     }
 
     @Override
@@ -25,13 +25,20 @@ public class OpenAiClient implements GenerativeAIClient {
 
     @Override
     public String ask(String question, AITier tier) {
+        if (apiKey == null || apiKey.isBlank()) {
+            return "OpenAI API key is missing.";
+        }
+        OpenAIClient client = OpenAIOkHttpClient.builder()
+        .apiKey(apiKey)
+        .build();
+        
         ResponseCreateParams params = ResponseCreateParams.builder()
                 .input(question)
                 .model(ChatModel.GPT_5_2)
                 .build();
         Response resp = client.responses().create(params);
 
-        return client.responses().create(params).output().stream()
+        return resp.output().stream()
                 .flatMap(item -> item.message().stream())
                 .flatMap(message -> message.content().stream())
                 .flatMap(content -> content.outputText().stream())
