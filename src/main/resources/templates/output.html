@@ -42,7 +42,7 @@
                 <div class="form-body">
 
                     <div class="input-field">
-                        <label for="auditName">Audit Name</label>
+                        <label for="auditName">Scan Name</label>
                         <input type="text" id="auditName" name="auditName" 
                                placeholder="Enter name for new scan" required />
                     </div>
@@ -106,6 +106,7 @@
                         <tr>
                             <th>#</th>
                             <th>Rule ID</th>
+                            <th>Impacted Users</th>
                             <th>Instances</th>
                             <th>Impact</th>
                             <th>Description</th>
@@ -118,6 +119,7 @@
                         <tr th:each="v, iter : ${scan.violations}">
                             <td th:text="${iter.count}"></td>
                             <td class="bold" th:text="${v.ruleId}"></td>
+                            <td th:text="${v.impactedUsers}"></td>
                             <td th:text="${v.instanceCount}"></td>
                             <td>    
                                 <span class="badge"
