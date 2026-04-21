@@ -19,8 +19,14 @@
 }
 
 /* Base Screen Style */
+html,
 body {
+    height: 100%;
     margin: 0;
+    overflow: hidden;
+}
+
+body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: var(--text-main);
     background: var(--bg-main);
@@ -28,7 +34,8 @@ body {
 
 .screen {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .bold {
@@ -50,9 +57,13 @@ body {
 /* Sidebar and Navigation Style */
 .sidebar {
     width: 260px;
+    height: 100vh;
+    flex-shrink: 0;
     padding: 20px;
+    box-sizing: border-box;
     background: var(--primary-color);
     color: #fff;
+    overflow-y: auto;
 }
 
 .sidebar-header h2 {
@@ -80,7 +91,10 @@ body {
 /* Main Content Panel Style */
 .main-content {
     flex: 1;
+    height: 100vh;
+    overflow-y: auto;
     padding: 30px;
+    box-sizing: border-box;
     background: var(--bg-soft);
 }
 
