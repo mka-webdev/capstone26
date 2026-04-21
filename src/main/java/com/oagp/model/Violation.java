@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
+import jakarta.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,8 @@ public class Violation {
     private String helpUrl;
 
     private Integer instanceCount;
+    @Transient
+    private String impactedUsers;
 
     /*
  * The remediation field stores the accessibility report text generated
@@ -151,5 +154,13 @@ public class Violation {
 
     public void setNodes(List<ViolationNode> nodes) {
         this.nodes = nodes;
+    }
+    
+    public String getImpactedUsers() {
+        return impactedUsers;
+    }
+
+    public void setImpactedUsers(String impactedUsers) {
+        this.impactedUsers = impactedUsers;
     }
 }

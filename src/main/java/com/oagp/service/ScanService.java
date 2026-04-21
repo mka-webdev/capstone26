@@ -33,6 +33,7 @@ public class ScanService {
     // Repository used to save and retrieve Scan data from the database
     private final ScanRepository scanRepository;
     private final ScanReportRepository scanReportRepository;
+    private final ImpactMappingService impactMappingService;
 
     /*
      * Jackson ObjectMapper used to:
@@ -42,11 +43,13 @@ public class ScanService {
     private final ObjectMapper objectMapper;
 
     public ScanService(ScanRepository scanRepository,
-                       ScanReportRepository scanReportRepository,
-                       ObjectMapper objectMapper) {
+            ScanReportRepository scanReportRepository,
+            ObjectMapper objectMapper,
+            ImpactMappingService impactMappingService) {
         this.scanRepository = scanRepository;
         this.scanReportRepository = scanReportRepository;
         this.objectMapper = objectMapper;
+        this.impactMappingService = impactMappingService;
     }
 
     // Reads the JSON file and processes its contents.
@@ -100,6 +103,9 @@ public class ScanService {
                 violation.setDescription(axeViolation.getDescription());
                 violation.setHelp(axeViolation.getHelp());
                 violation.setHelpUrl(axeViolation.getHelpUrl());
+                violation.setImpactedUsers(
+                        impactMappingService.getImpactedUsersText(axeViolation.getId())
+                );
 
                 if (axeViolation.getTags() != null) {
                     violation.setTags(String.join(", ", axeViolation.getTags()));
@@ -136,7 +142,6 @@ public class ScanService {
 
         // Remediation is now triggered manually from the front-end button,
         // so it is NOT called automatically here.
-
         return savedScan;
     }
 
@@ -259,16 +264,34 @@ public class ScanService {
 
     // Returns all scan records from the database
     public List<Scan> getAllScans() {
-        return scanRepository.findAll();
+        List<Scan> scans = scanRepository.findAll();
+        scans.forEach(this::applyImpactedUsers);
+        return scans;
     }
 
     // Returns the most recently added scan
     public Scan getLatestScan() {
-        return scanRepository.findTopByOrderByIdDesc().orElse(null);
+        Scan scan = scanRepository.findTopByOrderByIdDesc().orElse(null);
+        applyImpactedUsers(scan);
+        return scan;
     }
 
     // Returns a scan by its database ID
     public Scan getScanById(Long id) {
-        return scanRepository.findById(id).orElse(null);
+        Scan scan = scanRepository.findById(id).orElse(null);
+        applyImpactedUsers(scan);
+        return scan;
+    }
+
+    private void applyImpactedUsers(Scan scan) {
+        if (scan == null || scan.getViolations() == null) {
+            return;
+        }
+
+        for (Violation violation : scan.getViolations()) {
+            violation.setImpactedUsers(
+                    impactMappingService.getImpactedUsersText(violation.getRuleId())
+            );
+        }
     }
 }
