@@ -1,7 +1,6 @@
 package com.oagp.service;
 
-import com.oagp.client.GeminiClient;
-import com.oagp.client.OpenAiClient;
+import com.oagp.factory.AIAnswerStrategyFactory;
 import com.oagp.model.AIProvider;
 import com.oagp.model.AITier;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,12 +29,10 @@ public class AiService {
     @Value("${ai.tier.default:FREE}")
     private AITier defaultTier;
 
-    private final GeminiClient geminiClient;
-    private final OpenAiClient openAiClient;
+    private final AIAnswerStrategyFactory factory;
 
-    public AiService(GeminiClient geminiClient, OpenAiClient openAiClient) {
-        this.geminiClient = geminiClient;
-        this.openAiClient = openAiClient;
+    public AiService(AIAnswerStrategyFactory factory) {
+        this.factory = factory;
     }
 
     public String generateRemediation(String prompt) {
@@ -47,16 +44,10 @@ public class AiService {
     }
 
     public String generateRemediation(String prompt, AIProvider provider, AITier tier) {
-
-        switch (provider) {
-            case GEMINI:
-                return geminiClient.ask(prompt, tier);
-            case OPEN_AI:
-                return openAiClient.ask(prompt, tier);
-            default:
-                throw new IllegalArgumentException(
-                        "Invalid provider: " + provider + ". Use 'GEMINI' or 'OPEN_AI'."
-                );
+        try {
+            return factory.getStrategy(provider, tier).ask(prompt);
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
         }
     }
 }

@@ -1,37 +1,41 @@
-package com.oagp.client;
+package com.oagp.model.strategy;
 
+import com.oagp.model.AIProvider;
+import com.oagp.model.AITier;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatModel;
-import com.oagp.model.AITier;
-import com.oagp.model.GenerativeAIClient;
 import com.openai.models.responses.Response;
 import com.openai.models.responses.ResponseCreateParams;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OpenAiClient implements GenerativeAIClient {
+public class OpenAIPaidStrategy implements AIAnswerStrategy {
 
     private final String apiKey;
 
-    public OpenAiClient() {
+    public OpenAIPaidStrategy() {
         this.apiKey = System.getenv("OPENAI_API_KEY");
     }
 
     @Override
-    public String ask(String question) {
-        return ask(question, null);
+    public AIProvider provider() {
+        return AIProvider.OPEN_AI;
     }
 
     @Override
-    public String ask(String question, AITier tier) {
-        if (apiKey == null || apiKey.isBlank()) {
-            return "OpenAI API key is missing.";
-        }
+    public AITier tier() {
+        return AITier.PAID;
+    }
+    @Override
+    public String ask(String question) throws IllegalArgumentException {
+        if (apiKey == null || apiKey.isEmpty())
+            throw new IllegalArgumentException("OpenAI API key is missing. Please set the OPENAI_API_KEY environment variable.");
+
         OpenAIClient client = OpenAIOkHttpClient.builder()
-        .apiKey(apiKey)
-        .build();
-        
+                .apiKey(apiKey)
+                .build();
+
         ResponseCreateParams params = ResponseCreateParams.builder()
                 .input(question)
                 .model(ChatModel.GPT_5_2)
