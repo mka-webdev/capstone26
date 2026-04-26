@@ -1,8 +1,8 @@
 package com.oagp.service;
 
-import com.oagp.factory.AIAnswerStrategyFactory;
-import com.oagp.model.AIProvider;
-import com.oagp.model.AITier;
+import com.oagp.factory.AiAnswerStrategyFactory;
+import com.oagp.model.AiProvider;
+import com.oagp.model.AiTier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +24,14 @@ import org.springframework.stereotype.Service;
 public class AiService {
 
     @Value("${ai.provider.default:GEMINI}")
-    private AIProvider defaultProvider;
+    private AiProvider defaultProvider;
 
     @Value("${ai.tier.default:FREE}")
-    private AITier defaultTier;
+    private AiTier defaultTier;
 
-    private final AIAnswerStrategyFactory factory;
+    private final AiAnswerStrategyFactory factory;
 
-    public AiService(AIAnswerStrategyFactory factory) {
+    public AiService(AiAnswerStrategyFactory factory) {
         this.factory = factory;
     }
 
@@ -39,11 +39,11 @@ public class AiService {
         return generateRemediation(prompt, defaultProvider, defaultTier);
     }
 
-    public String generateRemediation(String prompt, AIProvider provider) {
+    public String generateRemediation(String prompt, AiProvider provider) {
         return generateRemediation(prompt, provider, defaultTier);
     }
 
-    public String generateRemediation(String prompt, AIProvider provider, AITier tier) {
+    public String generateRemediation(String prompt, AiProvider provider, AiTier tier) {
         try {
             return factory.getStrategy(provider, tier).ask(prompt);
         } catch (IllegalArgumentException e) {

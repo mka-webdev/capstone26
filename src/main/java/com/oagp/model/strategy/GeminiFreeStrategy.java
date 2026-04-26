@@ -2,8 +2,8 @@ package com.oagp.model.strategy;
 
 import com.google.genai.Client;
 import com.google.genai.types.GenerateContentResponse;
-import com.oagp.model.AIProvider;
-import com.oagp.model.AITier;
+import com.oagp.model.AiProvider;
+import com.oagp.model.AiTier;
 import org.apache.http.HttpException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class GeminiFreeStrategy implements AIAnswerStrategy {
+public class GeminiFreeStrategy implements AiAnswerStrategy {
     private final String apiKey;
 
     @Value("${gemini.model}")
@@ -22,13 +22,13 @@ public class GeminiFreeStrategy implements AIAnswerStrategy {
     }
 
     @Override
-    public AIProvider provider() {
-        return AIProvider.GEMINI;
+    public AiProvider provider() {
+        return AiProvider.GEMINI;
     }
 
     @Override
-    public AITier tier() {
-        return AITier.FREE;
+    public AiTier tier() {
+        return AiTier.FREE;
     }
 
     @Override
