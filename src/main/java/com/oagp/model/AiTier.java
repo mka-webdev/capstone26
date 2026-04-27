@@ -1,6 +1,6 @@
 package com.oagp.model;
 
-public enum AITier {
+public enum AiTier {
     FREE,
     PAID
 }
