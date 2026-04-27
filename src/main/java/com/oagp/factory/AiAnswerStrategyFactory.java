@@ -5,7 +5,6 @@ import com.oagp.model.AiTier;
 import com.oagp.model.strategy.AiAnswerStrategy;
 import com.oagp.model.strategy.AiAnswerStrategyKey;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;

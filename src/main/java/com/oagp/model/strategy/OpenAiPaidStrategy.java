@@ -7,9 +7,8 @@ import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatModel;
 import com.openai.models.responses.Response;
 import com.openai.models.responses.ResponseCreateParams;
+import com.openai.models.responses.ResponseOutputText;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @Component
 public class OpenAiPaidStrategy implements AiAnswerStrategy {
@@ -49,7 +48,7 @@ public class OpenAiPaidStrategy implements AiAnswerStrategy {
                     .flatMap(item -> item.message().stream())
                     .flatMap(message -> message.content().stream())
                     .flatMap(content -> content.outputText().stream())
-                    .map(outputText -> outputText.text())
+                    .map(ResponseOutputText::text)
                     .collect(java.util.stream.Collectors.joining())
                     .trim();
         } catch (Exception e) {
