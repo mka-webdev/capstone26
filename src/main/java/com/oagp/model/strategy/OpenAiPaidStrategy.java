@@ -9,6 +9,8 @@ import com.openai.models.responses.Response;
 import com.openai.models.responses.ResponseCreateParams;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component
 public class OpenAiPaidStrategy implements AiAnswerStrategy {
 
@@ -36,18 +38,22 @@ public class OpenAiPaidStrategy implements AiAnswerStrategy {
                 .apiKey(apiKey)
                 .build();
 
-        ResponseCreateParams params = ResponseCreateParams.builder()
-                .input(question)
-                .model(ChatModel.GPT_5_2)
-                .build();
-        Response resp = client.responses().create(params);
+        try {
+            ResponseCreateParams params = ResponseCreateParams.builder()
+                    .input(question)
+                    .model(ChatModel.GPT_5_2)
+                    .build();
+            Response resp = client.responses().create(params);
 
-        return resp.output().stream()
-                .flatMap(item -> item.message().stream())
-                .flatMap(message -> message.content().stream())
-                .flatMap(content -> content.outputText().stream())
-                .map(outputText -> outputText.text())
-                .collect(java.util.stream.Collectors.joining())
-                .trim();
+            return resp.output().stream()
+                    .flatMap(item -> item.message().stream())
+                    .flatMap(message -> message.content().stream())
+                    .flatMap(content -> content.outputText().stream())
+                    .map(outputText -> outputText.text())
+                    .collect(java.util.stream.Collectors.joining())
+                    .trim();
+        } catch (Exception e) {
+            return "OpenAI service returned an unexpected error. Please try again later.";
+        }
     }
 }

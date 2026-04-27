@@ -25,4 +25,9 @@ public class AiController {
                       @PathVariable String prompt) {
         return aiServices.generateRemediation(prompt, provider, tier);
     }
+
+    @GetMapping("/{prompt}")
+    public String ask(@PathVariable String prompt) {
+        return aiServices.generateRemediation(prompt);
+    }
 }

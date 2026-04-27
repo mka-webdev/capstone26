@@ -48,8 +48,10 @@ public class GeminiPaidStrategy implements AiAnswerStrategy {
                     question,
                     null
             );
-        } catch (IOException | HttpException e) {
-            return e.getMessage();
+        } catch (IOException e) {
+            return "Unable to connect to the Gemini API. Please check your internet connection and try again.";
+        } catch (HttpException e) {
+            return "The Gemini API is currently unavailable or rejected the request. Please try again later.";
         }
 
         return response.text();
