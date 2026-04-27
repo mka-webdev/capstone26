@@ -1,0 +1,308 @@
+{
+  "url": "https://edition.cnn.com/",
+  "timestamp": "2026-04-23T06:30:48.973Z",
+  "testEngine": {
+    "name": "axe-core",
+    "version": "4.11.1"
+  },
+  "testRunner": {
+    "name": "playwright"
+  },
+  "violations": [
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "tags": [
+        "cat.color",
+        "wcag2aa",
+        "wcag143",
+        "TTv5",
+        "TT13.c",
+        "EN-301-549",
+        "EN-9.1.4.3",
+        "ACT",
+        "RGAAv4",
+        "RGAA-3.2.1"
+      ],
+      "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#6e6e6e",
+                "bgColor": "#0c0c0c",
+                "contrastRatio": 3.83,
+                "fontSize": "7.5pt (10px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<div class=\"zone__inner has-pseudo-class-fix-layout--6-4\">",
+                  "target": [
+                    ".zone--t-dark > .has-pseudo-class-fix-layout--6-4.zone__inner"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.83 (foreground color: #6e6e6e, background color: #0c0c0c, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<figcaption class=\"interactive-video__credit\">Animation by Agne Jurkenaite/CNN</figcaption>",
+          "target": [
+            ".container_spotlight-package__item-media.container__item-media > .interactive-video[data-component-name=\"interactive-video\"][data-unselectable=\"true\"] > .media__metadata-wrapper > .interactive-video__metadata > .interactive-video__caption[itemprop=\"caption\"] > .interactive-video__credit"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.83 (foreground color: #6e6e6e, background color: #0c0c0c, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+        }
+      ]
+    },
+    {
+      "id": "landmark-unique",
+      "impact": "moderate",
+      "tags": [
+        "cat.semantics",
+        "best-practice"
+      ],
+      "description": "Ensure landmarks are unique",
+      "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-unique?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "landmark-is-unique",
+              "data": {
+                "role": "navigation",
+                "accessibleText": null
+              },
+              "relatedNodes": [
+                {
+                  "html": "<nav class=\"header__nav\" style=\"visibility: visible;\">",
+                  "target": [
+                    ".header__nav"
+                  ]
+                },
+                {
+                  "html": "<nav class=\"subnav\" data-uri=\"cms.cnn.com/_components/subnav/instances/new-edition-footer-v1@published\" data-editable=\"settings\">",
+                  "target": [
+                    ".footer__subnav > .subnav"
+                  ]
+                },
+                {
+                  "html": "<nav class=\"footer__links\" data-editable=\"footerLinks\">",
+                  "target": [
+                    ".footer__links"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "moderate",
+          "html": "<nav data-uri=\"cms.cnn.com/_components/header/instances/cnn-v2@published\" id=\"pageHeader\" data-editable=\"settings\" class=\"header cnn-app-display-none\" data-analytics-aggregate-events=\"true\">",
+          "target": [
+            "#pageHeader"
+          ],
+          "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+        },
+        {
+          "any": [
+            {
+              "id": "landmark-is-unique",
+              "data": {
+                "role": "navigation",
+                "accessibleText": "user account nav"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<nav class=\"user-account-nav use...\" data-uri=\"cms.cnn.com/_compone...\" data-editable=\"settings\" data-one-tap-enabled=\"true\" data-one-tap-enabled...=\"false\" aria-label=\"User Account Nav\" data-avatar-enabled=\"false\" data-follow-tooltip-...=\"true\" tabindex=\"0\" style=\"visibility: visible;\">",
+                  "target": [
+                    "#desktop-footer-account-nav > .user-account-nav.user-account-nav--subscriptions.user-account-nav--unauth"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "moderate",
+          "html": "<nav class=\"user-account-nav use...\" data-uri=\"cms.cnn.com/_compone...\" data-editable=\"settings\" data-one-tap-enabled=\"true\" data-one-tap-enabled...=\"false\" aria-label=\"User Account Nav\" data-avatar-enabled=\"false\" data-follow-tooltip-...=\"true\" tabindex=\"0\" style=\"visibility: visible;\">",
+          "target": [
+            "#desktop-header-account-nav > .user-account-nav.user-account-nav--subscriptions.user-account-nav--unauth"
+          ],
+          "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+        }
+      ]
+    },
+    {
+      "id": "link-name",
+      "impact": "serious",
+      "tags": [
+        "cat.name-role-value",
+        "wcag2a",
+        "wcag244",
+        "wcag412",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT6.a",
+        "EN-301-549",
+        "EN-9.2.4.4",
+        "EN-9.4.1.2",
+        "ACT",
+        "RGAAv4",
+        "RGAA-6.2.1"
+      ],
+      "description": "Ensure links have discernible text",
+      "help": "Links must have discernible text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/link-name?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have text that is visible to screen readers"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "non-empty-title",
+              "data": {
+                "messageKey": "noAttr"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has no title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is in tab order and does not have accessible text"
+            }
+          ],
+          "impact": "serious",
+          "html": "<a href=\"/2026/04/22/us/epste...\" class=\"container__link cont...\" data-link-type=\"article\" data-zjs=\"click\" data-zjs-cms_id=\"cms.cnn.com/_pages/c...\" data-zjs-canonical_u...=\"https://www.cnn.com\" data-zjs-zone_id=\"cms.cnn.com/_compone...\" data-zjs-zone_name=\"zone\" data-zjs-zone_type=\"zone_layout--wi ...>",
+          "target": [
+            ".container_lead-package__link.container_lead-package__left.container_lead-package__light:nth-child(1)"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have text that is visible to screen readers"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "non-empty-title",
+              "data": {
+                "messageKey": "noAttr"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has no title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is in tab order and does not have accessible text"
+            }
+          ],
+          "impact": "serious",
+          "html": "<a href=\"/2026/04/22/world/vi...\" class=\"container__link cont...\" data-link-type=\"vertical-video\" data-zjs=\"click\" data-zjs-cms_id=\"cms.cnn.com/_pages/c...\" data-zjs-canonical_u...=\"https://www.cnn.com\" data-zjs-zone_id=\"cms.cnn.com/_compone...\" data-zjs-zone_name=\"zone\" data-zjs-zone_type=\"zone_lay ...>",
+          "target": [
+            "a[data-zjs-card_link_type=\"interactive-video\"][data-zjs-container_page_position_number=\"7\"][data-zjs-container_position_number=\"3\"]"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+        }
+      ]
+    },
+    {
+      "id": "page-has-heading-one",
+      "impact": "moderate",
+      "tags": [
+        "cat.semantics",
+        "best-practice"
+      ],
+      "description": "Ensure that the page, or at least one of its frames contains a level-one heading",
+      "help": "Page should contain a level-one heading",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/page-has-heading-one?application=playwright",
+      "nodes": [
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "page-has-heading-one",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Page must have a level-one heading"
+            }
+          ],
+          "none": [],
+          "impact": "moderate",
+          "html": "<html lang=\"en\" data-uri=\"cms.cnn.com/_pages/clg35wfph000047qb0ndy7s77@published\" data-layout-uri=\"cms.cnn.com/_layouts/layout-homepage/instances/homepage-international@published\" class=\"userconsent-cntry-au userconsent-state- userconsent-reg-global\">",
+          "target": [
+            "html"
+          ],
+          "failureSummary": "Fix all of the following:\n  Page must have a level-one heading"
+        }
+      ]
+    }
+  ]
+}

@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface ScanReportRepository extends JpaRepository<ScanReport, Long> {
 
     Optional<ScanReport> findByScanId(Long scanId);
+    
+     void deleteByScanId(Long scanId);
 }
