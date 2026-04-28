@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en-AU" xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(pageTitle, content)">
+<head>
+    <meta charset="utf-8" />
+    <title th:text="'OAGP - ' + ${pageTitle}">OAGP</title>
+    <link rel="stylesheet" th:href="@{/style.css}" />
+</head>
+
+<body>
+<div class="screen">
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>OAGP</h2>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <h3>Actions</h3>
+
+                <a th:href="@{/}" class="nav-item"
+                   th:classappend="${activePage == 'scan'} ? ' primary'">
+                    New Scan
+                </a>
+
+                <a th:href="@{/results/latest}" class="nav-item"
+                   th:classappend="${activePage == 'results'} ? ' primary'">
+                    View Latest Scan
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="header-banner">
+            <h1><strong>OAGP</strong> Open Accessibility Governance Platform</h1>
+        </header>
+
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <div th:replace="${content}"></div>
+
+    </main>
+</div>
+</body>
+</html>

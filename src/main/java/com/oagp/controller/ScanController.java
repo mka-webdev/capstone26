@@ -31,37 +31,42 @@ public class ScanController {
     }
 
     @GetMapping("/")
-    public String showLatestScan(@RequestParam(value = "recentScan", required = false) boolean recentScan, Model model) {
-        if (recentScan)  {
-            Scan latestScan = scanService.getLatestScan();
-            model.addAttribute("scan", latestScan);
-        }
-        return "output";
+    public String showNewScan(Model model) {
+        model.addAttribute("activePage", "scan");
+        model.addAttribute("hasScans", scanService.getLatestScan() != null);
+        return "new-scan";
     }
-
+    
+    @GetMapping("/results/latest")
+    public String showLatestScan(Model model) {
+        Scan latestScan = scanService.getLatestScan();
+        model.addAttribute("scan", latestScan);
+        model.addAttribute("activePage", "results");
+        return "results";
+    }
+    
     @PostMapping("/scan")
     public String runScan(@RequestParam("url") String url,
-            @RequestParam("auditName") String auditName,
-            Model model) {
+                          @RequestParam("auditName") String auditName,
+                          Model model) {
         try {
             String normalizedUrl = normalizeUrl(url);
             validateUrl(normalizedUrl);
 
             Path jsonPath = scannerProcessService.runScan(normalizedUrl);
-
             scanService.processScannedJson(jsonPath, auditName);
 
-            return "redirect:/?recentScan=true";
+            return "redirect:/results/latest";
 
         } catch (IllegalArgumentException e) {
-            model.addAttribute("scan", scanService.getLatestScan());
             model.addAttribute("errorMessage", e.getMessage());
-            return "output";
+            model.addAttribute("activePage", "scan");
+            return "new-scan";
 
         } catch (IOException | InterruptedException e) {
-            model.addAttribute("scan", scanService.getLatestScan());
             model.addAttribute("errorMessage", "Unable to scan the page.");
-            return "output";
+            model.addAttribute("activePage", "scan");
+            return "new-scan";
         }
     }
     
@@ -149,6 +154,6 @@ public class ScanController {
             remediationService.generateRemediationsForScan(scan);
         }
         // Redirect the browser back to the home page.
-        return "redirect:/";
+        return "redirect:/results/latest";
     }
 }
