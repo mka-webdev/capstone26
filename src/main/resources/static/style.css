@@ -80,12 +80,27 @@ body {
     display: block;
     color: #fff;
     text-decoration: none;
-    padding: 8px 0;
+    padding: 10px 12px;
     font-size: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(2px);
 }
 
 .nav-item.active {
+    background: var(--accent-color);
     font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transform: scale(0.98);
+}
+
+.nav-item.primary {
+    background: var(--accent-color);
 }
 
 /* Main Content Panel Style */
@@ -156,7 +171,7 @@ input[type="text"] {
     color: var(--text-muted);
 }
 
-.input-field {
+.input-field { 
     margin-bottom: 15px;
     display: flex;
     flex-direction: column;
