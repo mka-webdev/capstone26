@@ -32,6 +32,7 @@ npm-debug.log*
 results.json
 playwright-report/
 test-results/
+/scan-archive/*.json
 
 # =====================================
 # NetBeans
@@ -53,7 +54,6 @@ nb-configuration.xml
 *.iml
 *.ipr
 *.iws
-out/
 
 # =====================================
 # Eclipse / STS
@@ -89,3 +89,4 @@ temp/
 # =====================================
 .DS_Store
 Thumbs.db
+

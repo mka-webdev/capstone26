@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en-AU" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout('Scan Results', ~{::content})}">
+
+<div th:fragment="content">
+
+    <section th:if="${scan != null}">
+
+        <div th:if="${!#lists.isEmpty(scan.violations)}">
+
+            <div class="results-header card">
+                <div class="header-main">
+                    <h2 th:text="'Results for: ' + ${scan.pageUrl}"></h2>
+
+                    <p>
+                        Scan Name:
+                        <strong th:text="${scan.auditName}"></strong>
+                    </p>
+
+                    <p>
+                        Scanned on:
+                        <span th:text="${#temporals.format(scan.scanTimestamp, 'dd-MM-yyyy HH:mm')}"></span>
+                    </p>
+                </div>
+
+                <form th:action="@{/generate-report}" method="post" class="report-action">
+                    <button type="submit" class="btn btn-secondary">
+                        Generate AI Remediation Guide
+                    </button>
+                </form>
+
+                <div class="metrics-grid">
+                    <div class="metric-card card">
+                        <div class="metric-label">Total Violations</div>
+                        <div class="metric-value" th:text="${#lists.size(scan.violations)}"></div>
+                    </div>
+
+                    <div class="metric-card card">
+                        <div class="metric-label">Critical</div>
+                        <div class="metric-value"
+                             th:text="${scan.violations.?[impact.toLowerCase() == 'critical'].size()}"></div>
+                    </div>
+
+                    <div class="metric-card card">
+                        <div class="metric-label">Serious</div>
+                        <div class="metric-value"
+                             th:text="${scan.violations.?[impact.toLowerCase() == 'serious'].size()}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <details class="ai-report card"
+                     th:if="${scan.violations != null and scan.violations[0].remediation != null}" open>
+                <summary class="section-title">AI Remediation Guide</summary>
+
+                <div class="ai-report-body">
+                    <pre class="ai-report-text" th:text="${scan.violations[0].remediation}"></pre>
+                </div>
+            </details>
+
+            <h3 class="section-title">Found Violations</h3>
+
+            <table class="oagp-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Rule ID</th>
+                    <th>Impacted Users</th>
+                    <th>Instances</th>
+                    <th>Impact</th>
+                    <th>Description</th>
+                    <th>Tags</th>
+                    <th>Help</th>
+                    <th>Resources</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="v, iter : ${scan.violations}">
+                    <td th:text="${iter.count}"></td>
+                    <td class="bold" th:text="${v.ruleId}"></td>
+                    <td th:text="${v.impactedUsers}"></td>
+                    <td th:text="${v.instanceCount}"></td>
+
+                    <td>
+                        <span class="badge"
+                              th:classappend="${v.impact.toLowerCase()}"
+                              th:text="${v.impact}">
+                        </span>
+                    </td>
+
+                    <td th:text="${v.description}"></td>
+
+                    <td>
+                        <div class="tag-cloud" th:if="${v.tags != null}">
+                            <span class="tag"
+                                  th:each="tag : ${#strings.arraySplit(v.tags, ',')}"
+                                  th:text="${tag}">
+                            </span>
+                        </div>
+                    </td>
+
+                    <td th:text="${v.help}"></td>
+
+                    <td>
+                        <a th:href="${v.helpUrl}" target="_blank" class="link">
+                            Learn More
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h3 class="section-title">Technical Details</h3>
+
+            <div class="violation-list">
+                <details class="violation-card card"
+                         th:each="violation : ${scan.violations}">
+
+                    <summary class="violation-summary">
+                        <span class="badge"
+                              th:classappend="${violation.impact.toLowerCase()}"
+                              th:text="${violation.impact}">
+                        </span>
+
+                        <strong th:text="${violation.ruleId}"></strong>
+
+                        <span th:text="${violation.instanceCount} + ' instances'"></span>
+                    </summary>
+
+                    <div class="violation-details">
+
+                        <div class="detail-row">
+                            <strong>Description:</strong>
+                            <p th:text="${violation.description}"></p>
+                        </div>
+
+                        <div class="detail-row">
+                            <strong>Tags:</strong>
+
+                            <div class="tag-cloud" th:if="${violation.tags != null}">
+                                <span class="tag"
+                                      th:each="tag : ${#strings.arraySplit(violation.tags, ',')}"
+                                      th:text="${tag}">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <strong>Help Resource:</strong>
+                            <a th:href="${violation.helpUrl}" target="_blank">
+                                View Remediation Guide
+                            </a>
+                        </div>
+
+                        <div class="instances-section">
+                            <h4>Affected Elements</h4>
+
+                            <div class="node-item"
+                                 th:each="node : ${violation.nodes}">
+
+                                <code>
+                                    Element:
+                                    <span th:text="${node.elementType}"></span>
+                                </code>
+
+                                <pre class="html-snippet" th:text="${node.html}"></pre>
+
+                                <p th:text="${node.message}"></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </details>
+            </div>
+
+        </div>
+
+        <div th:if="${#lists.isEmpty(scan.violations)}"
+             class="success-state card">
+
+            <h2>No Violations Found!</h2>
+
+            <p>
+                Excellent! The page at
+                <strong th:text="${scan.pageUrl}"></strong>
+                passed all accessibility checks.
+            </p>
+        </div>
+
+    </section>
+
+    <div th:if="${scan == null}" class="empty-state">
+        <p>No scan data available. Run a scan first.</p>
+    </div>
+
+</div>
+</html>

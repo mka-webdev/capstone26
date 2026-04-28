@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en-AU" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout('Scan Management', ~{::content})}">
+
+<div th:fragment="content">
+
+    <div class="control-panel card">
+        <h2>Scan Management</h2>
+
+        <form th:action="@{/scan}" method="post" class="scan-form">
+            <div class="form-body">
+
+                <div class="input-field">
+                    <label for="auditName">Scan Name</label>
+                    <input type="text" id="auditName" name="auditName"
+                           placeholder="Enter name for new scan" required />
+                </div>
+
+                <div class="input-field">
+                    <label for="url">Page URL</label>
+
+                    <div class="input-group">
+                        <input type="text" id="url" name="url"
+                               placeholder="Enter page URL" required />
+
+                        <button type="submit" class="btn btn-primary">
+                            Run New Scan
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <small class="hint">
+                Accepted formats: https://example.com, example.com, localhost:8080
+            </small>
+        </form>
+    </div>
+
+    <div class="empty-state">
+        <p th:if="${!hasScans}">No scan data available. Enter a URL above to begin an audit.</p>
+
+        <a th:if="${hasScans}" th:href="@{/results/latest}" class="btn btn-primary">
+            View Most Recent Scan
+        </a>
+    </div>
+
+</div>
+</html>
