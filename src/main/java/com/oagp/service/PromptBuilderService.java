@@ -9,18 +9,19 @@ import org.springframework.stereotype.Service;
 public class PromptBuilderService {
 
     /*
-     * Builds one complete prompt for the entire scan.
+     * Builds one complete internal prompt for the entire scan.
      *
      * This method:
      * - adds scan details
      * - calculates a summary of violations by severity
      * - lists every violation in detail
      * - lists all affected elements (nodes) under each violation
-     * - adds final instructions for the AI
-     *
+     * - adds final formatting and content instructions for the AI
      *
      * Returns:
-     * - one complete prompt string for the AI system
+     * - one complete internal prompt string for the AI system
+     *
+     * This prompt is not intended to be displayed to users.
      */
     public String buildPromptForWholeScan(Scan scan) {
         StringBuilder prompt = new StringBuilder();
@@ -116,16 +117,46 @@ public class PromptBuilderService {
             // If no violations exist, say so clearly
             prompt.append("No violations found.\n\n");
         }
-        // Add final instructions for the AI
 
-        prompt.append("Instructions for AI\n");
-        prompt.append("-------------------\n");
-        prompt.append("Using only the scan data above, write a clear accessibility report.\n");
-        prompt.append("For each violation, explain:\n");
-        prompt.append("1. What the issue is\n");
-        prompt.append("2. Why it matters\n");
-        prompt.append("3. How it can be fixed\n");
-        prompt.append("Do not invent extra facts beyond the supplied scan data.\n");
+        // Add final internal requirements for the AI response.
+        // These requirements shape the generated report but should not appear in the final report.
+
+        prompt.append("\nFinal response requirements:\n");
+        prompt.append("Write one user-facing accessibility remediation report.\n");
+        prompt.append("Use only the scan data above.\n");
+        prompt.append("Create one section for each violation listed above.\n");
+        prompt.append("Do not include prompt instructions, scan prompt labels, internal notes, or raw scan data headings in the final response.\n\n");
+
+        prompt.append("Required final report format:\n\n");
+        prompt.append("Accessibility Remediation Report\n\n");
+
+        prompt.append("Violation 1: [Rule ID]\n");
+        prompt.append("Description: [One short sentence describing the issue.]\n");
+        prompt.append("Impact: [One short paragraph explaining who is affected and why it matters.]\n");
+        prompt.append("Remediation Clarification: [Two to three plain-text paragraphs explaining the issue in more detail, what the remediation means in practical terms, and what the developer or auditor should check.]\n");
+        prompt.append("Recommendation: [One short practical paragraph explaining the direct fix.]\n\n");
+
+        prompt.append("Violation 2: [Rule ID]\n");
+        prompt.append("Description: [One short sentence describing the issue.]\n");
+        prompt.append("Impact: [One short paragraph explaining who is affected and why it matters.]\n");
+        prompt.append("Remediation Clarification: [Two to three plain-text paragraphs explaining the issue in more detail, what the remediation means in practical terms, and what the developer or auditor should check.]\n");
+        prompt.append("Recommendation: [One short practical paragraph explaining the direct fix.]\n\n");
+
+        prompt.append("Rules:\n");
+        prompt.append("- Use plain text only.\n");
+        prompt.append("- Do not use Markdown.\n");
+        prompt.append("- Do not use bullet points.\n");
+        prompt.append("- Do not use asterisks.\n");
+        prompt.append("- Do not use code blocks.\n");
+        prompt.append("- Do not add introductory or closing text.\n");
+        prompt.append("- Do not include prompt instructions, scan prompt labels, internal notes, or raw scan data headings in the final response.\n");
+        prompt.append("- Keep Description short.\n");
+        prompt.append("- Keep Impact concise.\n");
+        prompt.append("- Add Remediation Clarification before Recommendation for each violation.\n");
+        prompt.append("- Make Remediation Clarification the most detailed part of each violation section.\n");
+        prompt.append("- Remediation Clarification should contain two to three paragraphs per violation.\n");
+        prompt.append("- Keep Recommendation short, practical, and action-focused.\n");
+        prompt.append("- Do not invent extra facts beyond the supplied scan data.\n");
 
         // Return the completed prompt text
         return prompt.toString();

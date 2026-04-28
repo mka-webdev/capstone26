@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.oagp.model.ScanReport;
+import com.oagp.repository.ScanReportRepository;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -21,20 +23,28 @@ public class ScanController {
     private final ScanService scanService;
     private final ScannerProcessService scannerProcessService;
     private final RemediationService remediationService;
+    private final ScanReportRepository scanReportRepository;
 
     public ScanController(ScanService scanService,
             ScannerProcessService scannerProcessService,
-            RemediationService remediationService) {
+            RemediationService remediationService,
+            ScanReportRepository scanReportRepository) {
         this.scanService = scanService;
         this.scannerProcessService = scannerProcessService;
         this.remediationService = remediationService;
+        this.scanReportRepository = scanReportRepository;
     }
 
     @GetMapping("/")
     public String showLatestScan(@RequestParam(value = "recentScan", required = false) boolean recentScan, Model model) {
-        if (recentScan)  {
+        if (recentScan) {
             Scan latestScan = scanService.getLatestScan();
             model.addAttribute("scan", latestScan);
+
+            if (latestScan != null) {
+                ScanReport report = scanReportRepository.findByScanId(latestScan.getId()).orElse(null);
+                model.addAttribute("scanReport", report);
+            }
         }
         return "output";
     }
@@ -64,7 +74,7 @@ public class ScanController {
             return "output";
         }
     }
-    
+
     private void validateUrl(String url) {
         try {
             URI uri = new URI(url);
@@ -126,16 +136,12 @@ public class ScanController {
     }
 
     /*
- * Handles the request to generate an AI report for the current scan.
- *
- * This method is called when the user presses the "Generate AI Report"
- * button on the front end. It retrieves the most recently saved scan
- * from the database. If a scan exists, it sends that scan to the
- * remediation service, which builds the prompt data and runs the
- * AI-report generation process.
- *
- * After the process completes, the method redirects the user back
- * to the home page so the latest scan page is shown again.
+ * Handles the normal application request to generate an AI report
+     * for the latest saved scan.
+     *
+     * This endpoint is intended for form or front-end POST requests.
+     * It retrieves the most recently saved scan, passes it to the
+     * remediation service, and redirects back to the latest scan view.
      */
     @PostMapping("/generate-report")
     public String generateReportForCurrentScan() {
@@ -148,7 +154,27 @@ public class ScanController {
             // and running the AI-report generation logic.
             remediationService.generateRemediationsForScan(scan);
         }
-        // Redirect the browser back to the home page.
-        return "redirect:/";
+        // Redirect the browser back to the latest scan view.
+        return "redirect:/?recentScan=true";
     }
+
+    /*
+ * Temporary browser-test endpoint for generating an AI remediation report.
+     *
+     * This allows the AI report generation flow to be tested by entering a URL
+     * directly in the browser, without adding a front-end button or form.
+     *
+     * Remove this endpoint before merging into main.
+     */
+    @GetMapping("/test-generate-report")
+    public String testGenerateReportForCurrentScan() {
+        Scan scan = scanService.getLatestScan();
+
+        if (scan != null) {
+            remediationService.generateRemediationsForScan(scan);
+        }
+
+        return "redirect:/?recentScan=true";
+    }
+
 }

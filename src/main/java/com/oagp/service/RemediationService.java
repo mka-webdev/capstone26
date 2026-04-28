@@ -1,8 +1,9 @@
 package com.oagp.service;
 
 import com.oagp.model.Scan;
-import com.oagp.model.Violation;
-import com.oagp.repository.ViolationRepository;
+import com.oagp.model.ScanReport;
+import com.oagp.repository.ScanReportRepository;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 /*
@@ -10,14 +11,13 @@ import org.springframework.stereotype.Service;
  *
  * This class coordinates the AI remediation process for a scan.
  *
- * It receives a completed Scan object, builds one full prompt
- * using the PromptBuilderService, sends that prompt to the
- * AiService, and saves the returned AI output into the
- * remediation field of each Violation.
+ * It receives a completed Scan object, builds one full internal prompt
+ * using the PromptBuilderService, sends that prompt to the AiService,
+ * and saves only the returned AI response as a scan-level ScanReport.
  *
- * This class does not perform scanning itself and does not build
- * the prompt directly. Instead, it connects the prompt builder,
- * AI service, and repository save process.
+ * This class does not perform scanning itself and does not build the
+ * prompt directly. Instead, it connects the prompt builder, AI service,
+ * and scan report repository save process.
  */
 @Service
 public class RemediationService {
@@ -26,17 +26,18 @@ public class RemediationService {
     private final PromptBuilderService promptBuilderService;
     //Service used to send the prompt to the AI system and return the response.
     private final AiService aiService;
-    //Repository used to save updated Violation records back into the database.
-    private final ViolationRepository violationRepository;
+    //Repository used to save the generated scan-level AI report.
+    private final ScanReportRepository scanReportRepository;
 
     public RemediationService(PromptBuilderService promptBuilderService,
             AiService aiService,
-            ViolationRepository violationRepository) {
+            ScanReportRepository scanReportRepository) {
         this.promptBuilderService = promptBuilderService;
         this.aiService = aiService;
-        this.violationRepository = violationRepository;
+        this.scanReportRepository = scanReportRepository;
+    }
 
-        /*
+    /*
      * Generates remediation output for the given scan.
      *
      * This method:
@@ -49,9 +50,7 @@ public class RemediationService {
      *
      * Parameter:
      * - scan: the scan to process
-         */
-    }
-
+     */
     public void generateRemediationsForScan(Scan scan) {
         // Stop immediately if no scan exists or if the scan has no violations.
         if (scan == null || scan.getViolations() == null || scan.getViolations().isEmpty()) {
@@ -65,22 +64,30 @@ public class RemediationService {
         System.out.println("====================================");
         System.out.println(fullPrompt);
         System.out.println("====================================");
-         // Send the prompt to the AI service and receive the response.
+        // Send the prompt to the AI service and receive the response.
         String aiResponse = aiService.generateRemediation(fullPrompt);
 
         System.out.println("AI RESPONSE:");
         System.out.println(aiResponse);
         System.out.println("====================================");
 
-         /*
-         * Save the AI response into each violation.
-         *
-         * In the current design, one full AI report is generated for the whole scan,
-         * so the same response is stored in every Violation record.
+        /*
+         * Save only the AI-generated response as one scan-level report.
+        *
+        * The internal prompt is not saved as user-facing report content.
+        * The report is linked to the Scan rather than duplicated across
+        * individual Violation records.
          */
-        for (Violation violation : scan.getViolations()) {
-            violation.setRemediation(aiResponse);
-            violationRepository.save(violation);
-        }
+        ScanReport report = scanReportRepository.findByScanId(scan.getId())
+                .orElseGet(ScanReport::new);
+
+        report.setScan(scan);
+        report.setReportTitle("AI Remediation Report for " + scan.getPageUrl());
+        report.setReportText(aiResponse);
+        report.setSummary("AI-generated remediation report for scan ID " + scan.getId());
+        report.setTotalViolations(scan.getViolations().size());
+        report.setGeneratedAt(LocalDateTime.now());
+
+        scanReportRepository.save(report);
     }
 }
