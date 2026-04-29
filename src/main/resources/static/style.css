@@ -238,6 +238,44 @@ input[type="text"] {
     font-weight: 700;
 }
 
+.ai-remediation-panel {
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.ai-remediation-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.generate-button {
+    white-space: normal;
+    min-width: 220px;
+}
+
+.ai-remediation-output {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+}
+
+.ai-remediation-output h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.ai-report-text {
+    white-space: pre-wrap;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-main);
+}
+
 .edit-inline-form input[type="text"] {
     width: 100%;
     max-width: 100%;

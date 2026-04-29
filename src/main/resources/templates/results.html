@@ -23,27 +23,6 @@
                     </p>
                 </div>
 
-                <form th:action="@{/generate-report/{id}(id=${scan.id})}" method="post" class="report-action">
-                    <fieldset class="ai-provider-selection">
-                        <legend>Choose AI Report Mode</legend>
-                        <label class="radio-button">
-                            <input type="radio" name="aiChoice" value="GEMINI_FREE" checked />
-                            <span>Gemini Free</span>
-                        </label>
-                        <label class="radio-button">
-                            <input type="radio" name="aiChoice" value="GEMINI_PAID" />
-                            <span>Gemini Paid</span>
-                        </label>
-                        <label class="radio-button">
-                            <input type="radio" name="aiChoice" value="OPENAI_PAID" />
-                            <span>OpenAI Paid</span>
-                        </label>
-                    </fieldset>
-                    <button type="submit" class="btn btn-secondary">
-                        Generate AI Remediation Guide
-                    </button>
-                </form>
-
                 <div class="metrics-grid">
                     <div class="metric-card card">
                         <div class="metric-label">Total Violations</div>
@@ -64,15 +43,44 @@
                 </div>
             </div>
 
-            <details class="ai-report card"
-                     th:if="${scan.violations != null and scan.violations[0].remediation != null}" open>
-                <summary class="section-title">AI Remediation Guide</summary>
-
-                <div class="ai-report-body">
-                    <pre class="ai-report-text" th:text="${scan.violations[0].remediation}"></pre>
+            <div class="ai-remediation-panel card">
+                <div class="panel-header">
+                    <h3>AI Remediation</h3>
+                    <p>Select a provider and generate the remediation guide for this scan.</p>
                 </div>
-            </details>
 
+                <form th:action="@{/generate-report/{id}(id=${scan.id})}" method="post" class="ai-remediation-form">
+                    <fieldset class="ai-provider-selection">
+                        <legend>Choose AI Report Mode</legend>
+                        <label class="radio-button">
+                            <input type="radio" name="aiChoice" value="GEMINI_FREE" checked />
+                            <span>Gemini Free</span>
+                        </label>
+                        <label class="radio-button">
+                            <input type="radio" name="aiChoice" value="GEMINI_PAID" />
+                            <span>Gemini Paid</span>
+                        </label>
+                        <label class="radio-button">
+                            <input type="radio" name="aiChoice" value="OPENAI_PAID" />
+                            <span>OpenAI Paid</span>
+                        </label>
+                    </fieldset>
+                    <button type="submit" class="btn btn-secondary generate-button">
+                        Generate AI Remediation Guide
+                    </button>
+                </form>
+
+                <div class="ai-remediation-output" th:if="${scan.violations != null and scan.violations[0].remediation != null}">
+                    <h4>AI Remediation Guide</h4>
+                    <details class="ai-report card" th:if="${scan.violations != null and scan.violations[0].remediation != null}" open>
+                       <summary class="section-title">AI Remediation Guide</summary>
+                       <div class="ai-report-body">
+                           <pre class="ai-report-text" th:text="${scan.violations[0].remediation}"></pre>
+                       </div>
+                    </details>
+                </div>
+            </div>
+            
             <h3 class="section-title">Found Violations</h3>
 
             <table class="oagp-table">
