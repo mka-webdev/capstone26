@@ -195,6 +195,49 @@ input[type="text"] {
     min-width: 72px;
 }
 
+.ai-provider-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fafbfc;
+}
+
+.ai-provider-selection legend {
+    width: 100%;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.radio-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.radio-button input[type="radio"] {
+    accent-color: var(--primary-color);
+}
+
+.radio-button:hover {
+    border-color: var(--accent-color);
+    background: #f0f6fb;
+}
+
+.radio-button input[type="radio"]:checked + span {
+    font-weight: 700;
+}
+
 .edit-inline-form input[type="text"] {
     width: 100%;
     max-width: 100%;

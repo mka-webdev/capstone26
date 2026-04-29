@@ -146,11 +146,13 @@ public class ScanService {
     }
 
     private void buildAndSaveScanReport(Scan scan) {
-        if (scan == null) {
+        if (scan == null || scan.getId() == null) {
             return;
         }
 
-        ScanReport scanReport = new ScanReport();
+        ScanReport scanReport = scanReportRepository.findByScanId(scan.getId())
+                .orElseGet(ScanReport::new);
+
         scanReport.setScan(scan);
         scanReport.setReportTitle("Accessibility Report for " + scan.getPageUrl());
         scanReport.setGeneratedAt(LocalDateTime.now());

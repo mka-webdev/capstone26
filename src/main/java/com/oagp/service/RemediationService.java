@@ -1,5 +1,7 @@
 package com.oagp.service;
 
+import com.oagp.model.AiProvider;
+import com.oagp.model.AiTier;
 import com.oagp.model.Scan;
 import com.oagp.model.Violation;
 import com.oagp.repository.ViolationRepository;
@@ -51,13 +53,11 @@ public class RemediationService {
      * - scan: the scan to process
          */
     }
-
-    public void generateRemediationsForScan(Scan scan) {
-        // Stop immediately if no scan exists or if the scan has no violations.
+    
+    public void generateRemediationsForScan(Scan scan, AiProvider provider, AiTier tier) {
         if (scan == null || scan.getViolations() == null || scan.getViolations().isEmpty()) {
             return;
         }
-        // Build one full prompt string for the entire scan.
         String fullPrompt = promptBuilderService.buildPromptForWholeScan(scan);
 
         System.out.println("====================================");
@@ -65,8 +65,12 @@ public class RemediationService {
         System.out.println("====================================");
         System.out.println(fullPrompt);
         System.out.println("====================================");
-         // Send the prompt to the AI service and receive the response.
-        String aiResponse = aiService.generateRemediation(fullPrompt);
+        String aiResponse;
+        if (provider != null && tier != null) {
+            aiResponse = aiService.generateRemediation(fullPrompt, provider, tier);
+        } else {
+            aiResponse = aiService.generateRemediation(fullPrompt);
+        }
 
         System.out.println("AI RESPONSE:");
         System.out.println(aiResponse);
