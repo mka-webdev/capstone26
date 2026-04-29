@@ -70,15 +70,14 @@
                     </button>
                 </form>
 
-                <div class="ai-remediation-output" th:if="${scan.violations != null and scan.violations[0].remediation != null}">
-                    <h4>AI Remediation Guide</h4>
-                    <details class="ai-report card" th:if="${scan.violations != null and scan.violations[0].remediation != null}" open>
-                       <summary class="section-title">AI Remediation Guide</summary>
-                       <div class="ai-report-body">
-                           <pre class="ai-report-text" th:text="${scan.violations[0].remediation}"></pre>
-                       </div>
-                    </details>
-                </div>
+                <details class="ai-remediation-output" th:if="${aiReportHtml != null}">
+                    <summary class="ai-remediation-summary">
+                        <span>AI Remediation Guide</span>
+                        <small>Click to expand/collapse</small>
+                    </summary>
+
+                    <div class="ai-report-body markdown-body" th:utext="${aiReportHtml}"></div>
+                </details>
             </div>
             
             <h3 class="section-title">Found Violations</h3>

@@ -3,6 +3,7 @@ package com.oagp.controller;
 import com.oagp.model.AiProvider;
 import com.oagp.model.AiTier;
 import com.oagp.model.Scan;
+import com.oagp.service.MarkdownService;
 import com.oagp.service.RemediationService;
 import com.oagp.service.ScanService;
 import com.oagp.service.ScannerProcessService;
@@ -24,13 +25,16 @@ public class ScanController {
     private final ScanService scanService;
     private final ScannerProcessService scannerProcessService;
     private final RemediationService remediationService;
+    private final MarkdownService markdownService;
 
     public ScanController(ScanService scanService,
             ScannerProcessService scannerProcessService,
-            RemediationService remediationService) {
+            RemediationService remediationService,
+            MarkdownService markdownService) {
         this.scanService = scanService;
         this.scannerProcessService = scannerProcessService;
         this.remediationService = remediationService;
+        this.markdownService = markdownService;
     }
 
     @GetMapping("/")
@@ -45,6 +49,7 @@ public class ScanController {
         Scan latestScan = scanService.getLatestScan();
         model.addAttribute("scan", latestScan);
         model.addAttribute("activePage", "results");
+        model.addAttribute("aiReportHtml", getAiReportHtml(latestScan));
         return "results";
     }
     
@@ -94,6 +99,7 @@ public class ScanController {
         }
         model.addAttribute("scan", scan);
         model.addAttribute("activePage", "results");
+        model.addAttribute("aiReportHtml", getAiReportHtml(scan));
         return "results";
     }
     
@@ -224,6 +230,17 @@ public class ScanController {
         }
 
         return "redirect:/results/" + id;
+    }
+
+    private String getAiReportHtml(Scan scan) {
+        if (scan == null || scan.getViolations() == null || scan.getViolations().isEmpty()) {
+            return null;
+        }
+        String remediation = scan.getViolations().get(0).getRemediation();
+        if (remediation == null || remediation.isBlank()) {
+            return null;
+        }
+        return markdownService.toHtml(remediation);
     }
 }
     
