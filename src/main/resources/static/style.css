@@ -164,6 +164,44 @@ input[type="text"] {
     color: #fff;
 }
 
+.btn-secondary {
+    background: #5e6773;
+    color: #fff;
+}
+
+.btn-warning {
+    background: #f39c12;
+    color: #fff;
+}
+
+.btn-danger {
+    background: #e74c3c;
+    color: #fff;
+}
+
+.action-buttons {
+    display: inline-flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.action-buttons form {
+    margin: 0;
+}
+
+.action-buttons .btn {
+    padding: 8px 12px;
+    min-width: 72px;
+}
+
+.edit-inline-form input[type="text"] {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
 .hint {
     display: block;
     margin-top: 8px;

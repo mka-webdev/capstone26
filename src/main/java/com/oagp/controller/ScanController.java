@@ -53,6 +53,34 @@ public class ScanController {
         return "scans";
     }
 
+   @GetMapping("/scans/{id}/edit")
+    public String showEditScanForm(@PathVariable Long id, Model model) {
+        model.addAttribute("scans", scanService.getAllScans());
+        model.addAttribute("activePage", "scans");
+        model.addAttribute("editScanId", id);
+        Scan scan = scanService.getScanById(id);
+        model.addAttribute("editAuditName", scan != null ? scan.getAuditName() : "");
+        return "scans";
+    }
+
+    @PostMapping("/scans/{id}/rename")
+    public String renameScan(@PathVariable Long id,
+                             @RequestParam("auditName") String auditName,
+                             Model model) {
+        if (auditName == null || auditName.isBlank()) {
+            model.addAttribute("errorMessage", "Scan name cannot be empty.");
+            return showEditScanForm(id, model);
+        }
+        scanService.updateScanName(id, auditName);
+        return "redirect:/scans";
+    }
+
+    @PostMapping("/scans/{id}/delete")
+    public String deleteScan(@PathVariable Long id) {
+        scanService.deleteScanById(id);
+        return "redirect:/scans";
+    }
+    
     @GetMapping("/results/{id}")
     public String showScanById(@PathVariable Long id, Model model) {
         Scan scan = scanService.getScanById(id);
