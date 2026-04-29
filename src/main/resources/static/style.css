@@ -197,7 +197,9 @@ input[type="text"] {
 
 .edit-inline-form input[type="text"] {
     width: 100%;
-    min-width: 180px;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .hint {

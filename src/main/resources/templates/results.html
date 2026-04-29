@@ -182,6 +182,11 @@
             <h2>No Violations Found!</h2>
 
             <p>
+                Scan Name:
+                <strong th:text="${scan.auditName}"></strong>
+            </p>
+
+            <p>
                 Excellent! The page at
                 <strong th:text="${scan.pageUrl}"></strong>
                 passed all accessibility checks.
