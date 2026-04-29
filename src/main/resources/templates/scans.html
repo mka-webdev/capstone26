@@ -30,14 +30,33 @@
                 <tbody>
                 <tr th:each="scan, iter : ${scans}">
                     <td th:text="${iter.count}"></td>
-                    <td th:text="${scan.auditName}"></td>
+                    <td>
+                        <div th:if="${scan.id != editScanId}" th:text="${scan.auditName}"></div>
+                        <form th:if="${scan.id == editScanId}"
+                              th:id="'renameForm_' + ${scan.id}"
+                              th:action="@{/scans/{id}/rename(id=${scan.id})}"
+                              method="post"
+                              class="edit-inline-form">
+                            <input type="text" name="auditName" th:value="${editAuditName}" />
+                        </form>
+                    </td>
                     <td>
                         <a th:href="${scan.pageUrl}" target="_blank" th:text="${scan.pageUrl}"></a>
                     </td>
                     <td th:text="${#temporals.format(scan.scanTimestamp, 'dd-MM-yyyy HH:mm')}"></td>
                     <td th:text="${scan.violations != null ? #lists.size(scan.violations) : 0}"></td>
                     <td>
-                        <a th:href="@{/results/{id}(id=${scan.id})}" class="link">View Details</a>
+                        <div th:if="${scan.id != editScanId}" class="action-buttons">
+                            <a th:href="@{/results/{id}(id=${scan.id})}" class="btn btn-secondary">View</a>
+                            <form th:action="@{/scans/{id}/delete(id=${scan.id})}" method="post">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this scan?');">Delete</button>
+                            </form>
+                            <a th:href="@{/scans/{id}/edit(id=${scan.id})}" class="btn btn-warning">Edit</a>
+                        </div>
+                        <div th:if="${scan.id == editScanId}" class="action-buttons">
+                            <button type="submit" class="btn btn-primary" th:form="'renameForm_' + ${scan.id}">Save</button>
+                            <a th:href="@{/scans}" class="btn btn-secondary">Cancel</a>
+                        </div>
                     </td>
                 </tr>
                 </tbody>

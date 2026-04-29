@@ -283,6 +283,21 @@ public class ScanService {
         return scan;
     }
 
+    public Scan updateScanName(Long id, String auditName) {
+        Scan scan = scanRepository.findById(id).orElse(null);
+        if (scan == null) {
+            return null;
+        }
+        scan.setAuditName(auditName);
+        return scanRepository.save(scan);
+    }
+
+    public void deleteScanById(Long id) {
+        if (scanRepository.existsById(id)) {
+            scanRepository.deleteById(id);
+        }
+    }
+  
     private void applyImpactedUsers(Scan scan) {
         if (scan == null || scan.getViolations() == null) {
             return;
