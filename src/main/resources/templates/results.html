@@ -23,7 +23,22 @@
                     </p>
                 </div>
 
-                <form th:action="@{/generate-report}" method="post" class="report-action">
+                <form th:action="@{/generate-report/{id}(id=${scan.id})}" method="post" class="report-action">
+                    <fieldset class="ai-provider-selection">
+                        <legend>Choose AI Report Mode</legend>
+                        <label class="radio-button">
+                            <input type="radio" name="aiChoice" value="GEMINI_FREE" checked />
+                            <span>Gemini Free</span>
+                        </label>
+                        <label class="radio-button">
+                            <input type="radio" name="aiChoice" value="GEMINI_PAID" />
+                            <span>Gemini Paid</span>
+                        </label>
+                        <label class="radio-button">
+                            <input type="radio" name="aiChoice" value="OPENAI_PAID" />
+                            <span>OpenAI Paid</span>
+                        </label>
+                    </fieldset>
                     <button type="submit" class="btn btn-secondary">
                         Generate AI Remediation Guide
                     </button>
@@ -184,9 +199,6 @@
             <p>
                 Scan Name:
                 <strong th:text="${scan.auditName}"></strong>
-            </p>
-
-            <p>
                 Excellent! The page at
                 <strong th:text="${scan.pageUrl}"></strong>
                 passed all accessibility checks.
