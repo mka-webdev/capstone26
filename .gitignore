@@ -30,9 +30,9 @@ release.properties
 scanner/node_modules/
 npm-debug.log*
 results.json
+results_localhost.json
 playwright-report/
 test-results/
-/scan-archive/*.json
 
 # =====================================
 # NetBeans
