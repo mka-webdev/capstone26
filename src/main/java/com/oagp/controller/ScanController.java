@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class ScanController {
@@ -41,6 +42,27 @@ public class ScanController {
     public String showLatestScan(Model model) {
         Scan latestScan = scanService.getLatestScan();
         model.addAttribute("scan", latestScan);
+        model.addAttribute("activePage", "results");
+        return "results";
+    }
+    
+    @GetMapping("/scans")
+    public String showAllScans(Model model) {
+        model.addAttribute("scans", scanService.getAllScans());
+        model.addAttribute("activePage", "scans");
+        return "scans";
+    }
+
+    @GetMapping("/results/{id}")
+    public String showScanById(@PathVariable Long id, Model model) {
+        Scan scan = scanService.getScanById(id);
+        if (scan == null) {
+            model.addAttribute("errorMessage", "Scan not found.");
+            model.addAttribute("activePage", "scans");
+            model.addAttribute("scans", scanService.getAllScans());
+            return "scan-list";
+        }
+        model.addAttribute("scan", scan);
         model.addAttribute("activePage", "results");
         return "results";
     }

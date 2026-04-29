@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en-AU" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout('Stored Scans', ~{::content})}">
+
+<div th:fragment="content">
+
+    <section class="card">
+        <div class="results-header">
+            <h2>Stored Scans</h2>
+            <p>All scans saved in the database are listed below.</p>
+        </div>
+
+        <div th:if="${#lists.isEmpty(scans)}" class="empty-state">
+            <p>No stored scans found yet.</p>
+            <a th:href="@{/}" class="btn btn-primary">Run a New Scan</a>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(scans)}">
+            <table class="oagp-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Scan Name</th>
+                    <th>Page URL</th>
+                    <th>Scan Time</th>
+                    <th>Violations</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="scan, iter : ${scans}">
+                    <td th:text="${iter.count}"></td>
+                    <td th:text="${scan.auditName}"></td>
+                    <td>
+                        <a th:href="${scan.pageUrl}" target="_blank" th:text="${scan.pageUrl}"></a>
+                    </td>
+                    <td th:text="${#temporals.format(scan.scanTimestamp, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td th:text="${scan.violations != null ? #lists.size(scan.violations) : 0}"></td>
+                    <td>
+                        <a th:href="@{/results/{id}(id=${scan.id})}" class="link">View Details</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+</html>

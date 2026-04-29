@@ -28,6 +28,10 @@
                    th:classappend="${activePage == 'results'} ? ' primary'">
                     View Latest Scan
                 </a>
+                <a th:href="@{/scans}" class="nav-item"
+                   th:classappend="${activePage == 'scans'} ? ' primary'">
+                    All Scans
+                </a>
             </div>
         </nav>
     </aside>
