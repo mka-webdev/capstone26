@@ -146,11 +146,13 @@ public class ScanService {
     }
 
     private void buildAndSaveScanReport(Scan scan) {
-        if (scan == null) {
+        if (scan == null || scan.getId() == null) {
             return;
         }
 
-        ScanReport scanReport = new ScanReport();
+        ScanReport scanReport = scanReportRepository.findByScanId(scan.getId())
+                .orElseGet(ScanReport::new);
+
         scanReport.setScan(scan);
         scanReport.setReportTitle("Accessibility Report for " + scan.getPageUrl());
         scanReport.setGeneratedAt(LocalDateTime.now());
@@ -283,6 +285,21 @@ public class ScanService {
         return scan;
     }
 
+    public Scan updateScanName(Long id, String auditName) {
+        Scan scan = scanRepository.findById(id).orElse(null);
+        if (scan == null) {
+            return null;
+        }
+        scan.setAuditName(auditName);
+        return scanRepository.save(scan);
+    }
+
+    public void deleteScanById(Long id) {
+        if (scanRepository.existsById(id)) {
+            scanRepository.deleteById(id);
+        }
+    }
+  
     private void applyImpactedUsers(Scan scan) {
         if (scan == null || scan.getViolations() == null) {
             return;

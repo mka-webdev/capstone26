@@ -164,6 +164,195 @@ input[type="text"] {
     color: #fff;
 }
 
+.btn-secondary {
+    background: #5e6773;
+    color: #fff;
+}
+
+.btn-warning {
+    background: #f39c12;
+    color: #fff;
+}
+
+.btn-danger {
+    background: #e74c3c;
+    color: #fff;
+}
+
+.action-buttons {
+    display: inline-flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.action-buttons form {
+    margin: 0;
+}
+
+.action-buttons .btn {
+    padding: 8px 12px;
+    min-width: 72px;
+}
+
+.ai-provider-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fafbfc;
+}
+
+.ai-provider-selection legend {
+    width: 100%;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.radio-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.radio-button input[type="radio"] {
+    accent-color: var(--primary-color);
+}
+
+.radio-button:hover {
+    border-color: var(--accent-color);
+    background: #f0f6fb;
+}
+
+.radio-button input[type="radio"]:checked + span {
+    font-weight: 700;
+}
+
+.ai-remediation-panel {
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.ai-remediation-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.generate-button {
+    white-space: normal;
+    min-width: 220px;
+}
+
+.ai-remediation-output {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+}
+
+.ai-remediation-output h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.ai-report-text {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--text-main);
+}
+
+.ai-remediation-output {
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.ai-remediation-summary {
+    padding: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    font-weight: 700;
+    background: #f4f6f8;
+}
+
+.ai-remediation-summary small {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
+.ai-report-body {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+    margin: 1rem 0 0.5rem;
+}
+
+.markdown-body p {
+    margin: 0 0 1rem;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+    margin: 0 0 1rem 1.5rem;
+}
+
+.markdown-body pre,
+.markdown-body code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.markdown-body pre {
+    background: #f4f6f8;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+.markdown-body code {
+    background: #f4f6f8;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.markdown-body a {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+.edit-inline-form input[type="text"] {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
 .hint {
     display: block;
     margin-top: 8px;
