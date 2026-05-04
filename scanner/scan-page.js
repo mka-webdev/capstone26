@@ -7,6 +7,7 @@ async function run() {
   const url = process.argv[2];
   const outputPath =
     process.argv[3] || path.join(__dirname, "..", "results.json");
+  const headless = process.env.PLAYWRIGHT_HEADLESS !== "false";
 
   if (!url) {
     console.error("Missing URL argument.");
@@ -17,7 +18,7 @@ async function run() {
   let context;
 
   try {
-    browser = await chromium.launch({ headless: false });
+    browser = await chromium.launch({ headless });
     context = await browser.newContext();
     const page = await context.newPage();
 

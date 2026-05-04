@@ -102,6 +102,22 @@ cd scanner
 npm install
 npx playwright install
 ```
+
+## GitHub Actions release build
+
+The repository includes a GitHub Actions workflow that builds the Spring Boot application and publishes a Windows release bundle when you push a tag such as `v0.0.1`.
+
+The release ZIP includes:
+
+- the executable Spring Boot JAR
+- `run-oagp.bat` and `run-oagp.ps1` launchers
+- the `scanner/` source files needed by the app at runtime
+- this `README.md`
+
+To run the release on Windows, extract the ZIP, make sure Node.js is installed, and then double-click `run-oagp.bat`.
+
+On first launch, the script installs the scanner dependencies if they are missing.
+
 ## Environment Variables
 
 This application requires several environment variables to be configured for AI provider integration. These variables are used to securely supply API keys and configuration without hardcoding sensitive data.
