@@ -50,9 +50,17 @@
     
     <button id="scroll-to-top" class="scroll-to-top-btn">Scroll To Top</button>
     
+    <div id="page-loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-shell">
+            <div class="loader"></div>
+            <p>Scanning page, please wait…</p>
+        </div>
+    </div>
+    
 </div>
 
 <script th:src="@{/scripts/scroll-to-top.js}"></script>
+<script th:src="@{/scripts/loading-overlays.js}"></script>
 
 </body>
 </html>

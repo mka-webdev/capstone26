@@ -38,9 +38,11 @@
     </div>
 
     <div class="empty-state">
-        <p th:if="${!hasScans}">No scan data available. Enter a URL above to begin an audit.</p>
+        <p th:if="${hasScans != true}">
+            No scan data available. Enter a URL above to begin an audit.
+        </p>
 
-        <a th:if="${hasScans}" th:href="@{/results/latest}" class="btn btn-primary">
+        <a th:if="${hasScans == true}" th:href="@{/results/latest}" class="btn btn-primary">
             View Most Recent Scan
         </a>
     </div>
