@@ -39,7 +39,7 @@ scan-archive/results_2026-04-09_12-34-56.json
 
 This allows simple scan history tracking without affecting the main workflow.
 
-## AI-assisted remediation (in progress)
+## AI-assisted remediation
 
 OAGP is being extended to include AI-based remediation guidance.
 
@@ -48,9 +48,7 @@ The system will:
 - Use structured scan data (rule, impact, WCAG tags, element type)
 - Produce short, actionable guidance (description, impact, recommendation)
 
-Users will be able to select an AI provider before running a scan.
-
-Planned behavior:
+Users will be able to select an AI provider before running a scan:
 - Default provider: Google Gemini (free-tier friendly)
 - Optional provider: OpenAI (user-supplied API key stored locally on user's machine)
 - The system selects the provider dynamically at runtime
