@@ -86,10 +86,8 @@ This helps prevent unnecessary scanner execution and avoids exposing raw process
 
 ## Planned features
 
-- AI-generated remediation guidance per issue
 - Export scan results to PDF reports
-- Improved dashboard for scan history and comparison
-- Optional AI provider configuration via UI
+
 
 ## Scanner module setup
 
