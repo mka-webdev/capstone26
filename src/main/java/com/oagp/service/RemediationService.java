@@ -6,6 +6,8 @@ import com.oagp.model.Scan;
 import com.oagp.model.Violation;
 import com.oagp.repository.ViolationRepository;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * Service class
@@ -23,6 +25,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RemediationService {
+
+    private static final Logger log = LoggerFactory.getLogger(RemediationService.class);
 
     //Service used to build one complete prompt string from the scan data.
     private final PromptBuilderService promptBuilderService;
@@ -56,27 +60,30 @@ public class RemediationService {
     
     public void generateRemediationsForScan(Scan scan, AiProvider provider, AiTier tier) {
         if (scan == null || scan.getViolations() == null || scan.getViolations().isEmpty()) {
+            log.warn("Cannot generate remediation: scan is null or has no violations");
             return;
         }
+        
+        log.info("Generating remediations for scan id: {} with provider: {}, tier: {}", scan.getId(), provider, tier);
         String fullPrompt = promptBuilderService.buildPromptForWholeScan(scan);
 
-        System.out.println("====================================");
-        System.out.println("FULL SCAN PROMPT DATA");
-        System.out.println("====================================");
-        System.out.println(fullPrompt);
-        System.out.println("====================================");
+        log.debug("Full scan prompt data:\n{}", fullPrompt);
+        
         String aiResponse;
-        if (provider != null && tier != null) {
-            aiResponse = aiService.generateRemediation(fullPrompt, provider, tier);
-        } else {
-            aiResponse = aiService.generateRemediation(fullPrompt);
+        try {
+            if (provider != null && tier != null) {
+                aiResponse = aiService.generateRemediation(fullPrompt, provider, tier);
+            } else {
+                aiResponse = aiService.generateRemediation(fullPrompt);
+            }
+            
+            log.debug("AI response:\n{}", aiResponse);
+        } catch (Exception e) {
+            log.error("Failed to generate AI response: ", e);
+            return;
         }
 
-        System.out.println("AI RESPONSE:");
-        System.out.println(aiResponse);
-        System.out.println("====================================");
-
-         /*
+        /*
          * Save the AI response into each violation.
          *
          * In the current design, one full AI report is generated for the whole scan,
@@ -86,5 +93,7 @@ public class RemediationService {
             violation.setRemediation(aiResponse);
             violationRepository.save(violation);
         }
+        
+        log.info("Successfully saved remediations for {} violations", scan.getViolations().size());
     }
 }

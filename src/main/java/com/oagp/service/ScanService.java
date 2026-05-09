@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import com.oagp.model.ScanReport;
 import com.oagp.repository.ScanReportRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -29,6 +31,8 @@ import java.nio.file.Path;
  */
 @Service
 public class ScanService {
+
+    private static final Logger log = LoggerFactory.getLogger(ScanService.class);
 
     // Repository used to save and retrieve Scan data from the database
     private final ScanRepository scanRepository;
@@ -52,36 +56,24 @@ public class ScanService {
         this.impactMappingService = impactMappingService;
     }
 
-    // Reads the JSON file and processes its contents.
-    public void processJsonFile(Path jsonPath) throws IOException {
-        JsonNode root = objectMapper.readTree(jsonPath.toFile());
-
-        if (root.isArray()) {
-            for (JsonNode node : root) {
-                AxeResult axeResult = objectMapper.treeToValue(node, AxeResult.class);
-                saveAxeResult(axeResult, "Imported Scan");
-            }
-        } else if (root.isObject()) {
-            AxeResult axeResult = objectMapper.treeToValue(root, AxeResult.class);
-            saveAxeResult(axeResult, "Imported Scan");
-        } else {
-            throw new IOException("Unsupported JSON format in results.json");
-        }
-    }
-
     public Scan processScannedJson(Path jsonPath, String auditName) throws IOException {
+        log.info("Processing scanned JSON for audit: {} from path: {}", auditName, jsonPath);
         JsonNode root = objectMapper.readTree(jsonPath.toFile());
 
         if (!root.isObject()) {
+            log.error("Expected a single scan object in results.json, but got something else");
             throw new IOException("Expected a single scan object in results.json");
         }
 
         AxeResult axeResult = objectMapper.treeToValue(root, AxeResult.class);
-        return saveAxeResult(axeResult, auditName);
+        Scan savedScan = saveAxeResult(axeResult, auditName);
+        log.info("Successfully saved scan with id: {}", savedScan.getId());
+        return savedScan;
     }
 
     // Converts DTO → Entity and saves it.
     private Scan saveAxeResult(AxeResult axeResult, String auditName) {
+        log.debug("Saving AxeResult with audit name: {}, url: {}", auditName, axeResult.getUrl());
         Scan scan = new Scan();
         scan.setAuditName(auditName);
         scan.setPageUrl(axeResult.getUrl());
@@ -96,6 +88,7 @@ public class ScanService {
         }
 
         if (axeResult.getViolations() != null) {
+            log.debug("Processing {} violations", axeResult.getViolations().size());
             for (AxeViolation axeViolation : axeResult.getViolations()) {
                 Violation violation = new Violation();
                 violation.setRuleId(axeViolation.getId());
@@ -138,6 +131,7 @@ public class ScanService {
         }
 
         Scan savedScan = scanRepository.save(scan);
+        log.info("Saved scan with {} violations", savedScan.getViolations() != null ? savedScan.getViolations().size() : 0);
         buildAndSaveScanReport(savedScan);
 
         // Remediation is now triggered manually from the front-end button,
@@ -147,9 +141,11 @@ public class ScanService {
 
     private void buildAndSaveScanReport(Scan scan) {
         if (scan == null || scan.getId() == null) {
+            log.warn("Cannot build scan report: scan is null or has no ID");
             return;
         }
 
+        log.debug("Building scan report for scan id: {}", scan.getId());
         ScanReport scanReport = scanReportRepository.findByScanId(scan.getId())
                 .orElseGet(ScanReport::new);
 
@@ -262,53 +258,75 @@ public class ScanService {
         scanReport.setReportText(reportTextBuilder.toString());
 
         scanReportRepository.save(scanReport);
+        log.info("Saved scan report for scan id: {}", scan.getId());
     }
 
     // Returns all scan records from the database
     public List<Scan> getAllScans() {
+        log.debug("Retrieving all scans from database");
         List<Scan> scans = scanRepository.findAll();
         scans.forEach(this::applyImpactedUsers);
+        log.debug("Retrieved {} scans", scans.size());
         return scans;
     }
 
     // Returns the most recently added scan
     public Scan getLatestScan() {
+        log.debug("Retrieving latest scan");
         Scan scan = scanRepository.findTopByOrderByIdDesc().orElse(null);
         applyImpactedUsers(scan);
+        if (scan != null) {
+            log.debug("Found latest scan with id: {}", scan.getId());
+        } else {
+            log.debug("No scans found in database");
+        }
         return scan;
     }
 
     // Returns a scan by its database ID
     public Scan getScanById(Long id) {
+        log.debug("Retrieving scan by id: {}", id);
         Scan scan = scanRepository.findById(id).orElse(null);
         applyImpactedUsers(scan);
+        if (scan != null) {
+            log.debug("Found scan with id: {}", id);
+        } else {
+            log.warn("Scan not found with id: {}", id);
+        }
         return scan;
     }
 
     public Scan updateScanName(Long id, String auditName) {
+        log.info("Updating scan id: {} with new audit name: {}", id, auditName);
         Scan scan = scanRepository.findById(id).orElse(null);
         if (scan == null) {
+            log.warn("Scan not found with id: {}, cannot update", id);
             return null;
         }
         scan.setAuditName(auditName);
-        return scanRepository.save(scan);
+        Scan updatedScan = scanRepository.save(scan);
+        log.info("Successfully updated scan id: {}", id);
+        return updatedScan;
     }
 
     public void deleteScanById(Long id) {
+        log.info("Deleting scan with id: {}", id);
         if (scanRepository.existsById(id)) {
             scanRepository.deleteById(id);
+            log.info("Successfully deleted scan with id: {}", id);
+        } else {
+            log.warn("Scan not found with id: {}, cannot delete", id);
         }
     }
   
     private void applyImpactedUsers(Scan scan) {
-        if (scan == null || scan.getViolations() == null) {
-            return;
-        }
-
-        for (Violation violation : scan.getViolations()) {
-            violation.setImpactedUsers(
-                    impactMappingService.getImpactedUsersText(violation.getRuleId())
-            );
+        if (scan != null && scan.getViolations() != null) {
+            List<Violation> violations = scan.getViolations();
+            for (Violation violation : violations) {
+                violation.setImpactedUsers(
+                        impactMappingService.getImpactedUsersText(violation.getRuleId())
+                );
+            }
         }
     }
 }

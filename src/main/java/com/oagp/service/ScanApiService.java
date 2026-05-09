@@ -21,6 +21,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * API service for full scan endpoints.
@@ -34,6 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class ScanApiService {
+
+    private static final Logger log = LoggerFactory.getLogger(ScanApiService.class);
 
     private final ScanRepository scanRepository;
     private final ScanReportRepository scanReportRepository;
@@ -81,11 +85,12 @@ public class ScanApiService {
      */
     public List<ScanResponseDto> getAllScans(String url, String auditName, String time) {
 
+        log.debug("Getting all scans with filters - url: {}, auditName: {}, time: {}", url, auditName, time);
         String normalizedUrl = normalize(url);
         String normalizedAuditName = normalize(auditName);
         String normalizedTime = normalize(time);
 
-        return scanRepository.findAll().stream()
+        List<ScanResponseDto> results = scanRepository.findAll().stream()
                 .filter(scan -> matchesUrl(scan, normalizedUrl))
                 .filter(scan -> matchesAuditName(scan, normalizedAuditName))
                 .filter(scan -> matchesTime(scan, normalizedTime))
@@ -95,6 +100,9 @@ public class ScanApiService {
                 ))
                 .map(this::mapToScanResponseDto)
                 .collect(Collectors.toList());
+        
+        log.info("Retrieved {} scans with applied filters", results.size());
+        return results;
     }
 
     /*
@@ -114,9 +122,17 @@ public class ScanApiService {
  * - null if no scans exist in the database
      */
     public ScanResponseDto getLatestScan() {
-        return scanRepository.findTopByOrderByIdDesc()
+        log.debug("Getting latest scan");
+        ScanResponseDto latestScan = scanRepository.findTopByOrderByIdDesc()
                 .map(this::mapToScanResponseDto)
                 .orElse(null);
+        
+        if (latestScan != null) {
+            log.debug("Found latest scan with id: {}", latestScan.getId());
+        } else {
+            log.debug("No scans found in database");
+        }
+        return latestScan;
     }
 
     /*
@@ -141,9 +157,17 @@ public class ScanApiService {
  * - null if no scan exists with the given ID
      */
     public ScanResponseDto getScanById(Long id) {
-        return scanRepository.findById(id)
+        log.debug("Getting scan by id: {}", id);
+        ScanResponseDto scan = scanRepository.findById(id)
                 .map(this::mapToScanResponseDto)
                 .orElse(null);
+        
+        if (scan != null) {
+            log.debug("Found scan with id: {}", id);
+        } else {
+            log.warn("Scan not found with id: {}", id);
+        }
+        return scan;
     }
 
     /*
@@ -177,15 +201,28 @@ public class ScanApiService {
     public ScanResponseDto createScan(ScanRequestDto requestDto)
             throws IOException, InterruptedException {
 
-        validateRequest(requestDto);
+        log.info("Creating new scan with audit name: {}, url: {}", requestDto.getAuditName(), requestDto.getUrl());
+        try {
+            validateRequest(requestDto);
 
-        String normalizedUrl = normalizeUrl(requestDto.getUrl());
-        validateUrl(normalizedUrl);
+            String normalizedUrl = normalizeUrl(requestDto.getUrl());
+            log.debug("Normalized URL: {}", normalizedUrl);
+            validateUrl(normalizedUrl);
 
-        Path jsonPath = scannerProcessService.runScan(normalizedUrl);
-        Scan savedScan = scanService.processScannedJson(jsonPath, requestDto.getAuditName().trim());
-
-        return mapToScanResponseDto(savedScan);
+            log.debug("Running scanner for URL: {}", normalizedUrl);
+            Path jsonPath = scannerProcessService.runScan(normalizedUrl);
+            log.debug("Scanner completed, processing JSON");
+            Scan savedScan = scanService.processScannedJson(jsonPath, requestDto.getAuditName().trim());
+            
+            log.info("Successfully created scan with id: {}", savedScan.getId());
+            return mapToScanResponseDto(savedScan);
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid request for scan creation: {}", e.getMessage());
+            throw e;
+        } catch (IOException | InterruptedException e) {
+            log.error("Failed to execute scanner: ", e);
+            throw e;
+        }
     }
 
     /*
@@ -219,20 +256,28 @@ public class ScanApiService {
      */
     public ScanResponseDto updateScan(Long id, ScanRequestDto requestDto) {
 
-        validateRequest(requestDto);
+        log.info("Updating scan id: {} with new audit name: {}, url: {}", id, requestDto.getAuditName(), requestDto.getUrl());
+        try {
+            validateRequest(requestDto);
 
-        Scan scan = scanRepository.findById(id).orElse(null);
+            Scan scan = scanRepository.findById(id).orElse(null);
 
-        if (scan == null) {
-            return null;
+            if (scan == null) {
+                log.warn("Scan not found with id: {}", id);
+                return null;
+            }
+
+            scan.setAuditName(requestDto.getAuditName().trim());
+            scan.setPageUrl(requestDto.getUrl().trim());
+
+            Scan updatedScan = scanRepository.save(scan);
+            log.info("Successfully updated scan id: {}", id);
+
+            return mapToScanResponseDto(updatedScan);
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid request for scan update: {}", e.getMessage());
+            throw e;
         }
-
-        scan.setAuditName(requestDto.getAuditName().trim());
-        scan.setPageUrl(requestDto.getUrl().trim());
-
-        Scan updatedScan = scanRepository.save(scan);
-
-        return mapToScanResponseDto(updatedScan);
     }
 
     /*
@@ -262,12 +307,15 @@ public class ScanApiService {
     @Transactional
     public boolean deleteScan(Long id) {
 
+        log.info("Deleting scan with id: {}", id);
         if (!scanRepository.existsById(id)) {
+            log.warn("Scan not found with id: {}, cannot delete", id);
             return false;
         }
 
         scanReportRepository.deleteByScanId(id);
         scanRepository.deleteById(id);
+        log.info("Successfully deleted scan with id: {}", id);
         return true;
     }
 
@@ -296,14 +344,17 @@ public class ScanApiService {
     private void validateRequest(ScanRequestDto requestDto) {
 
         if (requestDto == null) {
+            log.warn("Request body is null");
             throw new IllegalArgumentException("Request body is required.");
         }
 
         if (requestDto.getAuditName() == null || requestDto.getAuditName().isBlank()) {
+            log.warn("Audit name is missing or blank");
             throw new IllegalArgumentException("Audit name is required.");
         }
 
         if (requestDto.getUrl() == null || requestDto.getUrl().isBlank()) {
+            log.warn("URL is missing or blank");
             throw new IllegalArgumentException("URL is required.");
         }
     }

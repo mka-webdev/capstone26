@@ -18,9 +18,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 public class ScanController {
+
+    private static final Logger log = LoggerFactory.getLogger(ScanController.class);
 
     private final ScanService scanService;
     private final ScannerProcessService scannerProcessService;
@@ -39,6 +43,7 @@ public class ScanController {
 
     @GetMapping("/")
     public String showNewScan(Model model) {
+        log.debug("Navigating to new scan page");
         model.addAttribute("activePage", "scan");
         model.addAttribute("hasScans", scanService.getLatestScan() != null);
         return "new-scan";
@@ -46,6 +51,7 @@ public class ScanController {
     
     @GetMapping("/results/latest")
     public String showLatestScan(Model model) {
+        log.info("Retrieving latest scan for display");
         Scan latestScan = scanService.getLatestScan();
         model.addAttribute("scan", latestScan);
         model.addAttribute("activePage", "results");
@@ -55,6 +61,7 @@ public class ScanController {
     
     @GetMapping("/scans")
     public String showAllScans(Model model) {
+        log.info("Retrieving all scans for display");
         model.addAttribute("scans", scanService.getAllScans());
         model.addAttribute("activePage", "scans");
         return "scans";
@@ -62,6 +69,7 @@ public class ScanController {
 
    @GetMapping("/scans/{id}/edit")
     public String showEditScanForm(@PathVariable Long id, Model model) {
+        log.info("Showing edit form for scan id: {}", id);
         model.addAttribute("scans", scanService.getAllScans());
         model.addAttribute("activePage", "scans");
         model.addAttribute("editScanId", id);
@@ -74,24 +82,36 @@ public class ScanController {
     public String renameScan(@PathVariable Long id,
                              @RequestParam("auditName") String auditName,
                              Model model) {
+        log.info("Renaming scan id: {} to audit name: {}", id, auditName);
         if (auditName == null || auditName.isBlank()) {
+            log.warn("Rename failed: audit name is empty for scan id: {}", id);
             model.addAttribute("errorMessage", "Scan name cannot be empty.");
             return showEditScanForm(id, model);
         }
-        scanService.updateScanName(id, auditName);
+        Scan updatedScan = scanService.updateScanName(id, auditName);
+        if (updatedScan == null) {
+            log.warn("Rename failed because scan id {} was not found", id);
+            model.addAttribute("errorMessage", "Scan not found.");
+            return showEditScanForm(id, model);
+        }
+        log.info("Successfully renamed scan id: {} to: {}", id, auditName);
         return "redirect:/scans";
     }
 
     @PostMapping("/scans/{id}/delete")
     public String deleteScan(@PathVariable Long id) {
+        log.info("Deleting scan with id: {}", id);
         scanService.deleteScanById(id);
+        log.info("Successfully deleted scan with id: {}", id);
         return "redirect:/scans";
     }
     
     @GetMapping("/results/{id}")
     public String showScanById(@PathVariable Long id, Model model) {
+        log.info("Retrieving scan with id: {}", id);
         Scan scan = scanService.getScanById(id);
         if (scan == null) {
+            log.warn("Scan not found with id: {}", id);
             model.addAttribute("errorMessage", "Scan not found.");
             model.addAttribute("activePage", "scans");
             model.addAttribute("scans", scanService.getAllScans());
@@ -107,21 +127,27 @@ public class ScanController {
     public String runScan(@RequestParam("url") String url,
                           @RequestParam("auditName") String auditName,
                           Model model) {
+        log.info("Starting scan for URL: {} with audit name: {}", url, auditName);
         try {
             String normalizedUrl = normalizeUrl(url);
+            log.debug("Normalized URL: {}", normalizedUrl);
             validateUrl(normalizedUrl);
 
             Path jsonPath = scannerProcessService.runScan(normalizedUrl);
+            log.debug("Scanner completed, processing JSON from: {}", jsonPath);
             scanService.processScannedJson(jsonPath, auditName);
+            log.info("Successfully completed scan for URL: {}", normalizedUrl);
 
             return "redirect:/results/latest";
 
         } catch (IllegalArgumentException e) {
+            log.warn("Invalid URL or request: {}", e.getMessage());
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("activePage", "scan");
             return "new-scan";
 
         } catch (IOException | InterruptedException e) {
+            log.error("Failed to scan the page: ", e);
             model.addAttribute("errorMessage", "Unable to scan the page.");
             model.addAttribute("activePage", "scan");
             return "new-scan";
@@ -130,26 +156,31 @@ public class ScanController {
     
     private void validateUrl(String url) {
         try {
+            log.debug("Validating URL: {}", url);
             URI uri = new URI(url);
             String scheme = uri.getScheme();
             String host = uri.getHost();
 
             if (scheme == null
                     || (!scheme.equalsIgnoreCase("http") && !scheme.equalsIgnoreCase("https"))) {
+                log.warn("Invalid URL scheme: {}", scheme);
                 throw new IllegalArgumentException("URL must start with http or https.");
             }
 
             if (host == null || host.isBlank()) {
+                log.warn("Invalid or missing host");
                 throw new IllegalArgumentException("Invalid URL.");
             }
 
             if (!isValidHost(host)) {
+                log.warn("Invalid host format: {}", host);
                 throw new IllegalArgumentException(
                         "Enter a valid website address, for example example.com, www.example.com, or localhost:8080."
                 );
             }
 
         } catch (URISyntaxException e) {
+            log.warn("URL parsing failed: {}", e.getMessage());
             throw new IllegalArgumentException("Invalid URL.");
         }
     }
@@ -158,22 +189,30 @@ public class ScanController {
         String trimmedUrl = url.trim();
 
         if (trimmedUrl.isBlank()) {
+            log.warn("Blank URL input");
             throw new IllegalArgumentException("URL is required.");
         }
 
         if (trimmedUrl.startsWith("http://") || trimmedUrl.startsWith("https://")) {
+            log.debug("URL already has protocol: {}", trimmedUrl);
             return trimmedUrl;
         }
 
         if (trimmedUrl.startsWith("localhost") || trimmedUrl.startsWith("127.0.0.1")) {
-            return "http://" + trimmedUrl;
+            String result = "http://" + trimmedUrl;
+            log.debug("Added http:// to localhost/127.0.0.1: {}", result);
+            return result;
         }
 
         if (trimmedUrl.startsWith("www.")) {
-            return "https://" + trimmedUrl;
+            String result = "https://" + trimmedUrl;
+            log.debug("Added https:// to www. URL: {}", result);
+            return result;
         }
 
-        return "https://" + trimmedUrl;
+        String result = "https://" + trimmedUrl;
+        log.debug("Added default https:// to URL: {}", result);
+        return result;
     }
 
     private boolean isValidHost(String host) {
@@ -200,33 +239,30 @@ public class ScanController {
  * After the process completes, the method redirects the user back
  * to the home page so the latest scan page is shown again.
      */
-    @PostMapping("/generate-report/{id}")
+     @PostMapping("/generate-report/{id}")
     public String generateReportForCurrentScan(
             @PathVariable Long id,
             @RequestParam(name = "aiChoice", required = false, defaultValue = "GEMINI_FREE") String aiChoice) {
 
+        log.info("Generating AI report for scan id: {} with AI choice: {}", id, aiChoice);
         Scan scan = scanService.getScanById(id);
 
         if (scan != null) {
             AiProvider provider = AiProvider.GEMINI;
             AiTier tier = AiTier.FREE;
 
-            switch (aiChoice) {
-                case "GEMINI_PAID" -> {
-                    provider = AiProvider.GEMINI;
-                    tier = AiTier.PAID;
-                }
-                case "OPENAI_PAID" -> {
-                    provider = AiProvider.OPEN_AI;
-                    tier = AiTier.PAID;
-                }
-                default -> {
-                    provider = AiProvider.GEMINI;
-                    tier = AiTier.FREE;
-                }
+            if ("GEMINI_PAID".equals(aiChoice)) {
+                tier = AiTier.PAID;
+            } else if ("OPENAI_PAID".equals(aiChoice)) {
+                provider = AiProvider.OPEN_AI;
+                tier = AiTier.PAID;
             }
 
+            log.debug("Generating remediations with provider: {}, tier: {}", provider, tier);
             remediationService.generateRemediationsForScan(scan, provider, tier);
+            log.info("Successfully generated AI report for scan id: {}", id);
+        } else {
+            log.warn("Scan not found with id: {}, cannot generate report", id);
         }
 
         return "redirect:/results/" + id;

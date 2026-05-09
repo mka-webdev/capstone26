@@ -4,9 +4,13 @@ import com.oagp.model.Scan;
 import com.oagp.model.Violation;
 import com.oagp.model.ViolationNode;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class PromptBuilderService {
+
+    private static final Logger log = LoggerFactory.getLogger(PromptBuilderService.class);
 
     /*
      * Builds one complete prompt for the entire scan.
@@ -23,6 +27,7 @@ public class PromptBuilderService {
      * - one complete prompt string for the AI system
      */
     public String buildPromptForWholeScan(Scan scan) {
+        log.info("Building prompt for scan audit name: {}, url: {}", scan.getAuditName(), scan.getPageUrl());
         StringBuilder prompt = new StringBuilder();
 
         prompt.append("Accessibility Scan Prompt Data\n");
@@ -128,7 +133,9 @@ public class PromptBuilderService {
         prompt.append("Do not invent extra facts beyond the supplied scan data.\n");
 
         // Return the completed prompt text
-        return prompt.toString();
+        String builtPrompt = prompt.toString();
+        log.debug("Built prompt with length: {} characters", builtPrompt.length());
+        return builtPrompt;
     }
 
     /*
