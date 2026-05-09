@@ -45,6 +45,7 @@ public class GeminiPaidStrategy implements AiAnswerStrategy {
             throw new IllegalArgumentException("Gemini API key is missing. Please set the GEMINI_API_KEY_PAID environment variable.");
         }
 
+        log.debug("Sending prompt to Gemini");
         GenerateContentResponse response;
         try(Client client = Client.builder().apiKey(apiKey).build()){
             response = client.models.generateContent(

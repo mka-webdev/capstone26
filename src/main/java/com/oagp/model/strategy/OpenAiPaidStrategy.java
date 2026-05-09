@@ -46,6 +46,7 @@ public class OpenAiPaidStrategy implements AiAnswerStrategy {
                 .build();
 
         try {
+            log.debug("Sending prompt to OpenAI");
             ResponseCreateParams params = ResponseCreateParams.builder()
                     .input(question)
                     .model(ChatModel.GPT_5_2)
