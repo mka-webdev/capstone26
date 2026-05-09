@@ -9,9 +9,14 @@ import com.openai.models.responses.Response;
 import com.openai.models.responses.ResponseCreateParams;
 import com.openai.models.responses.ResponseOutputText;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class OpenAiPaidStrategy implements AiAnswerStrategy {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(OpenAiPaidStrategy.class);
 
     private final String apiKey;
 
@@ -30,8 +35,11 @@ public class OpenAiPaidStrategy implements AiAnswerStrategy {
     }
     @Override
     public String ask(String question) throws IllegalArgumentException {
-        if (apiKey == null || apiKey.isEmpty())
+        log.debug("API key: {}", apiKey);
+        if (apiKey == null || apiKey.isEmpty()) {
+            log.error("No api key provided");
             throw new IllegalArgumentException("OpenAI API key is missing. Please set the OPENAI_API_KEY environment variable.");
+        }
 
         OpenAIClient client = OpenAIOkHttpClient.builder()
                 .apiKey(apiKey)
@@ -52,6 +60,7 @@ public class OpenAiPaidStrategy implements AiAnswerStrategy {
                     .collect(java.util.stream.Collectors.joining())
                     .trim();
         } catch (Exception e) {
+            log.error("Error while creating OpenAI response", e);
             return "OpenAI service returned an unexpected error. Please try again later.";
         }
     }
