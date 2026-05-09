@@ -98,6 +98,32 @@ cd scanner
 npm install
 npx playwright install
 ```
+ 
+## Logging configuration
+
+The application uses Spring Boot's logging (Logback under the hood) and is configured via `src/main/resources/application.properties`.
+
+Key settings you can change:
+
+- `logging.level.root` — global default logging level (TRACE, DEBUG, INFO, WARN, ERROR)
+- `logging.level.<package or class>` — per-package or per-class override (for example `logging.level.com.oagp=DEBUG`)
+- `logging.file.name` — (optional) write logs to a file instead of only the console
+
+Default values in this project (see `application.properties`):
+
+```
+logging.level.root=INFO
+logging.level.com.oagp=INFO
+```
+
+What the levels mean (short):
+
+- TRACE — very detailed diagnostic information
+- DEBUG — useful development-time information
+- INFO — runtime events of interest (start/stop/major actions)
+- WARN — something unexpected happened, but the application can continue
+- ERROR — a serious failure; typically an exception that stops a request or process
+
 ## Environment Variables
 
 This application requires several environment variables to be configured for AI provider integration. These variables are used to securely supply API keys and configuration without hardcoding sensitive data.
