@@ -9,9 +9,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class AiAnswerStrategyFactory {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(AiAnswerStrategyFactory.class);
+
     private final Map<AiAnswerStrategyKey, AiAnswerStrategy> strategyMap;
 
     public AiAnswerStrategyFactory(List<AiAnswerStrategy> strategies) {
@@ -23,9 +29,12 @@ public class AiAnswerStrategyFactory {
     }
 
     public AiAnswerStrategy getStrategy(AiProvider provider, AiTier tier) {
+        log.debug("Getting strategy for provider {} and tier {}", provider, tier);
+
         AiAnswerStrategy strategy = strategyMap.get(new AiAnswerStrategyKey(provider, tier));
 
         if (strategy == null) {
+            log.error("No strategy found for provider {} and tier {}", provider, tier);
             throw new IllegalArgumentException(
                     "No strategy found for provider=" + provider + ", tier=" + tier
             );

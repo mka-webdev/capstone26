@@ -39,7 +39,7 @@ scan-archive/results_2026-04-09_12-34-56.json
 
 This allows simple scan history tracking without affecting the main workflow.
 
-## AI-assisted remediation (in progress)
+## AI-assisted remediation
 
 OAGP is being extended to include AI-based remediation guidance.
 
@@ -48,9 +48,7 @@ The system will:
 - Use structured scan data (rule, impact, WCAG tags, element type)
 - Produce short, actionable guidance (description, impact, recommendation)
 
-Users will be able to select an AI provider before running a scan.
-
-Planned behavior:
+Users will be able to select an AI provider before running a scan:
 - Default provider: Google Gemini (free-tier friendly)
 - Optional provider: OpenAI (user-supplied API key stored locally on user's machine)
 - The system selects the provider dynamically at runtime
@@ -88,10 +86,8 @@ This helps prevent unnecessary scanner execution and avoids exposing raw process
 
 ## Planned features
 
-- AI-generated remediation guidance per issue
 - Export scan results to PDF reports
-- Improved dashboard for scan history and comparison
-- Optional AI provider configuration via UI
+
 
 ## Scanner module setup
 
@@ -102,6 +98,32 @@ cd scanner
 npm install
 npx playwright install
 ```
+ 
+## Logging configuration
+
+The application uses Spring Boot's logging (Logback under the hood) and is configured via `src/main/resources/application.properties`.
+
+Key settings you can change:
+
+- `logging.level.root` — global default logging level (TRACE, DEBUG, INFO, WARN, ERROR)
+- `logging.level.<package or class>` — per-package or per-class override (for example `logging.level.com.oagp=DEBUG`)
+- `logging.file.name` — (optional) write logs to a file instead of only the console
+
+Default values in this project (see `application.properties`):
+
+```
+logging.level.root=INFO
+logging.level.com.oagp=INFO
+```
+
+What the levels mean (short):
+
+- TRACE — very detailed diagnostic information
+- DEBUG — useful development-time information
+- INFO — runtime events of interest (start/stop/major actions)
+- WARN — something unexpected happened, but the application can continue
+- ERROR — a serious failure; typically an exception that stops a request or process
+
 ## Environment Variables
 
 This application requires several environment variables to be configured for AI provider integration. These variables are used to securely supply API keys and configuration without hardcoding sensitive data.

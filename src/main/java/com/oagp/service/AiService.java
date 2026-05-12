@@ -5,6 +5,8 @@ import com.oagp.model.AiProvider;
 import com.oagp.model.AiTier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * Service class
@@ -22,6 +24,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AiService {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(AiService.class);
 
     @Value("${ai.provider.default:GEMINI}")
     private AiProvider defaultProvider;
@@ -44,9 +49,12 @@ public class AiService {
     }
 
     public String generateRemediation(String prompt, AiProvider provider, AiTier tier) {
+        log.info("Generating remediation with provider: {}, tier: {}, prompt: {}",
+                provider, tier, prompt);
         try {
             return factory.getStrategy(provider, tier).ask(prompt);
         } catch (IllegalArgumentException e) {
+            log.error("Failed to generate response with error: {}", e.getMessage());
             return e.getMessage();
         }
     }

@@ -7,6 +7,8 @@ import com.oagp.service.ScanApiService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * REST API controller for full scan endpoints.
@@ -20,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/scans")
 public class ScanApiController {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(ScanApiController.class);
 
     private final ScanApiService scanApiService;
 
@@ -61,6 +66,7 @@ public class ScanApiController {
             @RequestParam(required = false) String url,
             @RequestParam(required = false) String auditName,
             @RequestParam(required = false) String time) {
+        log.info("Get all scans with filters - url: {}, auditName: {}, time: {}", url, auditName, time);
 
         List<ScanResponseDto> scans = scanApiService.getAllScans(url, auditName, time);
 
@@ -86,6 +92,7 @@ public class ScanApiController {
      */
     @GetMapping("/latest")
     public ResponseEntity<ApiResponse<ScanResponseDto>> getLatestScan() {
+        log.info("Get latest scan");
 
         ScanResponseDto latestScan = scanApiService.getLatestScan();
 
@@ -121,6 +128,7 @@ public class ScanApiController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ScanResponseDto>> getScanById(
             @PathVariable("id") Long id) {
+        log.info("Get scan with id {}", id);
 
         ScanResponseDto scan = scanApiService.getScanById(id);
 
@@ -166,6 +174,7 @@ public class ScanApiController {
     @PostMapping
     public ResponseEntity<ApiResponse<ScanResponseDto>> createScan(
             @RequestBody ScanRequestDto requestDto) {
+        log.info("Create scan request: {}", requestDto);
 
         try {
             ScanResponseDto createdScan = scanApiService.createScan(requestDto);
@@ -211,6 +220,7 @@ public class ScanApiController {
     public ResponseEntity<ApiResponse<ScanResponseDto>> updateScan(
             @PathVariable("id") Long id,
             @RequestBody ScanRequestDto requestDto) {
+        log.info("Update scan request: {}", requestDto);
 
         try {
             ScanResponseDto updatedScan = scanApiService.updateScan(id, requestDto);

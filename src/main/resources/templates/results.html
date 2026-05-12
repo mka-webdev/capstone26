@@ -70,6 +70,13 @@
                     </button>
                 </form>
 
+                <div id="ai-loading-overlay" class="panel-loading-overlay" style="display: none;">
+                    <div class="loading-shell">
+                        <div class="loader"></div>
+                        <p>Generating AI remediation report…</p>
+                    </div>
+                </div>
+                
                 <details class="ai-remediation-output" th:if="${aiReportHtml != null}">
                     <summary class="ai-remediation-summary">
                         <span>AI Remediation Guide</span>
