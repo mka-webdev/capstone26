@@ -21,6 +21,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.oagp.service.PdfExportService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
 @Controller
 public class ScanController {
 
@@ -30,15 +35,18 @@ public class ScanController {
     private final ScannerProcessService scannerProcessService;
     private final RemediationService remediationService;
     private final MarkdownService markdownService;
+    private final PdfExportService pdfExportService;
 
     public ScanController(ScanService scanService,
             ScannerProcessService scannerProcessService,
             RemediationService remediationService,
-            MarkdownService markdownService) {
+            MarkdownService markdownService,
+            PdfExportService pdfExportService) {
         this.scanService = scanService;
         this.scannerProcessService = scannerProcessService;
         this.remediationService = remediationService;
         this.markdownService = markdownService;
+        this.pdfExportService = pdfExportService;
     }
 
     @GetMapping("/")
@@ -48,7 +56,7 @@ public class ScanController {
         model.addAttribute("hasScans", scanService.getLatestScan() != null);
         return "new-scan";
     }
-    
+
     @GetMapping("/results/latest")
     public String showLatestScan(Model model) {
         log.info("Retrieving latest scan for display");
@@ -58,7 +66,7 @@ public class ScanController {
         model.addAttribute("aiReportHtml", getAiReportHtml(latestScan));
         return "results";
     }
-    
+
     @GetMapping("/scans")
     public String showAllScans(Model model) {
         log.info("Retrieving all scans for display");
@@ -67,7 +75,19 @@ public class ScanController {
         return "scans";
     }
 
-   @GetMapping("/scans/{id}/edit")
+    @GetMapping("/scans/{id}/export-pdf")
+    public ResponseEntity<byte[]> exportScanPdf(@PathVariable Long id) {
+        log.info("Exporting PDF for scan id: {}", id);
+
+        byte[] pdfBytes = pdfExportService.generatePdfForScan(id);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=oagp-scan-" + id + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
+    }
+
+    @GetMapping("/scans/{id}/edit")
     public String showEditScanForm(@PathVariable Long id, Model model) {
         log.info("Showing edit form for scan id: {}", id);
         model.addAttribute("scans", scanService.getAllScans());
@@ -80,8 +100,8 @@ public class ScanController {
 
     @PostMapping("/scans/{id}/rename")
     public String renameScan(@PathVariable Long id,
-                             @RequestParam("auditName") String auditName,
-                             Model model) {
+            @RequestParam("auditName") String auditName,
+            Model model) {
         log.info("Renaming scan id: {} to audit name: {}", id, auditName);
         if (auditName == null || auditName.isBlank()) {
             log.warn("Rename failed: audit name is empty for scan id: {}", id);
@@ -105,7 +125,7 @@ public class ScanController {
         log.info("Successfully deleted scan with id: {}", id);
         return "redirect:/scans";
     }
-    
+
     @GetMapping("/results/{id}")
     public String showScanById(@PathVariable Long id, Model model) {
         log.info("Retrieving scan with id: {}", id);
@@ -122,11 +142,11 @@ public class ScanController {
         model.addAttribute("aiReportHtml", getAiReportHtml(scan));
         return "results";
     }
-    
+
     @PostMapping("/scan")
     public String runScan(@RequestParam("url") String url,
-                          @RequestParam("auditName") String auditName,
-                          Model model) {
+            @RequestParam("auditName") String auditName,
+            Model model) {
         log.info("Starting scan for URL: {} with audit name: {}", url, auditName);
         try {
             String normalizedUrl = normalizeUrl(url);
@@ -153,7 +173,7 @@ public class ScanController {
             return "new-scan";
         }
     }
-    
+
     private void validateUrl(String url) {
         try {
             log.debug("Validating URL: {}", url);
@@ -239,7 +259,7 @@ public class ScanController {
  * After the process completes, the method redirects the user back
  * to the home page so the latest scan page is shown again.
      */
-     @PostMapping("/generate-report/{id}")
+    @PostMapping("/generate-report/{id}")
     public String generateReportForCurrentScan(
             @PathVariable Long id,
             @RequestParam(name = "aiChoice", required = false, defaultValue = "GEMINI_FREE") String aiChoice) {
@@ -279,4 +299,3 @@ public class ScanController {
         return markdownService.toHtml(remediation);
     }
 }
-    
