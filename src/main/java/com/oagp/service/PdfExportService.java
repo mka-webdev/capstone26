@@ -136,6 +136,11 @@ public class PdfExportService {
         }
 
         addInternalLink(document, "AI Remediation Guide", "aiRemediation", linkFont, 0, 18);
+        String remediation = getRemediationFromScan(scan);
+
+        if (remediation == null || remediation.isBlank()) {
+            addBodyParagraph(document, "AI remediation has not been generated for this scan.", normalFont);
+        }
     }
 
     private void addTitle(Document document, String text, Font font) throws Exception {
