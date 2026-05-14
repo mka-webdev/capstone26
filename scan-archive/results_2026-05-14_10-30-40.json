@@ -1,0 +1,1713 @@
+{
+  "url": "https://www.gamespot.com/",
+  "timestamp": "2026-05-12T07:07:33.559Z",
+  "testEngine": {
+    "name": "axe-core",
+    "version": "4.11.1"
+  },
+  "testRunner": {
+    "name": "playwright"
+  },
+  "violations": [
+    {
+      "id": "aria-allowed-role",
+      "impact": "minor",
+      "tags": [
+        "cat.aria",
+        "best-practice"
+      ],
+      "description": "Ensure role attribute has an appropriate value for the element",
+      "help": "ARIA role should be appropriate for the element",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-allowed-role?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "aria-allowed-role",
+              "data": [
+                "complementary"
+              ],
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "ARIA role complementary is not allowed for given element"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "minor",
+          "html": "<footer id=\"footer\" class=\"mastfooter\" role=\"complementary\">",
+          "target": [
+            "#footer"
+          ],
+          "failureSummary": "Fix any of the following:\n  ARIA role complementary is not allowed for given element"
+        }
+      ]
+    },
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "tags": [
+        "cat.color",
+        "wcag2aa",
+        "wcag143",
+        "TTv5",
+        "TT13.c",
+        "EN-301-549",
+        "EN-9.1.4.3",
+        "ACT",
+        "RGAAv4",
+        "RGAA-3.2.1"
+      ],
+      "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#808080",
+                "bgColor": "#ffffff",
+                "contrastRatio": 3.94,
+                "fontSize": "16.5pt (22px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<html lang=\"en\" class=\"js no-touch  blobcon...\" data-useragent=\"Mozilla/5.0 (Windows...\" data-platform=\"Win32\">",
+                  "target": [
+                    "html"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.94 (foreground color: #808080, background color: #ffffff, font size: 16.5pt (22px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<a class=\"section-header__see-all text-custom-regular text-large js-click-tag\" href=\"/deals/games/\" aria-label=\"See all Game Deals\" data-click-tag=\"\"><span class=\"section-header__bullet\" role=\"presentation\">•</span>See all\n      </a>",
+          "target": [
+            "a[aria-label=\"See all Game Deals\"]"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.94 (foreground color: #808080, background color: #ffffff, font size: 16.5pt (22px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#808080",
+                "bgColor": "#ffffff",
+                "contrastRatio": 3.94,
+                "fontSize": "16.5pt (22px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<html lang=\"en\" class=\"js no-touch  blobcon...\" data-useragent=\"Mozilla/5.0 (Windows...\" data-platform=\"Win32\">",
+                  "target": [
+                    "html"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.94 (foreground color: #808080, background color: #ffffff, font size: 16.5pt (22px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<a class=\"section-header__see-all text-custom-regular text-large js-click-tag\" href=\"/deals/tech/\" aria-label=\"See all Tech Deals\" data-click-tag=\"\"><span class=\"section-header__bullet\" role=\"presentation\">•</span>See all\n      </a>",
+          "target": [
+            "a[aria-label=\"See all Tech Deals\"]"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.94 (foreground color: #808080, background color: #ffffff, font size: 16.5pt (22px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#808080",
+                "bgColor": "#2b2d31",
+                "contrastRatio": 3.49,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<footer id=\"footer\" class=\"mastfooter\" role=\"complementary\">",
+                  "target": [
+                    "#footer"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<div class=\"footer-network-copyright\">© 2026 FANDOM, INC. ALL RIGHTS RESERVED.\n</div>",
+          "target": [
+            ".footer-network-copyright"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#808080",
+                "bgColor": "#2b2d31",
+                "contrastRatio": 3.49,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<footer id=\"footer\" class=\"mastfooter\" role=\"complementary\">",
+                  "target": [
+                    "#footer"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<span class=\"footer-links__header\">More Sites</span>",
+          "target": [
+            "ul:nth-child(1) > li:nth-child(1) > .footer-links__header"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#808080",
+                "bgColor": "#2b2d31",
+                "contrastRatio": 3.49,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<footer id=\"footer\" class=\"mastfooter\" role=\"complementary\">",
+                  "target": [
+                    "#footer"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<span class=\"footer-links__header\">Reviews</span>",
+          "target": [
+            "ul:nth-child(2) > li:nth-child(1) > .footer-links__header"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#808080",
+                "bgColor": "#2b2d31",
+                "contrastRatio": 3.49,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<footer id=\"footer\" class=\"mastfooter\" role=\"complementary\">",
+                  "target": [
+                    "#footer"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<span class=\"footer-links__header\">News</span>",
+          "target": [
+            "ul:nth-child(3) > li:nth-child(1) > .footer-links__header"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#808080",
+                "bgColor": "#2b2d31",
+                "contrastRatio": 3.49,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<footer id=\"footer\" class=\"mastfooter\" role=\"complementary\">",
+                  "target": [
+                    "#footer"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<span class=\"footer-links__header\">Shows</span>",
+          "target": [
+            "ul:nth-child(4) > li:nth-child(1) > .footer-links__header"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#808080",
+                "bgColor": "#2b2d31",
+                "contrastRatio": 3.49,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "normal",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<footer id=\"footer\" class=\"mastfooter\" role=\"complementary\">",
+                  "target": [
+                    "#footer"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<span class=\"footer-links__header\">Talk to Us</span>",
+          "target": [
+            "ul:nth-child(5) > li:nth-child(1) > .footer-links__header"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+        },
+        {
+          "any": [
+            {
+              "id": "color-contrast",
+              "data": {
+                "fgColor": "#808080",
+                "bgColor": "#2b2d31",
+                "contrastRatio": 3.49,
+                "fontSize": "12.0pt (16px)",
+                "fontWeight": "bold",
+                "messageKey": null,
+                "expectedContrastRatio": "4.5:1"
+              },
+              "relatedNodes": [
+                {
+                  "html": "<footer id=\"footer\" class=\"mastfooter\" role=\"complementary\">",
+                  "target": [
+                    "#footer"
+                  ]
+                }
+              ],
+              "impact": "serious",
+              "message": "Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "serious",
+          "html": "<strong>GameSpot</strong>",
+          "target": [
+            ".footer--social-icons:nth-child(3) > strong"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.49 (foreground color: #808080, background color: #2b2d31, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+        }
+      ]
+    },
+    {
+      "id": "definition-list",
+      "impact": "serious",
+      "tags": [
+        "cat.structure",
+        "wcag2a",
+        "wcag131",
+        "EN-301-549",
+        "EN-9.1.3.1",
+        "RGAAv4",
+        "RGAA-9.3.3"
+      ],
+      "description": "Ensure <dl> elements are structured correctly",
+      "help": "<dl> elements must only directly contain properly-ordered <dt> and <dd> groups, <script>, <template> or <div> elements",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/definition-list?application=playwright",
+      "nodes": [
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "structured-dlitems",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "When not empty, element does not have at least one <dt> element followed by at least one <dd> element"
+            }
+          ],
+          "impact": "serious",
+          "html": "<dl class=\"pod-header  \"><dt class=\"pod-header__item\"><div class=\"pod-title flexbox-row\"><h4 class=\"text-custom-bold\">GameSpot Recommends</h4><span class=\"pod-div\" role=\"presentation\" aria-hidden=\"true\"></span></div></dt></dl>",
+          "target": [
+            ".pod-header"
+          ],
+          "failureSummary": "Fix all of the following:\n  When not empty, element does not have at least one <dt> element followed by at least one <dd> element"
+        }
+      ]
+    },
+    {
+      "id": "heading-order",
+      "impact": "moderate",
+      "tags": [
+        "cat.semantics",
+        "best-practice"
+      ],
+      "description": "Ensure the order of headings is semantically correct",
+      "help": "Heading levels should only increase by one",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/heading-order?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "heading-order",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Heading order invalid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "moderate",
+          "html": "<h4 class=\"carousel-strip__content-item-title\">Humble Bundle's Spring Mega Sale Kicks Off With Discounts Up To 97% Off</h4>",
+          "target": [
+            "li[data-id=\"6539850\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-metadata > .carousel-strip__content-item-title"
+          ],
+          "failureSummary": "Fix any of the following:\n  Heading order invalid"
+        },
+        {
+          "any": [
+            {
+              "id": "heading-order",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Heading order invalid"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "moderate",
+          "html": "<h4 class=\"carousel-strip__content-item-title\">The Atari 2600+ Pac-Man Edition Console Is 34% Off At Amazon</h4>",
+          "target": [
+            "li[data-id=\"6533716\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-metadata > .carousel-strip__content-item-title"
+          ],
+          "failureSummary": "Fix any of the following:\n  Heading order invalid"
+        }
+      ]
+    },
+    {
+      "id": "image-redundant-alt",
+      "impact": "minor",
+      "tags": [
+        "cat.text-alternatives",
+        "best-practice"
+      ],
+      "description": "Ensure image alternative is not repeated as text",
+      "help": "Alternative text of images should not be repeated as text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/image-redundant-alt?application=playwright",
+      "nodes": [
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1873/18732937/4692391-screenshot2026-05-07at2.00.16%E2%80%AFpm.png\" alt=\"Humble Bundle's Spring Mega Sale Kicks Off With Discounts Up To 97% Off\">",
+          "target": [
+            "li[data-id=\"6539850\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1601/16018044/4692079-arranger.jpg\" alt=\"This Week's Epic Games Store Freebie Wants You To Rearrange The World\">",
+          "target": [
+            "li[data-id=\"6476419\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1752/17528202/4691954-kcdperfume.jpg\" alt=\"The Official Kingdom Come Perfume Is Now Available For Purchase\">",
+          "target": [
+            "li[data-id=\"6539794\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1701/17013431/4691986-swgamesweek.jpg\" alt=\"All The Best Star Wars Gaming Deals Available This Week\">",
+          "target": [
+            "li[data-id=\"6539785\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1601/16018044/4678093-switch-2-galaxy.jpg\" alt=\"You Have One Week To Grab This Switch 2 + Super Mario Galaxy Bundle Deal Before It's Gone\">",
+          "target": [
+            "li[data-id=\"6539226\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1873/18732937/4689299-wootsaleapril28.jpg\" alt=\"Woot's Spring Video Game Sale: Save On Switch, PS5, And Xbox Games, Retro Hardware, And More\">",
+          "target": [
+            "li[data-id=\"6539662\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1702/17023653/4689271-mixcollage-28-apr-2026-08-50-am-7086.jpg\" alt=\"Save Up To 50% On Nintendo Switch Digital Games At Amazon\">",
+          "target": [
+            "li[data-id=\"6539663\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1701/17013431/4687087-capsale.jpg\" alt=\"Capcom's Stellar 2026 Lineup Is Already Heavily Discounted On PC, Including Pragmata And Resident Evil Requiem\">",
+          "target": [
+            "li[data-id=\"6539555\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1873/18732937/4687014-personacookbookthumb.jpg\" alt=\"The Official Persona Cookbook Is 38% Off At Amazon\">",
+          "target": [
+            "li[data-id=\"6539578\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1701/17013431/4687072-metaphor.jpg\" alt=\"Score Discounts On PS5 RPGs, DualSense Controllers, And More - The Best PS5 Deals Of The Week (April 23, 2026)\">",
+          "target": [
+            "li[data-id=\"6538557\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1701/17013431/4687069-ndeals.jpg\" alt=\"Save On Switch 2 Games And Accessories - The Best Nintendo Deals This Week (April , 2026)\">",
+          "target": [
+            "li[data-id=\"6538446\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1601/16018044/4686407-crimson-pokopia.jpg\" alt=\"These New Releases Gave Game Spending A Much-Needed Boost In March\">",
+          "target": [
+            "li[data-id=\"6539539\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1595/15950357/4545526-atari2600%2Bpac-maneditionconsole.jpg\" alt=\"The Atari 2600+ Pac-Man Edition Console Is 34% Off At Amazon\">",
+          "target": [
+            "li[data-id=\"6533716\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1873/18732937/4693017-saplings_banner.jpg\" alt=\"Save Some Green by Going Green... Energize Your Forests &amp; Celebrate Arbor Day With Batteries Plus\">",
+          "target": [
+            "li[data-id=\"6539880\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1701/17013431/4690937-asus.jpg\" alt=\"Save On Asus Gaming Laptops And PC Accessories During Amazon's Gaming Week Sale\">",
+          "target": [
+            "li[data-id=\"6539734\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1601/16018044/4686920-viture-beast-xr-main.jpg\" alt=\"Viture’s Next-Gen Beast XR Glasses Are Here And Ready To Bring An IMAX-Sized Screen To Your Face\">",
+          "target": [
+            "li[data-id=\"6539569\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1595/15950357/4499842-switch-2-cameras.jpg\" alt=\"Nintendo Switch 2 Piranha Plant Camera Discounted To Best Price Yet\">",
+          "target": [
+            "li[data-id=\"6530549\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1701/17013431/4683631-bb.jpg\" alt=\"Save On Video Games, Tech, Trading Cards, And More In Best Buy's Ultimate Upgrade Event\">",
+          "target": [
+            "li[data-id=\"6539371\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1601/16018044/4683565-quest-3-main.jpg\" alt=\"Where To Buy A Meta Quest 3 VR Headset Before The Prices Go Up This Week\">",
+          "target": [
+            "li[data-id=\"6539447\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1865/18658661/4678301-headphonesfinal.jpg\" alt=\"Save Over $150 On These Premium Sony Noise Cancelling Headphones\">",
+          "target": [
+            "li[data-id=\"6539237\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1701/17013431/4677335-kindledeals.jpg\" alt=\"Multiple Kindle Models Are Steeply Discounted At Woot Today\">",
+          "target": [
+            "li[data-id=\"6539219\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1601/16018044/4677286-genki-3.jpg\" alt=\"Genki Covert Dock 3 Solves The Switch 2’s Clutter Problem In One Plug\">",
+          "target": [
+            "li[data-id=\"6539215\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1701/17013431/4676459-04-01.jpg\" alt=\"Outfit Your PS5 With Dbrand Darkplates 2.0 While They're On Sale\">",
+          "target": [
+            "li[data-id=\"6539155\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_small/1701/17013431/4672489-8bitdo.jpg\" alt=\"You Can Score A Great Deal On 8BitDo's Pro 3 Controller Right Now\">",
+          "target": [
+            "li[data-id=\"6539067\"] > .carousel-strip__content-item > a > .carousel-strip__content-item-body > .carousel-strip__content-item-image > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_tiny/1816/18167535/4666778-crimson-desert-guides-hub.jpg\" alt=\"Crimson Desert - Guides Hub\">",
+          "target": [
+            "img[alt=\"Crimson Desert - Guides Hub\"]"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_tiny/1816/18167535/4655273-resident-evil-requiem-guides-hub-.jpg\" alt=\"Resident Evil Requiem - Guides Hub\">",
+          "target": [
+            ".media--small:nth-child(3) > a > .align-vertical--contain > .align-vertical--child:nth-child(1) > .media-img > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_tiny/123/1239113/4573210-6780366477-45732.jpg\" alt=\"2026 Upcoming Game Release Dates\">",
+          "target": [
+            ".media--small:nth-child(4) > a > .align-vertical--contain > .align-vertical--child:nth-child(1) > .media-img > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        },
+        {
+          "any": [],
+          "all": [],
+          "none": [
+            {
+              "id": "duplicate-img-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "minor",
+              "message": "Element contains <img> element with alt text that duplicates existing text"
+            }
+          ],
+          "impact": "minor",
+          "html": "<img src=\"https://www.gamespot.com/a/uploads/screen_tiny/123/1239113/4650793-9418200617-46507.jpg\" alt=\"The Best Games Of 2026 (So Far)\">",
+          "target": [
+            ".media--small:nth-child(5) > a > .align-vertical--contain > .align-vertical--child:nth-child(1) > .media-img > img"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element contains <img> element with alt text that duplicates existing text"
+        }
+      ]
+    },
+    {
+      "id": "landmark-unique",
+      "impact": "moderate",
+      "tags": [
+        "cat.semantics",
+        "best-practice"
+      ],
+      "description": "Ensure landmarks are unique",
+      "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-unique?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "landmark-is-unique",
+              "data": {
+                "role": "complementary",
+                "accessibleText": null
+              },
+              "relatedNodes": [
+                {
+                  "html": "<footer id=\"footer\" class=\"mastfooter\" role=\"complementary\">",
+                  "target": [
+                    "#footer"
+                  ]
+                }
+              ],
+              "impact": "moderate",
+              "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "moderate",
+          "html": "<aside class=\"secondary-content span4 medium-span5\">",
+          "target": [
+            "aside"
+          ],
+          "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+        }
+      ]
+    },
+    {
+      "id": "link-name",
+      "impact": "serious",
+      "tags": [
+        "cat.name-role-value",
+        "wcag2a",
+        "wcag244",
+        "wcag412",
+        "section508",
+        "section508.22.a",
+        "TTv5",
+        "TT6.a",
+        "EN-301-549",
+        "EN-9.2.4.4",
+        "EN-9.4.1.2",
+        "ACT",
+        "RGAAv4",
+        "RGAA-6.2.1"
+      ],
+      "description": "Ensure links have discernible text",
+      "help": "Links must have discernible text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/link-name?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have text that is visible to screen readers"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "non-empty-title",
+              "data": {
+                "messageKey": "noAttr"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has no title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is in tab order and does not have accessible text"
+            }
+          ],
+          "impact": "serious",
+          "html": "<a href=\"http://facebook.com/gamespot\" target=\"_blank\" rel=\"nofollow\">",
+          "target": [
+            "a[href$=\"gamespot\"][rel=\"nofollow\"][target=\"_blank\"]:nth-child(2)"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have text that is visible to screen readers"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "non-empty-title",
+              "data": {
+                "messageKey": "noAttr"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has no title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is in tab order and does not have accessible text"
+            }
+          ],
+          "impact": "serious",
+          "html": "<a href=\"http://twitter.com/gamespot\" target=\"_blank\" rel=\"nofollow\">",
+          "target": [
+            "a[href$=\"gamespot\"][rel=\"nofollow\"][target=\"_blank\"]:nth-child(3)"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have text that is visible to screen readers"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "non-empty-title",
+              "data": {
+                "messageKey": "noAttr"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has no title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is in tab order and does not have accessible text"
+            }
+          ],
+          "impact": "serious",
+          "html": "<a href=\"http://youtube.com/gamespot\" target=\"_blank\" rel=\"nofollow\">",
+          "target": [
+            "a[href$=\"gamespot\"][rel=\"nofollow\"][target=\"_blank\"]:nth-child(4)"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have text that is visible to screen readers"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "non-empty-title",
+              "data": {
+                "messageKey": "noAttr"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has no title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is in tab order and does not have accessible text"
+            }
+          ],
+          "impact": "serious",
+          "html": "<a class=\"footer--social-instagram\" href=\"http://instagram.com/gamespot\" target=\"_blank\" rel=\"nofollow\">",
+          "target": [
+            ".footer--social-instagram"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have text that is visible to screen readers"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "non-empty-title",
+              "data": {
+                "messageKey": "noAttr"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has no title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is in tab order and does not have accessible text"
+            }
+          ],
+          "impact": "serious",
+          "html": "<a href=\"https://flipboard.com/@gamespot?utm_source=gamespot&utm_medium=follow&utm_campaign=tools\" target=\"_blank\" rel=\"nofollow\">",
+          "target": [
+            "a[rel=\"nofollow\"][target=\"_blank\"]:nth-child(6)"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have text that is visible to screen readers"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "non-empty-title",
+              "data": {
+                "messageKey": "noAttr"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has no title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is in tab order and does not have accessible text"
+            }
+          ],
+          "impact": "serious",
+          "html": "<a href=\"http://facebook.com/GameSpotUniverse\" target=\"_blank\" rel=\"nofollow\">",
+          "target": [
+            ".footer--social-icons:nth-child(4) > a[rel=\"nofollow\"][target=\"_blank\"]:nth-child(2)"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have text that is visible to screen readers"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "non-empty-title",
+              "data": {
+                "messageKey": "noAttr"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has no title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is in tab order and does not have accessible text"
+            }
+          ],
+          "impact": "serious",
+          "html": "<a href=\"http://twitter.com/gsuniverse\" target=\"_blank\" rel=\"nofollow\">",
+          "target": [
+            "a[href$=\"gsuniverse\"]"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have text that is visible to screen readers"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "non-empty-title",
+              "data": {
+                "messageKey": "noAttr"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has no title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is in tab order and does not have accessible text"
+            }
+          ],
+          "impact": "serious",
+          "html": "<a href=\"http://youtube.com/GameSpotUniverse\" target=\"_blank\" rel=\"nofollow\">",
+          "target": [
+            ".footer--social-icons:nth-child(4) > a[rel=\"nofollow\"][target=\"_blank\"]:nth-child(4)"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+        },
+        {
+          "any": [
+            {
+              "id": "has-visible-text",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element does not have text that is visible to screen readers"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "non-empty-title",
+              "data": {
+                "messageKey": "noAttr"
+              },
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element has no title attribute"
+            }
+          ],
+          "all": [],
+          "none": [
+            {
+              "id": "focusable-no-name",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "serious",
+              "message": "Element is in tab order and does not have accessible text"
+            }
+          ],
+          "impact": "serious",
+          "html": "<a href=\"https://www.gamespot.com/\" class=\"footer-logo\">",
+          "target": [
+            ".footer-logo"
+          ],
+          "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+        }
+      ]
+    },
+    {
+      "id": "page-has-heading-one",
+      "impact": "moderate",
+      "tags": [
+        "cat.semantics",
+        "best-practice"
+      ],
+      "description": "Ensure that the page, or at least one of its frames contains a level-one heading",
+      "help": "Page should contain a level-one heading",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/page-has-heading-one?application=playwright",
+      "nodes": [
+        {
+          "any": [],
+          "all": [
+            {
+              "id": "page-has-heading-one",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Page must have a level-one heading"
+            }
+          ],
+          "none": [],
+          "impact": "moderate",
+          "html": "<html lang=\"en\" class=\"js no-touch  blobcon...\" data-useragent=\"Mozilla/5.0 (Windows...\" data-platform=\"Win32\">",
+          "target": [
+            "html"
+          ],
+          "failureSummary": "Fix all of the following:\n  Page must have a level-one heading"
+        }
+      ]
+    },
+    {
+      "id": "region",
+      "impact": "moderate",
+      "tags": [
+        "cat.keyboard",
+        "best-practice",
+        "RGAAv4",
+        "RGAA-9.2.1"
+      ],
+      "description": "Ensure all page content is contained by landmarks",
+      "help": "All page content should be contained by landmarks",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/region?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Some page content is not contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "moderate",
+          "html": "<div class=\"promo--image bg-black width-100 promo--wide\"><div class=\"content\"><img src=\"https://www.gamespot.com/a/uploads/screen_kubrick/1632/16320660/4692624-hi-res-300-landscape-keyart-withdp.jpg\" alt=\"The Dark Pictures Anthology Has Never Been More Adrift | Directive 8020 Review\"></div></div>",
+          "target": [
+            ".promo--wide"
+          ],
+          "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Some page content is not contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "moderate",
+          "html": "<div class=\"promo-symbol promo-symbol--large color-primary border-circle position-top-left block\">",
+          "target": [
+            ".promo-symbol--large"
+          ],
+          "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+        },
+        {
+          "any": [
+            {
+              "id": "region",
+              "data": {
+                "isIframe": false
+              },
+              "relatedNodes": [],
+              "impact": "moderate",
+              "message": "Some page content is not contained by landmarks"
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "moderate",
+          "html": "<div class=\"promo--image bg-black width-100 promo--square\"><div class=\"content\"><img src=\"https://www.gamespot.com/a/uploads/square_medium/43/434805/4693072-3094320431-hH6Fn.jpg\" alt=\"Devil May Cry Netflix Creator Has Good Advice For Bloodborne Movie Team\"></div></div>",
+          "target": [
+            ".promo--square"
+          ],
+          "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks"
+        }
+      ]
+    },
+    {
+      "id": "select-name",
+      "impact": "critical",
+      "tags": [
+        "cat.forms",
+        "wcag2a",
+        "wcag412",
+        "section508",
+        "section508.22.n",
+        "TTv5",
+        "TT5.c",
+        "EN-301-549",
+        "EN-9.4.1.2",
+        "ACT",
+        "RGAAv4",
+        "RGAA-11.1.1"
+      ],
+      "description": "Ensure select element has an accessible name",
+      "help": "Select element must have an accessible name",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/select-name?application=playwright",
+      "nodes": [
+        {
+          "any": [
+            {
+              "id": "implicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element does not have an implicit (wrapped) <label>"
+            },
+            {
+              "id": "explicit-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element does not have an explicit <label>"
+            },
+            {
+              "id": "aria-label",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-label attribute does not exist or is empty"
+            },
+            {
+              "id": "aria-labelledby",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+            },
+            {
+              "id": "non-empty-title",
+              "data": {
+                "messageKey": "noAttr"
+              },
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element has no title attribute"
+            },
+            {
+              "id": "presentational-role",
+              "data": null,
+              "relatedNodes": [],
+              "impact": "critical",
+              "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+            }
+          ],
+          "all": [],
+          "none": [],
+          "impact": "critical",
+          "html": "<select name=\"sort\" class=\"text-bold border-round--large js-filter-json\" data-filter-query=\"platform\" data-filter-nohistory=\"1\" data-filter-nodata=\"1\" data-filter-extra-data=\"{\"clickTagPrefix\":\"front_door\"}\">",
+          "target": [
+            ".border-round--large"
+          ],
+          "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+        }
+      ]
+    }
+  ]
+}
