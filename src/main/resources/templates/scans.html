@@ -48,7 +48,7 @@
                     <td>
                         <div th:if="${scan.id != editScanId}" class="action-buttons">
                             <a th:href="@{/results/{id}(id=${scan.id})}" class="btn btn-secondary">View</a>
-                            <a href="#" class="btn btn-info">Export Scan</a>
+                            <a th:href="@{/scans/{id}/export-pdf(id=${scan.id})}" class="btn btn-info">Export Scan</a>
                             <form th:action="@{/scans/{id}/delete(id=${scan.id})}" method="post">
                                 <button type="submit"
                                         class="btn btn-danger"
