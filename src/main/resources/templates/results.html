@@ -43,10 +43,19 @@
                     </div>
                 </div>
                 
-                <div style="text-align: left; margin-top: 12px; margin-bottom: 30px">
-                    <a data-th-href="@{/scans/{id}/export-pdf(id=${scan.id})}" class="btn btn-secondary">
-                        Export PDF
-                    </a>
+                <div class="scan-management-panel card">
+                    <div class="panel-header">
+                        <h3>Scan Management</h3>
+                        <p>Export, edit, or delete this scan.</p>
+                    </div>
+
+                    <div class="action-buttons">
+                        <a data-th-href="@{/scans/{id}/export-pdf(id=${scan.id})}" class="btn btn-info">Export PDF</a>
+                        <a data-th-href="@{/scans/{id}/edit(id=${scan.id})}" class="btn btn-warning">Edit</a>
+                        <form th:action="@{/scans/{id}/delete(id=${scan.id})}" method="post" onsubmit="return confirm('Delete this scan?');">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
                 </div>
 
                 <div class="ai-remediation-panel card">
@@ -100,15 +109,16 @@
                 <table class="oagp-table">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Rule ID</th>
+                            <th data-sort-key="id" data-sort-type="number">#</th>
+                            <th data-sort-key="ruleId" data-sort-type="string">Rule ID</th>
                             <th>Impacted Users</th>
-                            <th>Instances</th>
-                            <th>Impact</th>
+                            <th data-sort-key="instances" data-sort-type="number">Instances</th>
+                            <th data-sort-key="impact" data-sort-type="severity">Impact</th>
                             <th>Description</th>
                             <th>Tags</th>
                             <th>Help</th>
                             <th>Resources</th>
+                            <th>Details</th>
                         </tr>
                     </thead>
 
@@ -144,25 +154,38 @@
                                     Learn More
                                 </a>
                             </td>
+                            <td>
+                                <a th:href="'#violation-detail-' + ${iter.count}"
+                                   class="link violation-detail-link">
+                                    View Details
+                                </a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
 
-                <h3 class="section-title">Technical Details</h3>
+                <div class="section-title-row">
+                    <h3 class="section-title">Technical Details</h3>
+                    <button id="toggle-violation-details" type="button" class="btn btn-secondary">Expand All</button>
+                </div>
 
                 <div class="violation-list">
                     <details class="violation-card card"
-                             th:each="violation : ${scan.violations}">
+                             th:each="violation, iter : ${scan.violations}"
+                             th:id="'violation-detail-' + ${iter.count}">
 
                         <summary class="violation-summary">
-                            <span class="badge"
-                                  th:classappend="${violation.impact.toLowerCase()}"
-                                  th:text="${violation.impact}">
-                            </span>
+                            <div class="violation-summary-content">
+                                <span class="badge"
+                                      th:classappend="${violation.impact.toLowerCase()}"
+                                      th:text="${violation.impact}">
+                                </span>
 
-                            <strong th:text="${violation.ruleId}"></strong>
+                                <strong th:text="${violation.ruleId}"></strong>
 
-                            <span th:text="${violation.instanceCount} + ' instances'"></span>
+                                <span th:text="${violation.instanceCount} + ' instances'"></span>
+                            </div>
+                            <small>Click to expand/collapse</small>
                         </summary>
 
                         <div class="violation-details">

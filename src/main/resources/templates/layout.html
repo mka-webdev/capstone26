@@ -5,6 +5,21 @@
     <meta charset="utf-8" />
     <title th:text="'OAGP - ' + ${pageTitle}">OAGP</title>
     <link rel="stylesheet" th:href="@{/style.css}" />
+    
+    <!-- Prevent white flash by applying theme before page renders -->
+    <script>
+        (function() {
+            const key = 'theme-preference';
+            const savedTheme = localStorage.getItem(key);
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    
 </head>
 
 <body>
@@ -39,6 +54,7 @@
     <main class="main-content">
 
         <header class="header-banner">
+            <button id="theme-toggle-btn" aria-label="Switch theme" title="Toggle dark mode">🌙</button>
             <h1><strong>OAGP</strong> Open Accessibility Governance Platform</h1>
         </header>
 
@@ -59,8 +75,12 @@
     
 </div>
 
+<!-- Scripts for improved user experience -->
 <script th:src="@{/scripts/scroll-to-top.js}"></script>
 <script th:src="@{/scripts/loading-overlays.js}"></script>
+<script th:src="@{/scripts/dark-mode.js}"></script>
+<script th:src="@{/scripts/violation-details-toggle.js}"></script>
+<script th:src="@{/scripts/table-sorting.js}"></script>
 
 </body>
 </html>
