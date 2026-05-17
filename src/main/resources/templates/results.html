@@ -43,10 +43,19 @@
                     </div>
                 </div>
                 
-                <div style="text-align: left; margin-top: 12px; margin-bottom: 30px">
-                    <a data-th-href="@{/scans/{id}/export-pdf(id=${scan.id})}" class="btn btn-secondary">
-                        Export PDF
-                    </a>
+                <div class="scan-management-panel card">
+                    <div class="panel-header">
+                        <h3>Scan Management</h3>
+                        <p>Export, edit, or delete this scan.</p>
+                    </div>
+
+                    <div class="action-buttons">
+                        <a data-th-href="@{/scans/{id}/export-pdf(id=${scan.id})}" class="btn btn-info">Export PDF</a>
+                        <a data-th-href="@{/scans/{id}/edit(id=${scan.id})}" class="btn btn-warning">Edit</a>
+                        <form th:action="@{/scans/{id}/delete(id=${scan.id})}" method="post" onsubmit="return confirm('Delete this scan?');">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
                 </div>
 
                 <div class="ai-remediation-panel card">
