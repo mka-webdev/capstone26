@@ -565,6 +565,47 @@ input[type="text"] {
 .oagp-table th {
     background: #f0f0f0;
     color: var(--text-main);
+    transition: background-color 0.2s ease;
+    position: relative;
+}
+
+.oagp-table th[data-sortable="true"] {
+    cursor: pointer;
+}
+
+.oagp-table th[data-sortable="true"]:hover {
+    background: #e8e8e8;
+}
+
+/* Reserve space for sort indicator to avoid layout shift */
+.oagp-table th[data-sortable="true"]::after {
+    display: inline-block;
+    width: 1.1rem;
+    margin-left: 0.35rem;
+    text-align: left;
+    font-size: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease;
+}
+
+.oagp-table th[data-sortable="true"][data-sort-order="none"]::after {
+    content: '⇅';
+}
+
+.oagp-table th[data-sortable="true"][data-sort-order="none"]:hover::after,
+.oagp-table th[data-sortable="true"][data-sort-order="asc"]::after,
+.oagp-table th[data-sortable="true"][data-sort-order="desc"]::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.oagp-table th[data-sortable="true"][data-sort-order="asc"]::after {
+    content: '▲';
+}
+
+.oagp-table th[data-sortable="true"][data-sort-order="desc"]::after {
+    content: '▼';
 }
 
 .oagp-table .tag-cloud {
@@ -642,6 +683,10 @@ input[type="text"] {
     font-weight: 400;
     color: var(--text-muted);
     white-space: nowrap;
+}
+
+.violation-summary strong {
+    font-family: monospace;
 }
 
 .violation-details {
@@ -915,6 +960,10 @@ code {
     color: #d4d4d4;
 }
 
+[data-theme="dark"] .oagp-table th:hover {
+    background: #454545;
+}
+
 [data-theme="dark"] .oagp-table td {
     color: #d4d4d4;
 }
@@ -1057,7 +1106,7 @@ code {
 [data-theme="dark"] .violation-card {
     background: #2a2a2a;
     border: 1px solid #4a4a4a;
-    border-radius: 4px; 
+    border-radius: 4px;
 }
 
 /* Dark mode - Node item */
