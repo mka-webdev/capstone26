@@ -248,6 +248,7 @@ input[type="text"] {
 
 .action-buttons form {
     margin: 0;
+    display: inline-flex;
 }
 
 .action-buttons .btn {
@@ -256,7 +257,12 @@ input[type="text"] {
     justify-content: center;
     padding: 8px 12px;
     min-width: 82px;
+    min-height: 36px;
+    box-sizing: border-box;
+    font: inherit;
+    line-height: 1.2;
     text-align: center;
+    white-space: nowrap;
 }
 
 .ai-provider-selection {
