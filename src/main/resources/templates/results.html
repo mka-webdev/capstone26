@@ -118,6 +118,7 @@
                             <th>Tags</th>
                             <th>Help</th>
                             <th>Resources</th>
+                            <th>Details</th>
                         </tr>
                     </thead>
 
@@ -153,6 +154,12 @@
                                     Learn More
                                 </a>
                             </td>
+                            <td>
+                                <a th:href="'#violation-detail-' + ${iter.count}"
+                                   class="link violation-detail-link">
+                                    View Details
+                                </a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -164,17 +171,21 @@
 
                 <div class="violation-list">
                     <details class="violation-card card"
-                             th:each="violation : ${scan.violations}">
+                             th:each="violation, iter : ${scan.violations}"
+                             th:id="'violation-detail-' + ${iter.count}">
 
                         <summary class="violation-summary">
-                            <span class="badge"
-                                  th:classappend="${violation.impact.toLowerCase()}"
-                                  th:text="${violation.impact}">
-                            </span>
+                            <div class="violation-summary-content">
+                                <span class="badge"
+                                      th:classappend="${violation.impact.toLowerCase()}"
+                                      th:text="${violation.impact}">
+                                </span>
 
-                            <strong th:text="${violation.ruleId}"></strong>
+                                <strong th:text="${violation.ruleId}"></strong>
 
-                            <span th:text="${violation.instanceCount} + ' instances'"></span>
+                                <span th:text="${violation.instanceCount} + ' instances'"></span>
+                            </div>
+                            <small>Click to expand/collapse</small>
                         </summary>
 
                         <div class="violation-details">

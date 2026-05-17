@@ -625,13 +625,23 @@ input[type="text"] {
     padding: 15px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
     cursor: pointer;
     background: #f9f9f9;
 }
 
-.violation-summary strong {
-    font-family: monospace;
+.violation-summary-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.violation-summary small {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-muted);
+    white-space: nowrap;
 }
 
 .violation-details {
@@ -882,7 +892,7 @@ code {
     transition: none !important;
 }
 
-/* Additional Dark Mode Overrides */
+/* ===== Additional Dark Mode Overrides ===== */
 
 /* Dark mode - Tags */
 [data-theme="dark"] .tag {
@@ -1047,7 +1057,7 @@ code {
 [data-theme="dark"] .violation-card {
     background: #2a2a2a;
     border: 1px solid #4a4a4a;
-    border-radius: 4px;
+    border-radius: 4px; 
 }
 
 /* Dark mode - Node item */

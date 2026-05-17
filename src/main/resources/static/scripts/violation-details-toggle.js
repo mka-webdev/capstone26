@@ -32,5 +32,23 @@ document.addEventListener('DOMContentLoaded', function () {
         detail.addEventListener('toggle', updateButtonState);
     });
 
+    const detailLinks = Array.from(document.querySelectorAll('.violation-detail-link'));
+    detailLinks.forEach((link) => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const targetId = link.getAttribute('href')?.replace(/^#/, '');
+            if (!targetId) {
+                return;
+            }
+            const targetDetail = document.getElementById(targetId);
+            if (!targetDetail) {
+                return;
+            }
+            targetDetail.setAttribute('open', '');
+            targetDetail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            updateButtonState();
+        });
+    });
+
     updateButtonState();
 });
