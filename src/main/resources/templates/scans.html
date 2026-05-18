@@ -19,11 +19,11 @@
             <table class="oagp-table">
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Scan Name</th>
+                    <th data-sort-key="id" data-sort-type="number">#</th>
+                    <th data-sort-key="name" data-sort-type="string">Scan Name</th>
                     <th>Page URL</th>
-                    <th>Scan Time</th>
-                    <th>Violations</th>
+                    <th data-sort-key="scanTime" data-sort-type="date">Scan Time</th>
+                    <th data-sort-key="violations" data-sort-type="number">Violations</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -48,7 +48,7 @@
                     <td>
                         <div th:if="${scan.id != editScanId}" class="action-buttons">
                             <a th:href="@{/results/{id}(id=${scan.id})}" class="btn btn-secondary">View</a>
-                            <a href="#" class="btn btn-info">Export Scan</a>
+                            <a th:href="@{/scans/{id}/export-pdf(id=${scan.id})}" class="btn btn-info">Export Scan</a>
                             <form th:action="@{/scans/{id}/delete(id=${scan.id})}" method="post">
                                 <button type="submit"
                                         class="btn btn-danger"
