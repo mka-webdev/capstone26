@@ -130,7 +130,9 @@ public class PromptBuilderService {
         prompt.append("1. What the issue is\n");
         prompt.append("2. Why it matters\n");
         prompt.append("3. How it can be fixed\n");
-        prompt.append("Do not invent extra facts beyond the supplied scan data.\n");
+        prompt.append("4. Related WCAG success criteria, where WCAG tags are supplied\n");
+        prompt.append("If WCAG tags are present, translate them into readable WCAG references where possible, such as WCAG 2.4.4 Link Purpose or WCAG 4.1.2 Name, Role, Value.\n");
+        prompt.append("Do not invent WCAG references or extra facts beyond the supplied scan data.\n");
 
         // Return the completed prompt text
         String builtPrompt = prompt.toString();
