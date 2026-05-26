@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  oagp:
+    build: .
+    image: oagp
+    ports:
+      - "8080:8080"
+    environment:
+      # AI keys (set these in your environment or override in a .env file)
+      GEMINI_API_KEY_FREE: "${GEMINI_API_KEY_FREE:-}"
+      GEMINI_API_KEY_PAID: "${GEMINI_API_KEY_PAID:-}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      # By default store DB in the mounted volume at /data
+      SPRING_DATASOURCE_URL: "${SPRING_DATASOURCE_URL:-jdbc:sqlite:/data/oagp_first.db}"
+      # scanner runs headless by default inside the container; set to false to render a visible browser (not recommended in production)
+      PLAYWRIGHT_HEADLESS: "${PLAYWRIGHT_HEADLESS:-true}"
+    volumes:
+      - oagp-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  oagp-data:
+    name: oagp-data
+

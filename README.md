@@ -150,3 +150,45 @@ $env:GEMINI_API_KEY_FREE="your_free_key"
 $env:GEMINI_API_KEY_PAID="your_paid_key"
 $env:OPENAI_API_KEY="your_openai_key"
 ```
+
+## Run with Docker
+
+The project now includes a Docker image that bundles:
+
+- the Spring Boot application
+- Node.js dependencies for `scanner/`
+- the Playwright browser runtime needed by the scanner
+
+### Build the image
+
+```bash
+docker build -t oagp .
+```
+
+### Run the container
+
+```bash
+docker run --rm -p 8080:8080 \
+  -e GEMINI_API_KEY_FREE=your_free_key \
+  -e GEMINI_API_KEY_PAID=your_paid_key \
+  -e OPENAI_API_KEY=your_openai_key \
+  oagp
+```
+
+### Optional: persist the SQLite database
+
+By default, the app stores `oagp_first.db` inside the container filesystem.
+To keep the database between runs, mount a volume and point Spring to it:
+
+```bash
+docker run --rm -p 8080:8080 \
+  -e SPRING_DATASOURCE_URL=jdbc:sqlite:/data/oagp_first.db \
+  -e GEMINI_API_KEY_FREE=your_free_key \
+  -e GEMINI_API_KEY_PAID=your_paid_key \
+  -e OPENAI_API_KEY=your_openai_key \
+  -v oagp-data:/data \
+  oagp
+```
+
+If you want the scanner to render a visible browser outside Docker, set `PLAYWRIGHT_HEADLESS=false`, but the default is headless so the container works out of the box.
+
