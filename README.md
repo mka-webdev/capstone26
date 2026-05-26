@@ -151,44 +151,55 @@ $env:GEMINI_API_KEY_PAID="your_paid_key"
 $env:OPENAI_API_KEY="your_openai_key"
 ```
 
-## Run with Docker
+## Docker Compose & CI (quick reference)
 
-The project now includes a Docker image that bundles:
+This project includes first-class Docker support and a GitHub Actions workflow that publishes Docker images when a GitHub Release is published.
 
-- the Spring Boot application
-- Node.js dependencies for `scanner/`
-- the Playwright browser runtime needed by the scanner
+- `Dockerfile` — multi-stage image that builds the Spring Boot app and installs the scanner dependencies
+- `docker-compose.yml` — starts the service with a named volume `oagp-data` mounted to `/data` (persists SQLite DB)
+- `.dockerignore` — keeps build context small
+- `.env` — template file with placeholders for local development (do not commit real secrets)
+- `.github/workflows/docker-publish.yml` — CI workflow that builds and pushes the image to Docker Hub when a release is published
 
-### Build the image
+Recommended quick workflow (local)
 
-```bash
-docker build -t oagp .
-```
-
-### Run the container
-
-```bash
-docker run --rm -p 8080:8080 \
-  -e GEMINI_API_KEY_FREE=your_free_key \
-  -e GEMINI_API_KEY_PAID=your_paid_key \
-  -e OPENAI_API_KEY=your_openai_key \
-  oagp
-```
-
-### Optional: persist the SQLite database
-
-By default, the app stores `oagp_first.db` inside the container filesystem.
-To keep the database between runs, mount a volume and point Spring to it:
+1. Edit `.env` in the project root and set your API keys (do not commit secrets).
+2. Start the app with Compose:
 
 ```bash
-docker run --rm -p 8080:8080 \
-  -e SPRING_DATASOURCE_URL=jdbc:sqlite:/data/oagp_first.db \
-  -e GEMINI_API_KEY_FREE=your_free_key \
-  -e GEMINI_API_KEY_PAID=your_paid_key \
-  -e OPENAI_API_KEY=your_openai_key \
-  -v oagp-data:/data \
-  oagp
+docker-compose up -d --build
 ```
 
-If you want the scanner to render a visible browser outside Docker, set `PLAYWRIGHT_HEADLESS=false`, but the default is headless so the container works out of the box.
+3. Stop the app:
+
+```bash
+docker-compose down
+```
+
+Persisting the database
+
+By default `docker-compose.yml` mounts a named volume `oagp-data` at `/data` inside the container and the application uses `jdbc:sqlite:/data/oagp_first.db`. If you prefer a host folder instead of a named volume, edit `docker-compose.yml` and replace the volume with a host path, for example:
+
+```yaml
+    volumes:
+      - ./data:/data
+```
+
+Publishing images from GitHub Releases
+
+The repository contains a workflow at `.github/workflows/docker-publish.yml` that triggers when you publish a GitHub Release. It builds the image and pushes it to Docker Hub using the release tag as the image tag:
+
+  turner747/capstone26:<release-tag>
+
+Create a release (via the GitHub UI or the GitHub CLI):
+
+```bash
+# with git tags + gh (GitHub CLI)
+git tag -a v1.2.3 -m "Release v1.2.3"
+git push origin v1.2.3
+gh release create v1.2.3 --notes "Release v1.2.3"
+```
+
+When the release is published the workflow will run and push `turner747/capstone26:v1.2.3` and `turner747/capstone26:latest` to Docker Hub.
+
 
