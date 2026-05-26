@@ -1,0 +1,10 @@
+target
+scanner/node_modules
+scanner/.playwright
+results.json
+scan-archive
+*.db
+.git
+.idea
+*.iml
+README.md~
