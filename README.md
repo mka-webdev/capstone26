@@ -151,55 +151,105 @@ $env:GEMINI_API_KEY_PAID="your_paid_key"
 $env:OPENAI_API_KEY="your_openai_key"
 ```
 
-## Docker Compose & CI (quick reference)
+## Run with Docker
 
-This project includes first-class Docker support and a GitHub Actions workflow that publishes Docker images when a GitHub Release is published.
+The project is packaged as a Docker image and published to Docker Hub at `turner747/capstone26`.
 
-- `Dockerfile` — multi-stage image that builds the Spring Boot app and installs the scanner dependencies
-- `docker-compose.yml` — starts the service with a named volume `oagp-data` mounted to `/data` (persists SQLite DB)
-- `.dockerignore` — keeps build context small
-- `.env` — template file with placeholders for local development (do not commit real secrets)
-- `.github/workflows/docker-publish.yml` — CI workflow that builds and pushes the image to Docker Hub when a release is published
+### Quick Start: Pull and Run from Docker Hub (Recommended)
 
-Recommended quick workflow (local)
+Supply environment variables at runtime when pulling and running the image — do not rely on a repository `.env` file.
 
-1. Edit `.env` in the project root and set your API keys (do not commit secrets).
-2. Start the app with Compose:
+#### Using docker run (Linux / macOS)
 
 ```bash
-docker-compose up -d --build
+docker run --rm -p 8080:8080 \
+  -e GEMINI_API_KEY_FREE=your_free_key \
+  -e GEMINI_API_KEY_PAID=your_paid_key \
+  -e OPENAI_API_KEY=your_openai_key \
+  turner747/capstone26:latest
 ```
 
-3. Stop the app:
+#### Using docker run (Windows / PowerShell)
 
-```bash
-docker-compose down
+```powershell
+docker run --rm -p 8080:8080 `
+  -e GEMINI_API_KEY_FREE="your_free_key" `
+  -e GEMINI_API_KEY_PAID="your_paid_key" `
+  -e OPENAI_API_KEY="your_openai_key" `
+  turner747/capstone26:latest
 ```
 
-Persisting the database
+#### Required Environment Variables
 
-By default `docker-compose.yml` mounts a named volume `oagp-data` at `/data` inside the container and the application uses `jdbc:sqlite:/data/oagp_first.db`. If you prefer a host folder instead of a named volume, edit `docker-compose.yml` and replace the volume with a host path, for example:
+| Variable | Purpose |
+|----------|---------|
+| `GEMINI_API_KEY_FREE` | Free-tier Gemini API key (required if using Gemini free tier) |
+| `GEMINI_API_KEY_PAID` | Paid Gemini API key (optional; required if using Gemini paid tier) |
+| `OPENAI_API_KEY` | OpenAI API key (optional; required if using OpenAI) |
 
-```yaml
-    volumes:
-      - ./data:/data
-```
+### Local Development: Build and Run with Docker Compose
 
-Publishing images from GitHub Releases
+For developers contributing to this project:
 
-The repository contains a workflow at `.github/workflows/docker-publish.yml` that triggers when you publish a GitHub Release. It builds the image and pushes it to Docker Hub using the release tag as the image tag:
+1. Clone the repository and cd into it
+2. Create a local `.env` file and fill in your API keys (`.env` is gitignored):
 
-  turner747/capstone26:<release-tag>
+   ```
+   GEMINI_API_KEY_FREE=your_free_key
+   GEMINI_API_KEY_PAID=your_paid_key
+   OPENAI_API_KEY=your_openai_key
+   ```
 
-Create a release (via the GitHub UI or the GitHub CLI):
+3. Build and start:
 
-```bash
-# with git tags + gh (GitHub CLI)
-git tag -a v1.2.3 -m "Release v1.2.3"
-git push origin v1.2.3
-gh release create v1.2.3 --notes "Release v1.2.3"
-```
+   ```bash
+   docker-compose up -d --build
+   ```
 
-When the release is published the workflow will run and push `turner747/capstone26:v1.2.3` and `turner747/capstone26:latest` to Docker Hub.
+4. Stop and clean up:
+
+   ```bash
+   docker-compose down
+   ```
+
+The `docker-compose.yml` uses a named volume `oagp-data` to persist the SQLite database between restarts.
+
+### CI/CD: Automated Docker Hub Publishing
+
+This repository includes a GitHub Actions workflow (`.github/workflows/docker-publish.yml`) that automatically builds and publishes the image to Docker Hub whenever you publish a GitHub Release.
+
+**Setup:**
+1. Add these repository secrets to GitHub (Settings → Secrets and variables → Actions):
+   - `DOCKERHUB_USERNAME` — your Docker Hub username
+   - `DOCKERHUB_TOKEN` — a Docker Hub personal access token or password
+
+2. Create a release on GitHub:
+
+   ```bash
+   # with git and gh CLI
+   git tag -a v1.0.0 -m "Release v1.0.0"
+   git push origin v1.0.0
+   gh release create v1.0.0
+   ```
+
+   The workflow will automatically build and push:
+   - `turner747/capstone26:v1.0.0` (release-specific tag)
+   - `turner747/capstone26:latest` (always updated with each release)
+
+### Security Notes
+
+- **Never commit real API keys or credentials to the repository.** The `.env` file in the repository is a template with placeholder values for local development only — it is gitignored and should never contain actual secrets.
+- When users pull the image from Docker Hub, they must supply their own API keys at runtime via environment variables, not by editing the repository.
+- Do not pass secrets in Dockerfile or build context; always inject them at runtime.
+- For production deployments, consider using a secrets manager (AWS Secrets Manager, HashiCorp Vault, Kubernetes Secrets, etc.) instead of plain environment variables.
+
+### Troubleshooting
+
+- **Image not found**: Ensure you have pulled the latest image with `docker pull turner747/capstone26:latest`
+- **Database not persisting**: Check that the volume `-v oagp-data:/data` is mounted
+- **Scanner not working**: Ensure `PLAYWRIGHT_HEADLESS=true` in production. GUI rendering is not available in headless container environments.
+- **Build fails locally**: Verify Docker is installed and running, and that `Dockerfile` builds successfully with `docker build -t oagp .`
+
+
 
 
