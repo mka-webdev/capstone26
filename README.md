@@ -84,9 +84,9 @@ It rejects clearly incomplete or invalid inputs such as:
 
 This helps prevent unnecessary scanner execution and avoids exposing raw processing errors for simple input mistakes.
 
-## Planned features
+## Export features
 
-- Export scan results to PDF reports
+- Export scan results to PDF 
 
 
 ## Scanner module setup
